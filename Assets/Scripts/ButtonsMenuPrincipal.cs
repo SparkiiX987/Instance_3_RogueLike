@@ -7,11 +7,7 @@ using UnityEngine.UI;
 public class ButtonsMenuPrincipal : MonoBehaviour
 {
     [SerializeField] private Button _buttonPlay;
-    [SerializeField] private Button _buttonSettings;
     [SerializeField] private Button _buttonLeave;
-
-    [SerializeField] private GameObject _panelMenuPrincipal;
-    [SerializeField] private GameObject _panelSettings;
 
 
 
