@@ -2,15 +2,7 @@ using UnityEngine;
 
 public interface ITargetable
 {
-    private float health;
-    
-    void GetHealth()
-    {
-        
-    }
-    
-    void SetHealth()
-    {
-        
-    }
+    public int GetHealth();
+
+    public void SetHealth(int _health);
 }
