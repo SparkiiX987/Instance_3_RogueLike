@@ -54,7 +54,7 @@ public class Ennemy : MonoBehaviour
         mapNodes = _map;
     }
 
-    private void GetCurrentTile()
+    private GameObject GetTileNextTo(Vector2 target)
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(selfTransform.position, 10, cellLayer);
         if(hits.Length == 0)
@@ -63,25 +63,27 @@ public class Ennemy : MonoBehaviour
             throw new Exception("Error : No points next to the entity " + gameObject.name);
         }
 
-        currentTile = hits[0].gameObject;
+        GameObject tile = hits[0].gameObject;
         if(hits.Length == 0)
         {
-            return;
+            return tile;
         }
 
         for(int i = 1; i < hits.Length; i++)
         {
-            if (Vector2.Distance(selfTransform.position, currentTile.transform.position) < Vector2.Distance(selfTransform.position, hits[i].transform.position);
+            if (Vector2.Distance(target, tile.transform.position) < Vector2.Distance(target, hits[i].transform.position))
             {
-                currentTile = hits[i].gameObject;
+                tile = hits[i].gameObject;
             }
         }
+
+        return tile;
     }
 
     private void FindPathToPlayer()
     {
 
-    } 
+    }
 
     #endregion
 
