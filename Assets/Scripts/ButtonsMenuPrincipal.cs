@@ -23,15 +23,6 @@ public class ButtonsMenuPrincipal : MonoBehaviour
         }
     }
 
-    public void Settings()
-    {
-        if(_buttonSettings != null)
-        {
-            _panelMenuPrincipal.SetActive(false);
-            _panelSettings.SetActive(true);
-        }
-    }
-
     public void Play()
     {
         if( _buttonPlay != null)
