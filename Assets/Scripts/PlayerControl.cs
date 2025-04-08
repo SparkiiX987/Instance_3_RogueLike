@@ -11,12 +11,14 @@ public class PlayerControl : MonoBehaviour, ITargetable
     
     private bool isDetectable;
     private int health;
-    public float stamina;
+    private float stamina;
     private bool isRunning;
 
     private Stats stats;
+    private SellableObject sellableObject;
+    private UsableObject usableObject;
     
-    public float currentCooldown;
+    private float currentCooldown;
     
     private InputAction moveAction;
     private InputAction lookAction;
@@ -28,6 +30,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
     private void Awake()
     {
         stats = GetComponent<Stats>();
+        sellableObject = GetComponent<SellableObject>();
+        usableObject = GetComponent<UsableObject>();
         playerTransform = GetComponent<Transform>();
     }
 
@@ -89,7 +93,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void UseItem(InputAction.CallbackContext _ctx)
     {
-        
+        if (_ctx.performed && usableObject != null) 
+            usableObject.Action();
     }
     
     public void Sprint(InputAction.CallbackContext _ctx)
