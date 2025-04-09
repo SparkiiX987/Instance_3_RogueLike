@@ -12,6 +12,9 @@ public class PlayerControl : MonoBehaviour, ITargetable
     [SerializeField] private float pickupDistance;
     [SerializeField] private LayerMask itemLayer;
     
+    [SerializeField] private Animator animator;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    
     private bool isDetectable;
     private int health;
     private float stamina;
@@ -86,6 +89,10 @@ public class PlayerControl : MonoBehaviour, ITargetable
     public void Movement(InputAction.CallbackContext _ctx)
     {
         movementDir = _ctx.ReadValue<Vector2>();
+        animator.SetBool("IsWalking", true);
+        
+        if (_ctx.canceled)
+            animator.SetBool("IsWalking", false);
     }
     
     private void LookAtMouse()
@@ -99,6 +106,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
     {
         if (_ctx.started)
         {
+            animator.SetBool("IsPickingUpItem", true);
             hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, itemLayer);
             if (hit.collider!= null && hit.collider.transform.GetComponent<CollectableItem>()) 
             {
@@ -114,12 +122,22 @@ public class PlayerControl : MonoBehaviour, ITargetable
                 Destroy(hit.collider.gameObject);
             }
         }
+
+        if (_ctx.canceled)
+            animator.SetBool("IsPickingUpItem", false);
     }
 
     public void UseItem(InputAction.CallbackContext _ctx)
     {
-        if (_ctx.performed && usableObject != null) 
+        if (_ctx.performed && usableObject != null)
+        {
             usableObject.Action();
+            animator.SetBool("IsUsingItem", true);
+        }
+            
+
+        if (_ctx.canceled)
+            animator.SetBool("IsUsingItem", false);
     }
     
     public void Sprint(InputAction.CallbackContext _ctx)
