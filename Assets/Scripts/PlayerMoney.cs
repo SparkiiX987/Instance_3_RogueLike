@@ -2,15 +2,38 @@ using UnityEngine;
 
 public class PlayerMoney : MonoBehaviour
 {
-    private int _money;
+    private int money;
+    private int impotsIncrement = 50;
+    public int impots = 200;
+
+    public static PlayerMoney Instance;
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.Log("trop de fois appelé");
+            Destroy(this);
+        }
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
     public int GetMoney()
     {
-        return _money;
+        return money;
     }
 
-    public void AddMoney(int amount)
+    public void AddMoney(int _amount)
     {
 
+    }
+
+    public int GetCurrentImpots(int _additionFactor)
+    {
+        return impots + _additionFactor * impotsIncrement;
     }
 }

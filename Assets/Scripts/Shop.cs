@@ -12,8 +12,14 @@ public class Shop : MonoBehaviour
         if(Instance != null)
         {
             Debug.Log("trop de fois appelé");
+            Destroy(this);
         }
         Instance = this;
+    }
+
+    private void Start()
+    {
+        DontDestroyOnLoad(gameObject);
     }
 
     public void SetActiveOffer(ShopOffer activeOffers)
