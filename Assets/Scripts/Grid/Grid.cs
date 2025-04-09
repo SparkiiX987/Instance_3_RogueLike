@@ -3,15 +3,20 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
-    private List<Cell> cells = new List<Cell>();
+    private List<Node> cells = new List<Node>();
 
-    public void AddCell(Cell _cell)
+    public void AddCell(Node _cell)
     {
         cells.Add(_cell);
     }
 
-    public Cell GetCellAt(int _index)
+    public Node GetCellAt(int _index)
     {
         return cells[_index];
+    }
+
+    public List<Node> GetCellList()
+    {
+        return cells;
     }
 }

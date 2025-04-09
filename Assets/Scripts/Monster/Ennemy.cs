@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Ennemy : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class Ennemy : MonoBehaviour
 
     [Header("PathFinding")]
     public float detectionRange;
-    private List<GameObject> mapNodes;
+    private Grid grid;
     private Vector2 playerPosition;
     private Vector2 nextPointToMove;
     private GameObject currentTile;
@@ -49,9 +50,9 @@ public class Ennemy : MonoBehaviour
 
     #region PathFiding
 
-    public void GetMap(List<GameObject> _map)
+    public void GetMap(Grid _grid)
     {
-        mapNodes = _map;
+        grid = _grid;
     }
 
     private GameObject GetTileNextTo(Vector2 target)
@@ -80,9 +81,68 @@ public class Ennemy : MonoBehaviour
         return tile;
     }
 
-    private void FindPathToPlayer()
+    private List<Node> FindPathToCell(Node _startNode, Node _goalNode)
     {
+        List<Link> openLinks = new List<Link>();
+        HashSet<Node> closedNodes = new HashSet<Node>();
 
+        Link startLink = new Link(_startNode, _startNode.GetCellPosition(), _goalNode.GetCellPosition());
+
+        openLinks.Add(startLink);
+
+        while(openLinks.Count > 0)
+        {
+            openLinks.Sort((linkA, linkB) => linkA.fCost.CompareTo(linkB.fCost));
+            Link currentLink = openLinks[0];
+            openLinks.RemoveAt(0);
+
+            Node currentNode = currentLink.nodeTo;
+            closedNodes.Add(currentNode);
+
+            if(currentNode == _goalNode)
+            { return ReconstructPath(currentLink); }
+
+            foreach(Link neighborLink in currentNode.GetLinks())
+            {
+                if (closedNodes.Contains(neighborLink.nodeTo)) { continue; }
+
+                float tentaiveG = currentLink.gCost + neighborLink.gCost;
+                Link existingLinkToNeighbor = openLinks.Find(openLinks => openLinks.nodeTo == neighborLink.nodeTo);
+
+                if(existingLinkToNeighbor == null || tentaiveG < existingLinkToNeighbor.gCost)
+                {
+                    Link newLink = new Link(currentNode, neighborLink.nodeTo.GetCellPosition(), _goalNode.GetCellPosition(), tentaiveG);
+                    newLink.parentLink = currentLink;
+
+                    if(existingLinkToNeighbor != null)
+                    {
+                        openLinks.Remove(existingLinkToNeighbor);
+                    }
+
+                    openLinks.Add(newLink);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private List<Node> ReconstructPath(Link _endLink)
+    {
+        List<Node> path = new List<Node>();
+        Link current = _endLink;
+
+        while (current != null)
+        {
+            if (current.nodeTo != null)
+            {
+                path.Add(current.nodeTo);
+            }
+            current = current.parentLink;
+        }
+
+        path.Reverse();
+        return path;
     }
 
     #endregion
