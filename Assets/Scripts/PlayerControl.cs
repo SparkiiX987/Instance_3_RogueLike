@@ -6,34 +6,47 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour, ITargetable
 {
     [SerializeField] private float staminaMax;
-    
+
     [SerializeField] private float cooldown;
+
+    [SerializeField] private float pickupDistance;
+    [SerializeField] private LayerMask itemLayer;
     
     private bool isDetectable;
     private int health;
-    public float stamina;
+    private float stamina;
     private bool isRunning;
+    
+    private Ray ray;
+    private RaycastHit2D hit;
 
     private Stats stats;
+    private SellableObject sellableObject;
+    private UsableObject usableObject;
+    private CollectableItem collectableObject;
     
-    public float currentCooldown;
+    private float currentCooldown;
     
     private InputAction moveAction;
     private InputAction lookAction;
 
     private Vector2 movementDir;
     private Vector2 nextPlayerPos;
+    private Vector2 dir;
     private Transform playerTransform;
     
     private void Awake()
     {
         stats = GetComponent<Stats>();
+        ray = new Ray(transform.position, transform.forward);
         playerTransform = GetComponent<Transform>();
+        collectableObject = GetComponent<CollectableItem>();
     }
 
     private void Start()
     {
         stamina = staminaMax;
+        hit = Physics2D.Raycast(playerTransform.position, Vector2.up, 100f);
     }
 
     private void Update()
@@ -75,7 +88,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
         movementDir = _ctx.ReadValue<Vector2>();
     }
     
-    public void LookAtMouse()
+    private void LookAtMouse()
     {
         var dir = Input.mousePosition - Camera.main.WorldToScreenPoint(playerTransform.position);
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
@@ -84,12 +97,29 @@ public class PlayerControl : MonoBehaviour, ITargetable
     
     public void PickUp(InputAction.CallbackContext _ctx)
     {
-        
+        if (_ctx.started)
+        {
+            hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, itemLayer);
+            if (hit.collider!= null && hit.collider.transform.GetComponent<CollectableItem>()) 
+            {
+                if (hit.collider.transform.GetComponent<CollectableItem>().item.GetType() == typeof(SellableObject))
+                {
+                    sellableObject = (SellableObject)hit.collider.transform.GetComponent<CollectableItem>().item;
+                }
+                
+                else if (hit.collider.transform.GetComponent<CollectableItem>().item.GetType() == typeof(UsableObject))
+                {
+                    usableObject = (UsableObject)hit.collider.transform.GetComponent<CollectableItem>().item;
+                }
+                Destroy(hit.collider.gameObject);
+            }
+        }
     }
 
     public void UseItem(InputAction.CallbackContext _ctx)
     {
-        
+        if (_ctx.performed && usableObject != null) 
+            usableObject.Action();
     }
     
     public void Sprint(InputAction.CallbackContext _ctx)
@@ -139,5 +169,10 @@ public class PlayerControl : MonoBehaviour, ITargetable
         
         else
             return false;
+    }
+
+    private Vector2 GetMousePosition()
+    {
+        return Input.mousePosition - Camera.main.WorldToScreenPoint(playerTransform.position);
     }
 }
