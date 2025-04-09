@@ -47,6 +47,7 @@ public class LevelGenerator : MonoBehaviour
         transform.position = new Vector3(
             Mathf.Clamp(transform.position.x, 0, maxPosX),
             Mathf.Clamp(transform.position.y, 0, maxPosY), transform.position.z);
+        
     }
 
     private void SetEntranceSpawn()
@@ -75,6 +76,8 @@ public class LevelGenerator : MonoBehaviour
     {
         for (; MoveAmount > 0; MoveAmount -= Random.Range(minMoveAmount, maxMoveAmount))
         {
+            
+            
             if (roomsGenerated >= 256)
             {
                 return;
@@ -84,7 +87,7 @@ public class LevelGenerator : MonoBehaviour
             {
                 case 0:/*UP*/
                     print("up " + transform.position);
-                    if (transform.position.y < maxPosY) {
+                    if (transform.position.y <= maxPosY) {
                         transform.position += new Vector3(moveDistance, 0, 0);
                         roomsGenerated += 1;
                         RoomGenerator();
@@ -92,7 +95,7 @@ public class LevelGenerator : MonoBehaviour
                     break;
                 case 1:/*Left*/
                     print("left " + transform.position);
-                    if (transform.position.x > 0) {
+                    if (transform.position.x >= 0) {
                         transform.position += new Vector3(0, moveDistance, 0);
                         roomsGenerated += 1;
                         RoomGenerator();
@@ -100,7 +103,7 @@ public class LevelGenerator : MonoBehaviour
                     break;
                 case 2:/*Right*/
                     print("right " + transform.position);
-                    if (transform.position.x < maxPosX) {
+                    if (transform.position.x <= maxPosX) {
                         transform.position -= new Vector3(moveDistance, 0, 0);
                         roomsGenerated += 1;
                         RoomGenerator();
@@ -108,7 +111,7 @@ public class LevelGenerator : MonoBehaviour
                     break;
                 case 3:/*Down*/
                     print("down " + transform.position);
-                    if (transform.position.y > 0) {
+                    if (transform.position.y >= 0) {
                         transform.position -= new Vector3(0, moveDistance, 0);
                         roomsGenerated += 1;
                         RoomGenerator();
