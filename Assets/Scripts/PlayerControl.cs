@@ -71,8 +71,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
             else
                 StaminaRegen();
         }
-
-        
     }
     
     public int GetHealth()
@@ -104,7 +102,16 @@ public class PlayerControl : MonoBehaviour, ITargetable
             hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, itemLayer);
             if (hit.collider!= null && hit.collider.transform.GetComponent<CollectableItem>()) 
             {
+                if (hit.collider.transform.GetComponent<CollectableItem>().item.GetType() == typeof(SellableObject))
+                {
+                    sellableObject = (SellableObject)hit.collider.transform.GetComponent<CollectableItem>().item;
+                }
                 
+                else if (hit.collider.transform.GetComponent<CollectableItem>().item.GetType() == typeof(UsableObject))
+                {
+                    usableObject = (UsableObject)hit.collider.transform.GetComponent<CollectableItem>().item;
+                }
+                Destroy(hit.collider.gameObject);
             }
         }
     }
@@ -166,9 +173,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private Vector2 GetMousePosition()
     {
-        /*dir.Set(Camera.main.WorldToScreenPoint(Input.mousePosition).x - playerTransform.position.x, Camera.main.WorldToScreenPoint(Input.mousePosition).y - playerTransform.position.y);
-        Debug.Log(Camera.main.WorldToScreenPoint(Input.mousePosition));
-        dir.Normalize();*/
         return Input.mousePosition - Camera.main.WorldToScreenPoint(playerTransform.position);
     }
 }
