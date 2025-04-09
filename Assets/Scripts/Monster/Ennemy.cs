@@ -81,6 +81,10 @@ public class Ennemy : MonoBehaviour
         return tile;
     }
 
+    public List<Node> TestPathFinding(Node _startNode, Node _goalNode)
+    {
+        return FindPathToCell(_startNode, _goalNode);
+    }
     private List<Node> FindPathToCell(Node _startNode, Node _goalNode)
     {
         List<Link> openLinks = new List<Link>();

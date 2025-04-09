@@ -24,10 +24,10 @@ public class Node : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        /*Gizmos.color = Color.red;
         for (int i = 0; i < nextNodes.Count; i++)
         {
             Gizmos.DrawLine(cellPosition, nextNodes[i].GetCellPosition());
-        }
+        }*/
     }
 }

@@ -31,8 +31,6 @@ public class PlayerDetection : MonoBehaviour
     {
         hit = Physics2D.Raycast(selfTransform.position, dir, ennemy.detectionRange);
         Debug.DrawRay(selfTransform.position, dir, Color.red, detectionCooldown);
-        print(hit);
-        if (hit) print(hit.collider.transform.name);
         if(!hit || hit.collider.tag != playerTag) { return; }
 
         ennemy.SetPlayerPosition(hit.collider.transform.position);
@@ -53,7 +51,6 @@ public class PlayerDetection : MonoBehaviour
         }
         else
         {
-            print("detect");
             actualCooldown = detectionCooldown;
             GetPlayerDIrection();
             DetectPlayer();
