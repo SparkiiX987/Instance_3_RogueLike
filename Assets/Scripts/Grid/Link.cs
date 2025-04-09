@@ -35,7 +35,7 @@ public class Link
 
     public void CalculateGCost(Vector2 _position)
     {
-        gCost = Vector2.Distance(_position, nodeTo.GetCellPosition());
+        gCost = Vector2.Distance(_position, nodeTo.GetNodePosition());
     }
 
     public void CalculateHCost(Vector2 _position, Vector2 _goalPosition)

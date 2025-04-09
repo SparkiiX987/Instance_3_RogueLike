@@ -27,13 +27,13 @@ public class PathfindingDebugger : MonoBehaviour
         Gizmos.color = pathColor;
         for (int i = 0; i < path.Count - 1; i++)
         {
-            Gizmos.DrawLine(path[i].GetCellPosition(), path[i + 1].GetCellPosition());
-            Gizmos.DrawSphere(path[i].GetCellPosition(), sphereRadius);
+            Gizmos.DrawLine(path[i].GetNodePosition(), path[i + 1].GetNodePosition());
+            Gizmos.DrawSphere(path[i].GetNodePosition(), sphereRadius);
         }
 
         if (path.Count > 0)
         {
-            Gizmos.DrawSphere(path[path.Count - 1].GetCellPosition(), sphereRadius);
+            Gizmos.DrawSphere(path[path.Count - 1].GetNodePosition(), sphereRadius);
         }
     }
 }
