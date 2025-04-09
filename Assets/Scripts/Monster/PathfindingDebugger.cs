@@ -8,7 +8,7 @@ public class PathfindingDebugger : MonoBehaviour
     public Color pathColor = Color.green;
     public float sphereRadius = 0.2f;
 
-    private List<Node> _path;
+    private List<Node> path;
 
     public Ennemy ennemy;
 
@@ -16,24 +16,24 @@ public class PathfindingDebugger : MonoBehaviour
     {
         if (startNode == null || goalNode == null) { return; }
 
-        _path = ennemy.TestPathFinding(startNode, goalNode);
+        path = ennemy.TestPathFinding(startNode, goalNode);
 
-        if (_path == null)
+        if (path == null)
         {
             print("pas de paf");
             return;
         }
 
         Gizmos.color = pathColor;
-        for (int i = 0; i < _path.Count - 1; i++)
+        for (int i = 0; i < path.Count - 1; i++)
         {
-            Gizmos.DrawLine(_path[i].GetCellPosition(), _path[i + 1].GetCellPosition());
-            Gizmos.DrawSphere(_path[i].GetCellPosition(), sphereRadius);
+            Gizmos.DrawLine(path[i].GetCellPosition(), path[i + 1].GetCellPosition());
+            Gizmos.DrawSphere(path[i].GetCellPosition(), sphereRadius);
         }
 
-        if (_path.Count > 0)
+        if (path.Count > 0)
         {
-            Gizmos.DrawSphere(_path[_path.Count - 1].GetCellPosition(), sphereRadius);
+            Gizmos.DrawSphere(path[path.Count - 1].GetCellPosition(), sphereRadius);
         }
     }
 }
