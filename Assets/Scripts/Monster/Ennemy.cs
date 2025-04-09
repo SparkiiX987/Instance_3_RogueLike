@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Ennemy : MonoBehaviour
 {
@@ -58,19 +56,19 @@ public class Ennemy : MonoBehaviour
     private GameObject GetTileNextTo(Vector2 target)
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(selfTransform.position, 10, cellLayer);
-        if(hits.Length == 0)
+        if (hits.Length == 0)
         {
             GetComponent<SpriteRenderer>().color = Color.red;
-            throw new Exception("Error : No points next to the entity " + gameObject.name);
+            Debug.LogError("Error : No points next to the entity " + gameObject.name);
         }
 
         GameObject tile = hits[0].gameObject;
-        if(hits.Length == 0)
+        if (hits.Length == 0)
         {
             return tile;
         }
 
-        for(int i = 1; i < hits.Length; i++)
+        for (int i = 1; i < hits.Length; i++)
         {
             if (Vector2.Distance(target, tile.transform.position) < Vector2.Distance(target, hits[i].transform.position))
             {
@@ -90,38 +88,53 @@ public class Ennemy : MonoBehaviour
         List<Link> openLinks = new List<Link>();
         HashSet<Node> closedNodes = new HashSet<Node>();
 
-        Link startLink = new Link(_startNode, _startNode.GetCellPosition(), _goalNode.GetCellPosition());
+        int tryNumber = 0;
 
-        openLinks.Add(startLink);
-
-        while(openLinks.Count > 0)
+        foreach (Link startNeighbor in _startNode.GetLinks())
         {
-            openLinks.Sort((linkA, linkB) => linkA.fCost.CompareTo(linkB.fCost));
+            float g = Vector2.Distance(_startNode.GetCellPosition(), startNeighbor.nodeTo.GetCellPosition());
+            float h = Vector2.Distance(startNeighbor.nodeTo.GetCellPosition(), _goalNode.GetCellPosition());
+
+            Link startLink = new Link(startNeighbor.nodeTo, g, h);
+            startLink.parentLink = new Link(_startNode, 0f, h);
+            openLinks.Add(startLink);
+        }
+        print(openLinks.Count);
+        closedNodes.Add(_startNode);
+
+        while (openLinks.Count > 0)
+        {
+            if (tryNumber++ >= 1000)
+            {
+                Debug.LogError("Error : Infinite loop detected !");
+                return null;
+            }
+
+            openLinks.Sort((a, b) => a.fCost.CompareTo(b.fCost));
             Link currentLink = openLinks[0];
             openLinks.RemoveAt(0);
 
             Node currentNode = currentLink.nodeTo;
             closedNodes.Add(currentNode);
 
-            if(currentNode == _goalNode)
-            { return ReconstructPath(currentLink); }
+            if (currentNode == _goalNode)
+                return ReconstructPath(currentLink);
 
-            foreach(Link neighborLink in currentNode.GetLinks())
+            foreach (Link neighborLink in currentNode.GetLinks())
             {
-                if (closedNodes.Contains(neighborLink.nodeTo)) { continue; }
+                if (closedNodes.Contains(neighborLink.nodeTo)) continue;
 
-                float tentaiveG = currentLink.gCost + neighborLink.gCost;
-                Link existingLinkToNeighbor = openLinks.Find(openLinks => openLinks.nodeTo == neighborLink.nodeTo);
+                float tentativeG = currentLink.gCost + Vector2.Distance(currentNode.GetCellPosition(), neighborLink.nodeTo.GetCellPosition());
+                Link existing = openLinks.Find(l => l.nodeTo == neighborLink.nodeTo);
 
-                if(existingLinkToNeighbor == null || tentaiveG < existingLinkToNeighbor.gCost)
+                if (existing == null || tentativeG < existing.gCost)
                 {
-                    Link newLink = new Link(currentNode, neighborLink.nodeTo.GetCellPosition(), _goalNode.GetCellPosition(), tentaiveG);
+                    float h = Vector2.Distance(neighborLink.nodeTo.GetCellPosition(), _goalNode.GetCellPosition());
+                    Link newLink = new Link(neighborLink.nodeTo, tentativeG, h);
                     newLink.parentLink = currentLink;
 
-                    if(existingLinkToNeighbor != null)
-                    {
-                        openLinks.Remove(existingLinkToNeighbor);
-                    }
+                    if (existing != null)
+                        openLinks.Remove(existing);
 
                     openLinks.Add(newLink);
                 }
@@ -130,6 +143,7 @@ public class Ennemy : MonoBehaviour
 
         return null;
     }
+
 
     private List<Node> ReconstructPath(Link _endLink)
     {
@@ -153,6 +167,6 @@ public class Ennemy : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 }

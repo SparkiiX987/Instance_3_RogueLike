@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[System.Serializable]
 public class Link
 {
     public float gCost;
@@ -23,6 +24,14 @@ public class Link
         gCost = _gCost;
         CalculateHCost(_position, _goalPosition);
     }
+
+    public Link(Node _startNode, float _gCost, float _hCost)
+    {
+        nodeTo = _startNode;
+        gCost = _gCost;
+        hCost = _hCost;
+    }
+
 
     public void CalculateGCost(Vector2 _position)
     {

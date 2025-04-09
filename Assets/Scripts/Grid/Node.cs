@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    [SerializeField] private List<Node> nextNodes = new List<Node>();
     [SerializeField] private List<Link> links = new List<Link>();
     public Node parent;
 
@@ -19,7 +18,6 @@ public class Node : MonoBehaviour
         return cellPosition;
     }
 
-    public List<Node> GetNextNodes() { return nextNodes; }
     public List<Link> GetLinks() { return links; }
 
     private void OnDrawGizmos()

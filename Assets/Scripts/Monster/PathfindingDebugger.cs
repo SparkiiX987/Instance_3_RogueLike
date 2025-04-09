@@ -15,7 +15,6 @@ public class PathfindingDebugger : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         if (startNode == null || goalNode == null) { return; }
-
         path = ennemy.TestPathFinding(startNode, goalNode);
 
         if (path == null)
@@ -24,6 +23,7 @@ public class PathfindingDebugger : MonoBehaviour
             return;
         }
 
+        print("ya le paf !");
         Gizmos.color = pathColor;
         for (int i = 0; i < path.Count - 1; i++)
         {
