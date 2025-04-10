@@ -2,12 +2,12 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LevelGenerator : MonoBehaviour
+public class LevelGeneratorWalker : MonoBehaviour
 {
     #region Global Variables
     
-    [Header("Global Variables")]
-    [HideInInspector] public float roomsGenerated;
+    [Header("Global Variables (info only)")]
+    public float roomsGenerated;
 
     #endregion
 
@@ -27,6 +27,7 @@ public class LevelGenerator : MonoBehaviour
     [Header("Room Settings")]
     [SerializeField] float maxPosX;
     [SerializeField] float maxPosY;
+    [SerializeField] int maxRooms;
     [SerializeField] int MoveAmount;
     [SerializeField] int minMoveAmount;
     [SerializeField] int maxMoveAmount;
@@ -40,13 +41,6 @@ public class LevelGenerator : MonoBehaviour
     {
         SetEntranceSpawn();
         WalkerMovment();
-    }
-
-    private void Update()
-    {
-        transform.position = new Vector3(
-            Mathf.Clamp(transform.position.x, 0, maxPosX),
-            Mathf.Clamp(transform.position.y, 0, maxPosY), transform.position.z);
     }
 
     private void SetEntranceSpawn()
@@ -73,9 +67,14 @@ public class LevelGenerator : MonoBehaviour
 
     private void WalkerMovment()
     {
-        for (; MoveAmount > 0; MoveAmount -= Random.Range(minMoveAmount, maxMoveAmount))
+        int amount = Random.Range(minMoveAmount, maxMoveAmount);
+        for (; MoveAmount > 0; MoveAmount -= amount)
         {
-            if (roomsGenerated >= 256)
+            transform.position = new Vector3(
+                Mathf.Clamp(transform.position.x, 0, maxPosX),
+                Mathf.Clamp(transform.position.y, 0, maxPosY), transform.position.z);
+            amount = Random.Range(minMoveAmount, maxMoveAmount);
+            if (roomsGenerated >= maxRooms)
             {
                 return;
             }
@@ -83,52 +82,47 @@ public class LevelGenerator : MonoBehaviour
             switch (direction)
             {
                 case 0:/*UP*/
-                    print("up " + transform.position);
-                    if (transform.position.y < maxPosY) {
+                    //print("up " + transform.position);
+                    if (transform.position.y <= maxPosY) {
                         transform.position += new Vector3(moveDistance, 0, 0);
-                        roomsGenerated += 1;
-                        RoomGenerator();
+                        RoomGenerator(amount);
                     }
                     break;
                 case 1:/*Left*/
-                    print("left " + transform.position);
-                    if (transform.position.x > 0) {
+                    //print("left " + transform.position);
+                    if (transform.position.x >= 0) {
                         transform.position += new Vector3(0, moveDistance, 0);
-                        roomsGenerated += 1;
-                        RoomGenerator();
+                        RoomGenerator(amount);
                     }
                     break;
                 case 2:/*Right*/
-                    print("right " + transform.position);
-                    if (transform.position.x < maxPosX) {
+                    //print("right " + transform.position);
+                    if (transform.position.x <= maxPosX) {
                         transform.position -= new Vector3(moveDistance, 0, 0);
-                        roomsGenerated += 1;
-                        RoomGenerator();
+                        RoomGenerator(amount);
                     }
                     break;
                 case 3:/*Down*/
-                    print("down " + transform.position);
-                    if (transform.position.y > 0) {
+                    //print("down " + transform.position);
+                    if (transform.position.y >= 0) {
                         transform.position -= new Vector3(0, moveDistance, 0);
-                        roomsGenerated += 1;
-                        RoomGenerator();
+                        RoomGenerator(amount);
                     }
                     break;
             }
         }
     }
 
-    private void RoomGenerator()
+    private void RoomGenerator(int amount)
     {
-        Instantiate(roomsArray[0], transform.position, Quaternion.identity);
-    }
-
-    private bool IsInbounds()
-    {
-        if (transform.position.x > maxPosX && transform.position.x < maxPosX)
+        if(!Physics.Raycast(transform.position, Vector3.forward, 1))
         {
-            
+            Instantiate(roomsArray[0], transform.position, Quaternion.identity);
+            roomsGenerated += 1;
         }
-        return false;
+        else
+        {
+            MoveAmount += amount;
+        }
     }
 }

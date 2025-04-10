@@ -553,6 +553,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 977796546}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &837838302
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 837838303}
+  - component: {fileID: 837838304}
+  m_Layer: 0
+  m_Name: Map Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &837838303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837838302}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &837838304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837838302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3038ab1eda443564fa11da7d160f9455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &910166810
 GameObject:
   m_ObjectHideFlags: 0
@@ -1429,6 +1473,10 @@ PrefabInstance:
       value: 38.4
       objectReference: {fileID: 0}
     - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
+      propertyPath: maxRooms
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
       propertyPath: minPos.y
       value: 0
       objectReference: {fileID: 0}
@@ -1438,11 +1486,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
       propertyPath: maxMoveAmount
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
       propertyPath: minMoveAmount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
+      propertyPath: delayBetweenRooms
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
       propertyPath: roomsArray.Array.size
@@ -1631,6 +1683,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 910166813}
   - {fileID: 690711348790533664}
+  - {fileID: 837838303}
   - {fileID: 977796546}
   - {fileID: 2126997956}
   - {fileID: 1563807657}
