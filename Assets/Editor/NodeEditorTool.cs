@@ -1,13 +1,15 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 
 public class NodeEditorTool : EditorWindow
 {
     private GameObject nodePrefab;
+    private Transform nodesParent;
     private float connectionRange;
+    private bool isPlacingNode = false;
 
-    [MenuItem("Tool/Node Editor")]
+
+    [MenuItem("Tools/Node Editor")]
     public static void ShowWindow()
     {
         GetWindow<NodeEditorTool>("Node Editor");
@@ -18,31 +20,70 @@ public class NodeEditorTool : EditorWindow
         GUILayout.Label("Node Tool", EditorStyles.boldLabel);
 
         nodePrefab = (GameObject)EditorGUILayout.ObjectField("Node Prefab", nodePrefab, typeof(GameObject), false);
+        nodesParent = (Transform)EditorGUILayout.ObjectField("Node Parent", nodesParent, typeof(Transform), true);
         connectionRange = Mathf.Max(0f, EditorGUILayout.FloatField("Auto-Connect range", connectionRange));
 
-        if(GUILayout.Button("place node at scene view camera"))
+        if (!isPlacingNode)
         {
-            PlaceNode();
+            if (GUILayout.Button("Start Placing Node"))
+            {
+                isPlacingNode = true;
+                SceneView.duringSceneGui += OnSceneGUI;
+            }
+        }
+        else
+        {
+            GUILayout.Label("Click in scene to place the node...");
+            if (GUILayout.Button("Cancel Placement"))
+            {
+                isPlacingNode = false;
+                SceneView.duringSceneGui -= OnSceneGUI;
+            }
         }
     }
 
-    private void PlaceNode()
+    private void OnSceneGUI(SceneView _sceneView)
     {
-        if(nodePrefab == null)
+        Event @event = Event.current;
+
+        if (@event.type == EventType.MouseDown && @event.button == 0 && !@event.alt)
         {
-            Debug.LogWarning("No Node prefab assigned !");
+            Ray worldRay = HandleUtility.GUIPointToWorldRay(@event.mousePosition);
+
+            Plane plane = new Plane(Vector3.forward, new Vector3(0, 0, 0));
+            if (plane.Raycast(worldRay, out float distance))
+            {
+                Vector3 worldPos = worldRay.GetPoint(distance);
+                Debug.Log("Clicked at: " + worldPos);
+                PlaceNode(worldPos);
+            }
+            else
+            {
+                Debug.LogWarning("Ray did not hit the Z=0 plane.");
+            }
+
+            isPlacingNode = false;
+            SceneView.duringSceneGui -= OnSceneGUI;
+            @event.Use();
+        }
+    }
+
+    private void PlaceNode(Vector3 _position)
+    {
+        Debug.Log(_position);
+        if (nodePrefab == null)
+        {
+            Debug.LogWarning("No prefab assigned.");
             return;
         }
 
-        Vector3 position = SceneView.lastActiveSceneView.camera.transform.position + SceneView.lastActiveSceneView.camera.transform.forward * 5f;
-        GameObject newNodeGO = (GameObject)PrefabUtility.InstantiatePrefab(nodePrefab);
-        newNodeGO.transform.position = position;
+        GameObject newNodeGO = (GameObject)PrefabUtility.InstantiatePrefab(nodePrefab, nodesParent);
+        newNodeGO.transform.position = _position;
 
         Node newNode = newNodeGO.GetComponent<Node>();
         if (newNode == null)
         {
             Debug.LogError("Prefab must have a Node component.");
-            Destroy(newNode);
             return;
         }
 
@@ -51,16 +92,17 @@ public class NodeEditorTool : EditorWindow
     }
 
 
+
     private void ConnectToNearbyNodes(Node newNode)
     {
         Node[] allNodes = FindObjectsByType<Node>(FindObjectsSortMode.None);
-        foreach(Node node in allNodes)
+        foreach (Node node in allNodes)
         {
-            if(node == newNode)
+            if (node == newNode)
             { continue; }
 
             float dist = Vector2.Distance(newNode.GetNodePosition(), node.GetNodePosition());
-            if(dist <= connectionRange)
+            if (dist <= connectionRange)
             {
                 newNode.AddLink(new Link(node, dist, 0f));
                 node.AddLink(new Link(newNode, dist, 0f));
