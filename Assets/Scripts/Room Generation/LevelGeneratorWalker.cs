@@ -2,12 +2,12 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LevelGenerator : MonoBehaviour
+public class LevelGeneratorWalker : MonoBehaviour
 {
     #region Global Variables
     
     [Header("Global Variables (info only)")]
-    /*[HideInInspector]*/ public float roomsGenerated;
+    public float roomsGenerated;
 
     #endregion
 
@@ -41,14 +41,6 @@ public class LevelGenerator : MonoBehaviour
     {
         SetEntranceSpawn();
         WalkerMovment();
-    }
-
-    private void Update()
-    {
-        transform.position = new Vector3(
-            Mathf.Clamp(transform.position.x, 0, maxPosX),
-            Mathf.Clamp(transform.position.y, 0, maxPosY), transform.position.z);
-        
     }
 
     private void SetEntranceSpawn()
@@ -125,13 +117,11 @@ public class LevelGenerator : MonoBehaviour
     {
         if(!Physics.Raycast(transform.position, Vector3.forward, 1))
         {
-            print("false");
             Instantiate(roomsArray[0], transform.position, Quaternion.identity);
             roomsGenerated += 1;
         }
         else
         {
-            print("True");
             MoveAmount += amount;
         }
     }
