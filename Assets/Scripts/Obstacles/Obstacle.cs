@@ -9,7 +9,7 @@ public class Obstacle : MonoBehaviour, ITargetable
     protected Ennemy enemy;
     protected PlayerControl player;
 
-    protected bool activated;
+    public bool activated;
 
     public int GetHealth()
     {

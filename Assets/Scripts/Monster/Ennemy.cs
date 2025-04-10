@@ -244,22 +244,19 @@ public class Ennemy : MonoBehaviour
             else
             {
                 Obstacle _obstacle = collision.GetComponent<Obstacle>();
-                if (_obstacle != null && collision.GetComponent<FoodObstacle>())
+                if (_obstacle != null && collision.GetComponent<FoodObstacle>() && _obstacle.activated)
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
                 }
-                else if (_obstacle != null && activeState == states[2])
+                else if (_obstacle != null && activeState == states[2] && _obstacle.activated)
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
                 }
-
             }
         }
         else
-        {
             ChangeState("Idle");
-        }
     }
 }
