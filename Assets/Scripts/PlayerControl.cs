@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerControl : MonoBehaviour, ITargetable
 {
+    [SerializeField] private float rotationSpeed;
+    
     [SerializeField] private float staminaMax;
 
     [SerializeField] private float cooldown;
@@ -99,7 +101,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
     {
         var dir = Input.mousePosition - Camera.main.WorldToScreenPoint(playerTransform.position);
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
     
     public void PickUp(InputAction.CallbackContext _ctx)
