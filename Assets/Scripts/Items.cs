@@ -1,7 +1,10 @@
 using UnityEngine;
+[System.Serializable]
 public class PickableObject : IPickableObject
 {
-    protected int price; 
+    public int price;
+    public string name;
+    public string description;
 
     public int GetPrice()
     {
