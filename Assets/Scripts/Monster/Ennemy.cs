@@ -26,7 +26,8 @@ public class Ennemy : MonoBehaviour
     private float timer = 0f;
     private float attackMaxTimer = 1f;
 
-    private ITargetable target;
+    public ITargetable target;
+    public PlayerControl targetPlayer;
 
     private void Awake()
     {
@@ -40,7 +41,7 @@ public class Ennemy : MonoBehaviour
         activeState = states[0];
     }
 
-    private void ChangeState(string _state)
+    public void ChangeState(string _state)
     {
         switch (_state)
         {
@@ -58,6 +59,7 @@ public class Ennemy : MonoBehaviour
                 }
             case "Chase":
                 {
+                    target = targetPlayer;
                     activeState = states[2];
                     Debug.Log("Chase");
                     break;
@@ -74,7 +76,19 @@ public class Ennemy : MonoBehaviour
 
                         timer -= attackMaxTimer;
 
-                        ChangeState("Ilde");
+                        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
+                        {
+                            ChangeState("Idle");
+                            targetPlayer = null;
+                            target = null;
+                        }
+                        else if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) <= detectionRange * 3)
+                        {
+                            if (target == null)
+                            {
+                                ChangeState("Chase");
+                            }
+                        }
                     }
                     else
                         Debug.Log("Unable to attack yet");
@@ -218,9 +232,14 @@ public class Ennemy : MonoBehaviour
     void Update()
     {
         Debug.Log(activeState);
-        if (timer > attackMaxTimer)
-            timer -= attackMaxTimer;
-        else
+        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange*3)
+        {
+            targetPlayer = null;
+            target = null;
+            ChangeState("Idle");
+        }
+
+        if (timer < attackMaxTimer)
             timer += Time.deltaTime;
     }
 
@@ -233,10 +252,12 @@ public class Ennemy : MonoBehaviour
             PlayerControl _player = collision.GetComponent<PlayerControl>();
             if (_player != null && Vector3.Distance(selfTransform.position, collision.transform.position) <= attackRad && activeState == states[2])
             {
+                if (targetPlayer == null)
+                    targetPlayer = _player;
                 target = _tempTarget;
                 ChangeState("Attack");
             }
-            else if (_player != null  && (activeState == states[0] || activeState == states[1]))
+            else if (_player != null && (activeState == states[0] || activeState == states[1]))
             {
                 target = _tempTarget;
                 ChangeState("Chase");
@@ -244,12 +265,12 @@ public class Ennemy : MonoBehaviour
             else
             {
                 Obstacle _obstacle = collision.GetComponent<Obstacle>();
-                if (_obstacle != null && collision.GetComponent<FoodObstacle>() && _obstacle.activated)
+                if (targetPlayer != null && _obstacle != null && collision.GetComponent<FoodObstacle>() && _obstacle.activated)
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
                 }
-                else if (_obstacle != null && activeState == states[2] && _obstacle.activated)
+                else if (targetPlayer != null && _obstacle != null && activeState == states[2] && _obstacle.activated)
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
@@ -257,6 +278,22 @@ public class Ennemy : MonoBehaviour
             }
         }
         else
-            ChangeState("Idle");
+        {
+            if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
+            {
+                ChangeState("Idle");
+                targetPlayer = null;
+                target = null;
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.GetComponent<ITargetable>() != null)
+        {
+            target = null;
+            ChangeState("Chase");
+        }
     }
 }

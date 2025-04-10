@@ -17,14 +17,16 @@ public class PlayerInteraction : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (obstacle == null)
-            obstacle = collision.gameObject.GetComponent<Obstacle>();
+    { 
+        Obstacle _tempObstacle = collision.gameObject.GetComponent<Obstacle>();
+        if (obstacle == null && _tempObstacle != null)
+            obstacle = _tempObstacle;
     }
 
-    private void nTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (obstacle != null)
+        Obstacle _tempObstacle = collision.gameObject.GetComponent<Obstacle>();
+        if (obstacle != null && _tempObstacle != null)
             obstacle = null;
     }
 }

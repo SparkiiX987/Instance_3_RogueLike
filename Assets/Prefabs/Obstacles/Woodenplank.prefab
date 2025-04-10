@@ -145,7 +145,6 @@ GameObject:
   - component: {fileID: 4596690191105648250}
   - component: {fileID: 2342406933542584472}
   - component: {fileID: 7160020408397321863}
-  - component: {fileID: 7785065835458867768}
   - component: {fileID: 6078137013623697547}
   m_Layer: 0
   m_Name: Plank
@@ -270,23 +269,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &7785065835458867768
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6067882074771526935}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecea0dcbe8da294488abdd8fcec5c1ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
-  start: {fileID: 720995655135667779}
-  destination: {fileID: 1448575594294612020}
-  boxCollider2D: {fileID: 7160020408397321863}
-  speed: 2
 --- !u!58 &6078137013623697547
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -332,6 +314,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3856334734126126074}
+  - component: {fileID: 63463824287120039}
   m_Layer: 0
   m_Name: Woodenplank
   m_TagString: Untagged
@@ -357,6 +340,25 @@ Transform:
   - {fileID: 1448575594294612020}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &63463824287120039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6812828402122366701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecea0dcbe8da294488abdd8fcec5c1ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  activated: 0
+  transformObstacle: {fileID: 4596690191105648250}
+  start: {fileID: 720995655135667779}
+  destination: {fileID: 1448575594294612020}
+  boxCollider2D: {fileID: 7160020408397321863}
+  speed: 2
 --- !u!1 &8403298345551081050
 GameObject:
   m_ObjectHideFlags: 0

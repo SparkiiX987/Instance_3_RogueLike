@@ -11,10 +11,6 @@ public class Attack : IState
     private float attackRange = 1f;
     private int damage = 25; // remplace with stats.damage (I suppopse)
 
-    // CoolDown
-    private float timer;
-    private float attackMaxTimer;
-
 
     public void Action()
     {
