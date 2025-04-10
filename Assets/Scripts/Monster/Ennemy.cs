@@ -7,8 +7,8 @@ public class Ennemy : MonoBehaviour
     //public Stats ennemyStats
 
     [Header("States"), HideInInspector]
-    private IState[] states = new IState[4];
-    private IState[] activeState;
+    public IState[] states = new IState[4];
+    public  IState activeState;
 
     [Header("PathFinding")]
     public float detectionRange;
@@ -21,6 +21,13 @@ public class Ennemy : MonoBehaviour
 
     private Transform selfTransform;
 
+    [Header("Attack")]
+    [SerializeField] private float attackRad = 1f;
+    private float timer = 0f;
+    private float attackMaxTimer = 1f;
+
+    private ITargetable target;
+
     private void Awake()
     {
         //ennemyStats = GetComponent<Stats>();
@@ -30,8 +37,51 @@ public class Ennemy : MonoBehaviour
     void Start()
     {
         StateInitialization();
+        activeState = states[0];
     }
 
+    private void ChangeState(string _state)
+    {
+        switch (_state)
+        {
+            case "Idle":
+                {
+                    activeState = states[0];
+                    Debug.Log("Idle");
+                    break;
+                }
+            case "Patrol":
+                {
+                    activeState = states[1];
+                    Debug.Log("Patrol");
+                    break;
+                }
+            case "Chase":
+                {
+                    activeState = states[2];
+                    Debug.Log("Chase");
+                    break;
+                }
+            case "Attack":
+                {
+                    if (timer > attackMaxTimer)
+                    {
+                        activeState = states[3];
+                        Attack attack = (Attack)activeState;
+                        attack.target = this.target;
+                        attack.enemy = this;
+                        attack.Action();
+
+                        timer -= attackMaxTimer;
+
+                        ChangeState("Ilde");
+                    }
+                    else
+                        Debug.Log("Unable to attack yet");
+                    break;
+                }
+        }
+    }
 
     private void StateInitialization()
     {
@@ -167,6 +217,49 @@ public class Ennemy : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(activeState);
+        if (timer > attackMaxTimer)
+            timer -= attackMaxTimer;
+        else
+            timer += Time.deltaTime;
+    }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        ITargetable _tempTarget = collision.GetComponent<ITargetable>();
+
+        if (_tempTarget != null)
+        {
+            PlayerControl _player = collision.GetComponent<PlayerControl>();
+            if (_player != null && Vector3.Distance(selfTransform.position, collision.transform.position) <= attackRad && activeState == states[2])
+            {
+                target = _tempTarget;
+                ChangeState("Attack");
+            }
+            else if (_player != null  && (activeState == states[0] || activeState == states[1]))
+            {
+                target = _tempTarget;
+                ChangeState("Chase");
+            }
+            else
+            {
+                Obstacle _obstacle = collision.GetComponent<Obstacle>();
+                if (_obstacle != null && collision.GetComponent<FoodObstacle>())
+                {
+                    target = _tempTarget;
+                    ChangeState("Attack");
+                }
+                else if (_obstacle != null && activeState == states[2])
+                {
+                    target = _tempTarget;
+                    ChangeState("Attack");
+                }
+
+            }
+        }
+        else
+        {
+            ChangeState("Idle");
+        }
     }
 }

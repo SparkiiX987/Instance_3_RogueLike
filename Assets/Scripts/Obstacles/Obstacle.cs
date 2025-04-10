@@ -5,8 +5,11 @@ using UnityEngine.InputSystem;
 public class Obstacle : MonoBehaviour, ITargetable
 {
     [SerializeField] private int health;
-    protected Enemy enemy;
-    //[SerializeField] private Obstacles obstacleType;
+
+    protected Ennemy enemy;
+    protected PlayerControl player;
+
+    protected bool activated;
 
     public int GetHealth()
     {
@@ -16,57 +19,31 @@ public class Obstacle : MonoBehaviour, ITargetable
     public void SetHealth(int _health)
     {
         health = _health;
-    }
 
-    public void TakeDamage(int _damage)
-    {
-        SetHealth(health - _damage);
         if (health <= 0)
         {
-            Destroy(this.gameObject);
+            //Play animation destruction
+            Destroy(gameObject);
         }
     }
 
     public virtual void Action()
     {
-        //if (context.started)
-        //{
-        //    switch (obstacleType)
-        //    {
-        //        case Obstacles.WoodenPlankBin:
-        //            {
-        //                //Play animation
-        //                //Play Sound
-        //                transformObstacle.localScale = size;
-        //                break;
-        //            }
-        //        case Obstacles.Table:
-        //            {
-        //                break;
-        //            }
-        //        case Obstacles.Food:
-        //            {
-        //                //Play Sound
-        //                break;
-        //            }
-        //    }
-        //}
+
     }
 
-    //public enum Obstacles
-    //{
-    //    WoodenPlankBin,
-    //    Table,
-    //    Food
-    //}
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    public virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        enemy = collision.GetComponent<Enemy>();
+        if (enemy == null) 
+            enemy = collision.GetComponent<Ennemy>();
+
+        if (player == null)
+        player = collision.GetComponent<PlayerControl>();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         enemy = null;
+        player = null;
     }
 }

@@ -5,21 +5,15 @@ using UnityEngine.InputSystem;
 
 public class FoodObstacle : Obstacle
 {
-    [SerializeField] private Transform transformFood;
-    [SerializeField] private float timerMax;
-    private float timer = 0f;
-
-    private void Update()
+    public override void OnTriggerEnter2D(Collider2D collision)
     {
+        base.OnTriggerEnter2D(collision);
         Action();
     }
-
     public override void Action()
     {
-        if (enemy != null)
-        {
-            //Monster attack it
-            Debug.Log("Monster in a zone");
-        }
+         //Target of ennemy is now food (== this gameObject)
+         activated = true;
+         Debug.Log("Monster targeting food");
     }
 }
