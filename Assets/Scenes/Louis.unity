@@ -1429,6 +1429,10 @@ PrefabInstance:
       value: 38.4
       objectReference: {fileID: 0}
     - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
+      propertyPath: maxRooms
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
       propertyPath: minPos.y
       value: 0
       objectReference: {fileID: 0}
@@ -1438,7 +1442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
       propertyPath: maxMoveAmount
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
       propertyPath: minMoveAmount
