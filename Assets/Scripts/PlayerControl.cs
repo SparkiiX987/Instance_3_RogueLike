@@ -89,10 +89,10 @@ public class PlayerControl : MonoBehaviour, ITargetable
     public void Movement(InputAction.CallbackContext _ctx)
     {
         movementDir = _ctx.ReadValue<Vector2>();
-        animator.SetBool("IsWalking", true);
+        animator.SetBool("IsWalkingBool", true);
         
         if (_ctx.canceled)
-            animator.SetBool("IsWalking", false);
+            animator.SetBool("IsWalkingBool", false);
     }
     
     private void LookAtMouse()
@@ -106,7 +106,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
     {
         if (_ctx.started)
         {
-            animator.SetBool("IsPickingUpItem", true);
             hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, itemLayer);
             if (hit.collider!= null && hit.collider.transform.GetComponent<CollectableItem>()) 
             {
@@ -119,12 +118,10 @@ public class PlayerControl : MonoBehaviour, ITargetable
                 {
                     usableObject = (UsableObject)hit.collider.transform.GetComponent<CollectableItem>().item;
                 }
+                animator.SetTrigger("IsPickingUpItem");
                 Destroy(hit.collider.gameObject);
             }
         }
-
-        if (_ctx.canceled)
-            animator.SetBool("IsPickingUpItem", false);
     }
 
     public void UseItem(InputAction.CallbackContext _ctx)
@@ -132,12 +129,17 @@ public class PlayerControl : MonoBehaviour, ITargetable
         if (_ctx.performed && usableObject != null)
         {
             usableObject.Action();
-            animator.SetBool("IsUsingItem", true);
-        }
             
-
-        if (_ctx.canceled)
-            animator.SetBool("IsUsingItem", false);
+            if (usableObject.GetType() == typeof(EmptyBottle))
+            {
+                animator.SetTrigger("IsThrowingItem");
+            }
+            
+            if (usableObject.GetType() == typeof(MonsterCan))
+            {
+                animator.SetTrigger("IsDrinkingItem");
+            }
+        }
     }
     
     public void Sprint(InputAction.CallbackContext _ctx)
@@ -147,15 +149,16 @@ public class PlayerControl : MonoBehaviour, ITargetable
         if (_ctx.performed && stamina > 0)
         {
             stats.speed = stats.speed * 2f;
+            animator.SetFloat("WalkingSpeed", 1.5f);
             isRunning = true;
         }
 
         else
         {
             stats.speed = walkingSpeed;
+            animator.SetFloat("WalkingSpeed", 1);
             isRunning = false;
         }
-            
     }
 
     private void StaminaRegen()
@@ -165,7 +168,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
             stamina = staminaMax;
             return;
         }
-            
         stamina += 1;
     }
 
@@ -176,7 +178,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
             stamina = 0;
             return;
         }
-            
         stamina -= 1;
     }
 
