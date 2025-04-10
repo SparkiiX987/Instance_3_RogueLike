@@ -11,7 +11,6 @@ public class PlayerMoney : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.Log("trop de fois appelé");
             Destroy(this);
         }
         Instance = this;

@@ -6,16 +6,14 @@ using UnityEngine.UI;
 public class DayUpdater : MonoBehaviour
 {
     public GameObject _panelBase;
+
+    [Header("Texts")]
     public TMP_Text textJour;
     public TMP_Text textImpots;
 
+    [Header("Impots")]
     [SerializeField] private List<Image> cases = new List<Image>();
-   
-   
-
     [SerializeField] private Color _color = Color.red;
-
-    
 
     private void Start()
     {
