@@ -10,6 +10,7 @@ public class RoomEditorTools : EditorWindow
     private bool isEditingRoom;
     private GameObject emptyRoom;
     private GameObject instantiedRoom;
+    private float cellSize = 0.32f;
 
 
     [MenuItem("Tools/Room Editor")]
@@ -22,7 +23,7 @@ public class RoomEditorTools : EditorWindow
     {
         GUILayout.Label("Room Editor", EditorStyles.boldLabel);
 
-        roomCreatorData = (RoomCreatorData)EditorGUILayout.ObjectField("Floor Prefabs", roomCreatorData, typeof(RoomCreatorData), false);
+        roomCreatorData = (RoomCreatorData)EditorGUILayout.ObjectField("Room Creator Data", roomCreatorData, typeof(RoomCreatorData), false);
         emptyRoom = (GameObject)EditorGUILayout.ObjectField("Empty Room", emptyRoom, typeof(GameObject), false);
 
         if (!isEditingRoom)
@@ -94,7 +95,7 @@ public class RoomEditorTools : EditorWindow
                 Vector3 worldPos = worldRay.GetPoint(distance);
                 int randomTileIndex = Random.Range(0, roomCreatorData.floorPrefabs.Count - 1);
                 GameObject newTile = Instantiate(roomCreatorData.floorPrefabs[randomTileIndex], instantiedRoom.transform.GetChild(1));
-                newTile.transform.position = worldPos;
+                newTile.transform.position = SnapToGrid(worldPos);
             }
             else
             {
@@ -103,5 +104,13 @@ public class RoomEditorTools : EditorWindow
 
             @event.Use();
         }
+    }
+
+
+    Vector2 SnapToGrid(Vector2 _position)
+    {
+        _position.x = Mathf.Round(_position.x / cellSize) * cellSize;
+        _position.y = Mathf.Round(_position.y / cellSize) * cellSize;
+        return _position;
     }
 }
