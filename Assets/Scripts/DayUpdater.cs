@@ -15,12 +15,22 @@ public class DayUpdater : MonoBehaviour
     [SerializeField] private List<Image> cases = new List<Image>();
     [SerializeField] private Color _color = Color.red;
 
+    public Transform shopOfferPanel;
+
+    [SerializeField] private List<GameObject> shopOfferPrefabs = new List<GameObject>();
+
     private void Start()
     {
         DayManager.Instance.IncrementDay();
         UpdateDayUI();
         CaseImpots();
         UpdateImpots();
+
+        for(int i = 0; i < shopOfferPrefabs.Count; i++)
+        {
+            GameObject shopOffer = Instantiate(shopOfferPrefabs[i], shopOfferPanel);
+        }
+
     }
 
     public void UpdateDayUI()
