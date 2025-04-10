@@ -92,8 +92,8 @@ public class Ennemy : MonoBehaviour
 
         foreach (Link startNeighbor in _startNode.GetLinks())
         {
-            float g = Vector2.Distance(_startNode.GetCellPosition(), startNeighbor.nodeTo.GetCellPosition());
-            float h = Vector2.Distance(startNeighbor.nodeTo.GetCellPosition(), _goalNode.GetCellPosition());
+            float g = Vector2.Distance(_startNode.GetNodePosition(), startNeighbor.nodeTo.GetNodePosition());
+            float h = Vector2.Distance(startNeighbor.nodeTo.GetNodePosition(), _goalNode.GetNodePosition());
 
             Link startLink = new Link(startNeighbor.nodeTo, g, h);
             startLink.parentLink = new Link(_startNode, 0f, h);
@@ -124,12 +124,12 @@ public class Ennemy : MonoBehaviour
             {
                 if (closedNodes.Contains(neighborLink.nodeTo)) continue;
 
-                float tentativeG = currentLink.gCost + Vector2.Distance(currentNode.GetCellPosition(), neighborLink.nodeTo.GetCellPosition());
+                float tentativeG = currentLink.gCost + Vector2.Distance(currentNode.GetNodePosition(), neighborLink.nodeTo.GetNodePosition());
                 Link existing = openLinks.Find(l => l.nodeTo == neighborLink.nodeTo);
 
                 if (existing == null || tentativeG < existing.gCost)
                 {
-                    float h = Vector2.Distance(neighborLink.nodeTo.GetCellPosition(), _goalNode.GetCellPosition());
+                    float h = Vector2.Distance(neighborLink.nodeTo.GetNodePosition(), _goalNode.GetNodePosition());
                     Link newLink = new Link(neighborLink.nodeTo, tentativeG, h);
                     newLink.parentLink = currentLink;
 
