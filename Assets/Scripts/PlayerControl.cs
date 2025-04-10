@@ -5,12 +5,17 @@ using UnityEngine.InputSystem;
 
 public class PlayerControl : MonoBehaviour, ITargetable
 {
+    [SerializeField] private float rotationSpeed;
+    
     [SerializeField] private float staminaMax;
 
     [SerializeField] private float cooldown;
 
     [SerializeField] private float pickupDistance;
     [SerializeField] private LayerMask itemLayer;
+    
+    [SerializeField] private Animator animator;
+    [SerializeField] private SpriteRenderer spriteRenderer;
     
     private bool isDetectable;
     private int health;
@@ -86,13 +91,18 @@ public class PlayerControl : MonoBehaviour, ITargetable
     public void Movement(InputAction.CallbackContext _ctx)
     {
         movementDir = _ctx.ReadValue<Vector2>();
+        animator.SetBool("IsWalkingBool", true);
+        
+        if (_ctx.canceled)
+            animator.SetBool("IsWalkingBool", false);
     }
     
     private void LookAtMouse()
     {
         var dir = Input.mousePosition - Camera.main.WorldToScreenPoint(playerTransform.position);
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
     
     public void PickUp(InputAction.CallbackContext _ctx)
@@ -111,6 +121,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
                 {
                     usableObject = (UsableObject)hit.collider.transform.GetComponent<CollectableItem>().item;
                 }
+                animator.SetTrigger("IsPickingUpItem");
                 Destroy(hit.collider.gameObject);
             }
         }
@@ -118,8 +129,20 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void UseItem(InputAction.CallbackContext _ctx)
     {
-        if (_ctx.performed && usableObject != null) 
+        if (_ctx.performed && usableObject != null)
+        {
             usableObject.Action();
+            
+            if (usableObject.GetType() == typeof(EmptyBottle))
+            {
+                animator.SetTrigger("IsThrowingItem");
+            }
+            
+            if (usableObject.GetType() == typeof(MonsterCan))
+            {
+                animator.SetTrigger("IsDrinkingItem");
+            }
+        }
     }
     
     public void Sprint(InputAction.CallbackContext _ctx)
@@ -129,15 +152,16 @@ public class PlayerControl : MonoBehaviour, ITargetable
         if (_ctx.performed && stamina > 0)
         {
             stats.speed = stats.speed * 2f;
+            animator.SetFloat("WalkingSpeed", 1.5f);
             isRunning = true;
         }
 
         else
         {
             stats.speed = walkingSpeed;
+            animator.SetFloat("WalkingSpeed", 1);
             isRunning = false;
         }
-            
     }
 
     private void StaminaRegen()
@@ -147,7 +171,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
             stamina = staminaMax;
             return;
         }
-            
         stamina += 1;
     }
 
@@ -158,7 +181,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
             stamina = 0;
             return;
         }
-            
         stamina -= 1;
     }
 
