@@ -26,8 +26,9 @@ public class Ennemy : MonoBehaviour
     private float timer = 0f;
     private float attackMaxTimer = 1f;
 
-    public ITargetable target;
+    [Header("Targets"), HideInInspector]
     public PlayerControl targetPlayer;
+    public ITargetable target;
 
     private void Awake()
     {
@@ -59,39 +60,14 @@ public class Ennemy : MonoBehaviour
                 }
             case "Chase":
                 {
-                    target = targetPlayer;
                     activeState = states[2];
                     Debug.Log("Chase");
                     break;
                 }
             case "Attack":
                 {
-                    if (timer > attackMaxTimer)
-                    {
-                        activeState = states[3];
-                        Attack attack = (Attack)activeState;
-                        attack.target = this.target;
-                        attack.enemy = this;
-                        attack.Action();
-
-                        timer -= attackMaxTimer;
-
-                        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
-                        {
-                            ChangeState("Idle");
-                            targetPlayer = null;
-                            target = null;
-                        }
-                        else if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) <= detectionRange * 3)
-                        {
-                            if (target == null)
-                            {
-                                ChangeState("Chase");
-                            }
-                        }
-                    }
-                    else
-                        Debug.Log("Unable to attack yet");
+                    activeState = states[3];
+                    Debug.Log("Attack");
                     break;
                 }
         }
@@ -109,6 +85,39 @@ public class Ennemy : MonoBehaviour
     {
         playerPosition = _position;
     }
+
+    #region States
+    public void ResetState()
+    {
+        targetPlayer = null;
+        target = null;
+        ChangeState("Idle");
+    }
+
+    public void PerformAttack()
+    {
+        activeState = states[3];
+        Attack attack = (Attack)activeState;
+        attack.target = this.target;
+        attack.enemy = this;
+        attack.Action();
+
+        timer -= attackMaxTimer;
+
+        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
+        {
+            ResetState();
+        }
+        else if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) <= detectionRange * 3)
+        {
+            if (target == null)
+            {
+                ChangeState("Chase");
+            }
+        }
+    }
+
+    #endregion
 
     #region PathFiding
 
@@ -232,12 +241,13 @@ public class Ennemy : MonoBehaviour
     void Update()
     {
         Debug.Log(activeState);
+        
+
         if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange*3)
         {
-            targetPlayer = null;
-            target = null;
-            ChangeState("Idle");
+            ResetState();
         }
+        
 
         if (timer < attackMaxTimer)
             timer += Time.deltaTime;
@@ -256,6 +266,7 @@ public class Ennemy : MonoBehaviour
                     targetPlayer = _player;
                 target = _tempTarget;
                 ChangeState("Attack");
+                PerformAttack();
             }
             else if (_player != null && (activeState == states[0] || activeState == states[1]))
             {
@@ -269,11 +280,13 @@ public class Ennemy : MonoBehaviour
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
+                    PerformAttack();
                 }
                 else if (targetPlayer != null && _obstacle != null && activeState == states[2] && _obstacle.activated)
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
+                    PerformAttack();
                 }
             }
         }
@@ -281,9 +294,7 @@ public class Ennemy : MonoBehaviour
         {
             if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
             {
-                ChangeState("Idle");
-                targetPlayer = null;
-                target = null;
+                ResetState();
             }
         }
     }
@@ -292,8 +303,8 @@ public class Ennemy : MonoBehaviour
     {
         if (collision.GetComponent<ITargetable>() != null)
         {
-            target = null;
-            ChangeState("Chase");
+            if (targetPlayer != null) { ChangeState("Chase"); }
+            else { ResetState(); }
         }
     }
 }
