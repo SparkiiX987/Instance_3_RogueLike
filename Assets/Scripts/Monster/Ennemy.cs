@@ -241,7 +241,6 @@ public class Ennemy : MonoBehaviour
     void Update()
     {
         Debug.Log(activeState);
-        
 
         if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange*3)
         {
@@ -276,7 +275,8 @@ public class Ennemy : MonoBehaviour
             else
             {
                 Obstacle _obstacle = collision.GetComponent<Obstacle>();
-                if (targetPlayer != null && _obstacle != null && collision.GetComponent<FoodObstacle>() && _obstacle.activated)
+                Debug.Log(_obstacle);
+                if ( _obstacle != null && collision.GetComponent<FoodObstacle>() && _obstacle.activated)
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
@@ -303,8 +303,7 @@ public class Ennemy : MonoBehaviour
     {
         if (collision.GetComponent<ITargetable>() != null)
         {
-            if (targetPlayer != null) { ChangeState("Chase"); }
-            else { ResetState(); }
+            if (targetPlayer != null && target != null) { ChangeState("Chase"); }
         }
     }
 }
