@@ -7,8 +7,8 @@ public class Ennemy : MonoBehaviour
     //public Stats ennemyStats
 
     [Header("States"), HideInInspector]
-    private IState[] states = new IState[4];
-    private IState[] activeState;
+    public IState[] states = new IState[4];
+    public  IState activeState;
 
     [Header("PathFinding")]
     public float detectionRange;
@@ -21,6 +21,15 @@ public class Ennemy : MonoBehaviour
 
     private Transform selfTransform;
 
+    [Header("Attack")]
+    [SerializeField] private float attackRad = 1f;
+    private float timer = 0f;
+    private float attackMaxTimer = 1f;
+
+    [Header("Targets"), HideInInspector]
+    public PlayerControl targetPlayer;
+    public ITargetable target;
+
     private void Awake()
     {
         //ennemyStats = GetComponent<Stats>();
@@ -30,8 +39,39 @@ public class Ennemy : MonoBehaviour
     void Start()
     {
         StateInitialization();
+        activeState = states[0];
     }
 
+    public void ChangeState(string _state)
+    {
+        switch (_state)
+        {
+            case "Idle":
+                {
+                    activeState = states[0];
+                    Debug.Log("Idle");
+                    break;
+                }
+            case "Patrol":
+                {
+                    activeState = states[1];
+                    Debug.Log("Patrol");
+                    break;
+                }
+            case "Chase":
+                {
+                    activeState = states[2];
+                    Debug.Log("Chase");
+                    break;
+                }
+            case "Attack":
+                {
+                    activeState = states[3];
+                    Debug.Log("Attack");
+                    break;
+                }
+        }
+    }
 
     private void StateInitialization()
     {
@@ -45,6 +85,39 @@ public class Ennemy : MonoBehaviour
     {
         playerPosition = _position;
     }
+
+    #region States
+    public void ResetState()
+    {
+        targetPlayer = null;
+        target = null;
+        ChangeState("Idle");
+    }
+
+    public void PerformAttack()
+    {
+        activeState = states[3];
+        Attack attack = (Attack)activeState;
+        attack.target = this.target;
+        attack.enemy = this;
+        attack.Action();
+
+        timer -= attackMaxTimer;
+
+        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
+        {
+            ResetState();
+        }
+        else if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) <= detectionRange * 3)
+        {
+            if (target == null)
+            {
+                ChangeState("Chase");
+            }
+        }
+    }
+
+    #endregion
 
     #region PathFiding
 
@@ -167,6 +240,70 @@ public class Ennemy : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(activeState);
 
+        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange*3)
+        {
+            ResetState();
+        }
+        
+
+        if (timer < attackMaxTimer)
+            timer += Time.deltaTime;
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        ITargetable _tempTarget = collision.GetComponent<ITargetable>();
+
+        if (_tempTarget != null)
+        {
+            PlayerControl _player = collision.GetComponent<PlayerControl>();
+            if (_player != null && Vector3.Distance(selfTransform.position, collision.transform.position) <= attackRad && activeState == states[2])
+            {
+                if (targetPlayer == null)
+                    targetPlayer = _player;
+                target = _tempTarget;
+                ChangeState("Attack");
+                PerformAttack();
+            }
+            else if (_player != null && (activeState == states[0] || activeState == states[1]))
+            {
+                target = _tempTarget;
+                ChangeState("Chase");
+            }
+            else
+            {
+                Obstacle _obstacle = collision.GetComponent<Obstacle>();
+                Debug.Log(_obstacle);
+                if ( _obstacle != null && collision.GetComponent<FoodObstacle>() && _obstacle.activated)
+                {
+                    target = _tempTarget;
+                    ChangeState("Attack");
+                    PerformAttack();
+                }
+                else if (targetPlayer != null && _obstacle != null && activeState == states[2] && _obstacle.activated)
+                {
+                    target = _tempTarget;
+                    ChangeState("Attack");
+                    PerformAttack();
+                }
+            }
+        }
+        else
+        {
+            if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
+            {
+                ResetState();
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.GetComponent<ITargetable>() != null)
+        {
+            if (targetPlayer != null && target != null) { ChangeState("Chase"); }
+        }
     }
 }

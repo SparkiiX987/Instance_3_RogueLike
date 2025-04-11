@@ -31,8 +31,10 @@ public class PlayerDetection : MonoBehaviour
     {
         hit = Physics2D.Raycast(selfTransform.position, dir, ennemy.detectionRange);
         Debug.DrawRay(selfTransform.position, dir, Color.red, detectionCooldown);
-        if(!hit || hit.collider.tag != playerTag) { return; }
+        if (!hit || hit.collider.tag != playerTag) { return; }
 
+        ennemy.targetPlayer = hit.collider.GetComponent<PlayerControl>();
+        ennemy.ChangeState("Chase");
         ennemy.SetPlayerPosition(hit.collider.transform.position);
         print("player is at " + hit.collider.transform.position);
     }
