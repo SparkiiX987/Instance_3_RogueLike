@@ -1,5 +1,4 @@
 using UnityEditor;
-using UnityEditor.TerrainTools;
 using UnityEngine;
 
 public class RoomEditorTools : EditorWindow
@@ -10,7 +9,6 @@ public class RoomEditorTools : EditorWindow
     private bool isEditingRoom;
     private GameObject emptyRoom;
     private GameObject instantiedRoom;
-    private float cellSize = 0.32f;
 
 
     [MenuItem("Tools/Room Editor")]
@@ -89,13 +87,26 @@ public class RoomEditorTools : EditorWindow
         {
             Ray worldRay = HandleUtility.GUIPointToWorldRay(@event.mousePosition);
 
-            Plane plane = new Plane(Vector3.forward, new Vector3(0, 0, 0));
+            Plane plane = new Plane(Vector3.forward, Vector3.zero);
             if (plane.Raycast(worldRay, out float distance))
             {
                 Vector3 worldPos = worldRay.GetPoint(distance);
-                int randomTileIndex = Random.Range(0, roomCreatorData.floorPrefabs.Count - 1);
-                GameObject newTile = Instantiate(roomCreatorData.floorPrefabs[randomTileIndex], instantiedRoom.transform.GetChild(1));
-                newTile.transform.position = SnapToGrid(worldPos);
+                Vector3 snappedPos = instantiedRoom.GetComponent<GridGizmo>().SnapToGrid(worldPos);
+
+                Transform floorParent = instantiedRoom.transform.GetChild(1);
+                for (int i = 0; i < floorParent.childCount; i++)
+                {
+                    Transform child = floorParent.GetChild(i);
+                    if (child.CompareTag("Tile") && child.position == snappedPos)
+                    {
+                        DestroyImmediate(child.gameObject);
+                        break;
+                    }
+                }
+
+                int randomTileIndex = Random.Range(0, roomCreatorData.floorPrefabs.Count);
+                GameObject newTile = Instantiate(roomCreatorData.floorPrefabs[randomTileIndex], floorParent);
+                newTile.transform.position = snappedPos;
             }
             else
             {
@@ -104,13 +115,5 @@ public class RoomEditorTools : EditorWindow
 
             @event.Use();
         }
-    }
-
-
-    Vector2 SnapToGrid(Vector2 _position)
-    {
-        _position.x = Mathf.Round(_position.x / cellSize) * cellSize;
-        _position.y = Mathf.Round(_position.y / cellSize) * cellSize;
-        return _position;
     }
 }
