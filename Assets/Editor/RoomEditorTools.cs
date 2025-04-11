@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -92,12 +93,18 @@ public class RoomEditorTools : EditorWindow
             {
                 Vector3 worldPos = worldRay.GetPoint(distance);
                 Vector3 snappedPos = instantiedRoom.GetComponent<GridGizmo>().SnapToGrid(worldPos);
+                Debug.Log(snappedPos);
+                if(snappedPos.x > 1.08f || snappedPos.x < -1.23f || snappedPos.y > 1.40f || snappedPos.y < -0.84f)
+                {
+                    return;
+                }
 
                 Transform floorParent = instantiedRoom.transform.GetChild(1);
+
                 for (int i = 0; i < floorParent.childCount; i++)
                 {
                     Transform child = floorParent.GetChild(i);
-                    if (child.CompareTag("Tile") && child.position == snappedPos)
+                    if (child.position == snappedPos)
                     {
                         DestroyImmediate(child.gameObject);
                         break;
@@ -107,6 +114,37 @@ public class RoomEditorTools : EditorWindow
                 int randomTileIndex = Random.Range(0, roomCreatorData.floorPrefabs.Count);
                 GameObject newTile = Instantiate(roomCreatorData.floorPrefabs[randomTileIndex], floorParent);
                 newTile.transform.position = snappedPos;
+
+                Vector3[] directions = new Vector3[]
+                {
+                    Vector3.down,
+                    Vector3.left,
+                    Vector3.right,
+                    Vector3.up
+                };
+
+                for (int i = 0; i < directions.Length; i++)
+                {
+                    Vector3 neighborPos = snappedPos + directions[i] * 0.32f;
+                    bool hasNeighbor = false;
+
+                    for (int j = 0; j < floorParent.childCount; j++)
+                    {
+                        Transform child = floorParent.GetChild(j);
+                        if (child.position == neighborPos)
+                        {
+                            hasNeighbor = true;
+                            break;
+                        }
+                    }
+
+                    if (!hasNeighbor && i < roomCreatorData.wallPrefabs.Count)
+                    {
+                        GameObject wall = Instantiate(roomCreatorData.wallPrefabs[i], floorParent);
+                        wall.transform.position = neighborPos;
+                        wall.tag = "Tile";
+                    }
+                }
             }
             else
             {
@@ -116,4 +154,5 @@ public class RoomEditorTools : EditorWindow
             @event.Use();
         }
     }
+
 }
