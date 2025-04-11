@@ -1,10 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class Ennemy : MonoBehaviour
 {
-    //[Header("stats"), HideInInspector]
-    //public Stats ennemyStats
+    [Header("stats"), HideInInspector]
+    public Stats ennemyStats;
 
     [Header("States"), HideInInspector]
     public IState[] states = new IState[4];
@@ -12,7 +14,7 @@ public class Ennemy : MonoBehaviour
 
     [Header("PathFinding")]
     public float detectionRange;
-    private Grid grid;
+    public Grid grid;
     private Vector2 playerPosition;
     private Vector2 nextPointToMove;
     private GameObject currentTile;
@@ -30,16 +32,27 @@ public class Ennemy : MonoBehaviour
     public PlayerControl targetPlayer;
     public ITargetable target;
 
+    [Header("Idle"), HideInInspector]
+    public float idleTimeMax = 3f;
+    public float idleTimeMin = 1f;
+
+    [Header("Path")]
+    public List<Node> nodes = new List<Node>();
+    private Node startNode, endNode;
+    private List<Node> path = new List<Node>();
+    private int currentIndexNode;
+
+
     private void Awake()
     {
-        //ennemyStats = GetComponent<Stats>();
+        ennemyStats = GetComponent<Stats>();
         selfTransform = transform;
     }
 
     void Start()
     {
         StateInitialization();
-        activeState = states[0];
+        ChangeState("Idle");
     }
 
     public void ChangeState(string _state)
@@ -49,25 +62,28 @@ public class Ennemy : MonoBehaviour
             case "Idle":
                 {
                     activeState = states[0];
-                    Debug.Log("Idle");
+
+                    Idle idleEnnemy = (Idle)activeState;
+                    idleEnnemy.ennemy = this;
+                    idleEnnemy.onIdle.AddListener(() => PerformIdle());
+                    idleEnnemy.Action();
+
                     break;
                 }
             case "Patrol":
                 {
                     activeState = states[1];
-                    Debug.Log("Patrol");
                     break;
                 }
             case "Chase":
                 {
                     activeState = states[2];
-                    Debug.Log("Chase");
                     break;
                 }
             case "Attack":
                 {
                     activeState = states[3];
-                    Debug.Log("Attack");
+                    PerformAttack();
                     break;
                 }
         }
@@ -86,7 +102,8 @@ public class Ennemy : MonoBehaviour
         playerPosition = _position;
     }
 
-    #region States
+    #region Attack
+
     public void ResetState()
     {
         targetPlayer = null;
@@ -213,7 +230,6 @@ public class Ennemy : MonoBehaviour
                 }
             }
         }
-
         return null;
     }
 
@@ -238,15 +254,90 @@ public class Ennemy : MonoBehaviour
 
     #endregion
 
+    #region movement
+
+    public void OnMovement(Vector2 targetPosition)
+    {
+        if (targetPosition != null)
+        {
+            //Look at the target
+            selfTransform.LookAt(targetPosition);
+            
+
+            //Move towards the player
+            Vector3 direction = (Vector3)targetPosition - selfTransform.position;
+            selfTransform.position += direction.normalized * ennemyStats.speed * Time.deltaTime;
+
+        }
+    }
+
+    #endregion
+
+    #region Idle
+
+    public void PerformIdle()
+    {
+        StartCoroutine(OnIdle());
+    }
+
+    public IEnumerator OnIdle()
+    {
+        float time = Random.Range(idleTimeMin, idleTimeMax);
+        yield return new WaitForSecondsRealtime(time);
+        ChangeState("Patrol");
+    }
+
+    #endregion
+
     void Update()
     {
         Debug.Log(activeState);
 
-        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange*3)
+        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
         {
             ResetState();
         }
-        
+
+        if (path == null || currentIndexNode == path.Count - 1 || path.Count == 0)
+        {
+            currentIndexNode = 0;
+            if (startNode == null && endNode == null)
+            {
+                do
+                {
+                    int randomNode = Random.Range(0, nodes.Count);
+                    startNode = nodes[randomNode];
+
+                    randomNode = Random.Range(0, nodes.Count);
+                    endNode = nodes[randomNode];
+                    path = TestPathFinding(startNode, endNode);
+                } while (startNode == endNode || path == null);
+                
+            }
+            else
+            {
+                startNode = endNode;
+                do
+                {
+                    Debug.Log("Hello");
+                    int randomNode = Random.Range(0, nodes.Count);
+                    endNode = nodes[randomNode];
+                    path = TestPathFinding(startNode, endNode);
+                } while (startNode == endNode || path == null);
+            }
+        }
+
+        if (activeState != states[0] && activeState != states[3] && path != null && currentIndexNode < path.Count)
+        {
+            nextPointToMove = path[currentIndexNode].transform.position;
+            if (Vector3.Distance(path[currentIndexNode].transform.position, selfTransform.position) >= 0.2f)
+                OnMovement(nextPointToMove);
+            else
+            {
+                Debug.Log(Vector3.Distance(path[currentIndexNode].transform.position, selfTransform.position));
+                currentIndexNode++;
+            }
+        }
 
         if (timer < attackMaxTimer)
             timer += Time.deltaTime;
@@ -262,10 +353,11 @@ public class Ennemy : MonoBehaviour
             if (_player != null && Vector3.Distance(selfTransform.position, collision.transform.position) <= attackRad && activeState == states[2])
             {
                 if (targetPlayer == null)
+                { 
                     targetPlayer = _player;
+                }
                 target = _tempTarget;
                 ChangeState("Attack");
-                PerformAttack();
             }
             else if (_player != null && (activeState == states[0] || activeState == states[1]))
             {
@@ -280,13 +372,11 @@ public class Ennemy : MonoBehaviour
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
-                    PerformAttack();
                 }
                 else if (targetPlayer != null && _obstacle != null && activeState == states[2] && _obstacle.activated)
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
-                    PerformAttack();
                 }
             }
         }
