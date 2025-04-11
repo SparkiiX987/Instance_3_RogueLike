@@ -13,6 +13,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     [SerializeField] private float pickupDistance;
     [SerializeField] private LayerMask itemLayer;
+    [SerializeField] private LayerMask obstacleLayer;
     
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -129,19 +130,32 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void UseItem(InputAction.CallbackContext _ctx)
     {
-        if (_ctx.performed && usableObject != null)
+        if (_ctx.started)
         {
-            usableObject.Action();
+            hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, obstacleLayer);
+            Debug.DrawRay(playerTransform.position, GetMousePosition(), Color.red, 2f);
             
-            if (usableObject.GetType() == typeof(EmptyBottle))
+            if (usableObject != null)
             {
-                animator.SetTrigger("IsThrowingItem");
+                usableObject.Action();
+            
+                if (usableObject.GetType() == typeof(EmptyBottle))
+                {
+                    animator.SetTrigger("IsThrowingItem");
+                }
+            
+                if (usableObject.GetType() == typeof(MonsterCan))
+                {
+                    animator.SetTrigger("IsDrinkingItem");
+                }
             }
             
-            if (usableObject.GetType() == typeof(MonsterCan))
+            else if (hit.collider != null && hit.collider.transform.GetComponent<Obstacle>())
             {
-                animator.SetTrigger("IsDrinkingItem");
+                Obstacle obstacleObject = hit.collider.transform.GetComponent<Obstacle>();
+                obstacleObject.Action();
             }
+            
         }
     }
     
