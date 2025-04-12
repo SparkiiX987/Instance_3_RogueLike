@@ -5,8 +5,8 @@ using UnityEngine;
 public class RoomEditorTools : EditorWindow
 {
     public RoomCreatorData roomCreatorData;
+    private string roomName;
     private bool isEditingFloor;
-    private bool isEditingWall;
     private bool isEditingRoom;
     private GameObject emptyRoom;
     private GameObject instantiedRoom;
@@ -25,9 +25,13 @@ public class RoomEditorTools : EditorWindow
         roomCreatorData = (RoomCreatorData)EditorGUILayout.ObjectField("Room Creator Data", roomCreatorData, typeof(RoomCreatorData), false);
         emptyRoom = (GameObject)EditorGUILayout.ObjectField("Empty Room", emptyRoom, typeof(GameObject), false);
 
+        
+        GUILayout.Label("Room Name");
+        roomName = EditorGUILayout.TextField(roomName);
+
         if (!isEditingRoom)
         {
-            if (GUILayout.Button("Create New Room"))
+            if (GUILayout.Button("Create new room"))
             {
                 isEditingRoom = true;
                 //SceneView.duringSceneGui += OnSceneGUI;
@@ -38,36 +42,32 @@ public class RoomEditorTools : EditorWindow
         {
             if (isEditingFloor)
             {
-                if (GUILayout.Button("Stop Editing"))
+                if (GUILayout.Button("Stop editing"))
                 {
                     isEditingFloor = false;
                     SceneView.duringSceneGui -= OnSceneGUI;
                 }
             }
-            else if (isEditingWall)
-            {
-                if (GUILayout.Button("Stop Editing"))
-                {
-                    isEditingWall = false;
-                }
-            }
             else
             {
-                if (GUILayout.Button("Edit Floor"))
+                if (GUILayout.Button("Edit floor"))
                 {
                     isEditingFloor = true;
                     SceneView.duringSceneGui += OnSceneGUI;
                 }
 
-                if (GUILayout.Button("Edit Wall"))
+                if (GUILayout.Button("Save as prefab"))
                 {
-                    isEditingWall = true;
+                    SaveAsPrefab("Assets/Prefabs/Rooms/" + roomName + ".prefab");
+                    roomName = "";
+                    isEditingRoom = false;
+                    instantiedRoom = null;
                 }
-                if (GUILayout.Button("Finish"))
+
+                if (GUILayout.Button("Delete"))
                 {
                     isEditingRoom = false;
-                    //SceneView.duringSceneGui -= OnSceneGUI;
-                    instantiedRoom = null;
+                    DestroyImmediate(instantiedRoom);
                 }
             }
         }
@@ -94,7 +94,7 @@ public class RoomEditorTools : EditorWindow
                 Vector3 worldPos = worldRay.GetPoint(distance);
                 Vector3 snappedPos = instantiedRoom.GetComponent<GridGizmo>().SnapToGrid(worldPos);
                 Debug.Log(snappedPos);
-                if(snappedPos.x > 1.08f || snappedPos.x < -1.23f || snappedPos.y > 1.40f || snappedPos.y < -0.84f)
+                if(!IsInGrid(instantiedRoom, snappedPos))
                 {
                     return;
                 }
@@ -153,6 +153,25 @@ public class RoomEditorTools : EditorWindow
 
             @event.Use();
         }
+    }
+
+    private bool IsInGrid(GameObject _room, Vector3 _tilePosition)
+    {
+        Vector3 roomPosition = _room.transform.position;
+
+        return (_tilePosition.x > (roomPosition.x - (4 * 0.32f))
+             && _tilePosition.x < (roomPosition.x + (4 * 0.32f))
+             && _tilePosition.y > (roomPosition.y - (4 * 0.32f))
+             && _tilePosition.y < (roomPosition.y + (4 * 0.32f)));
+    }
+
+    public void SaveAsPrefab(string path)
+    {
+        if(instantiedRoom == null)
+        { return; }
+
+        GameObject prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(instantiedRoom, path, InteractionMode.UserAction);
+        Debug.Log("Room saved as prefab at: " + path);
     }
 
 }
