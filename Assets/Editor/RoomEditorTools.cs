@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,6 +6,7 @@ public class RoomEditorTools : EditorWindow
     public RoomCreatorData roomCreatorData;
     private string roomName;
     private bool isEditingFloor;
+    private bool isEditingDoors;
     private bool isEditingRoom;
     private GameObject emptyRoom;
     private GameObject instantiedRoom;
@@ -25,7 +25,7 @@ public class RoomEditorTools : EditorWindow
         roomCreatorData = (RoomCreatorData)EditorGUILayout.ObjectField("Room Creator Data", roomCreatorData, typeof(RoomCreatorData), false);
         emptyRoom = (GameObject)EditorGUILayout.ObjectField("Empty Room", emptyRoom, typeof(GameObject), false);
 
-        
+
         GUILayout.Label("Room Name");
         roomName = EditorGUILayout.TextField(roomName);
 
@@ -40,12 +40,14 @@ public class RoomEditorTools : EditorWindow
         }
         else
         {
-            if (isEditingFloor)
+            if (isEditingFloor || isEditingDoors)
             {
                 if (GUILayout.Button("Stop editing"))
                 {
                     isEditingFloor = false;
+                    isEditingDoors = false;
                     SceneView.duringSceneGui -= OnSceneGUI;
+                    SceneView.duringSceneGui -= CreateDoor;
                 }
             }
             else
@@ -54,6 +56,12 @@ public class RoomEditorTools : EditorWindow
                 {
                     isEditingFloor = true;
                     SceneView.duringSceneGui += OnSceneGUI;
+                }
+
+                if (GUILayout.Button("Edit Doors"))
+                {
+                    isEditingDoors = true;
+                    SceneView.duringSceneGui += CreateDoor;
                 }
 
                 if (GUILayout.Button("Save as prefab"))
@@ -79,6 +87,24 @@ public class RoomEditorTools : EditorWindow
         instantiedRoom = (GameObject)PrefabUtility.InstantiatePrefab(emptyRoom);
         instantiedRoom.transform.position = position;
     }
+    private bool IsInGrid(GameObject _room, Vector3 _tilePosition)
+    {
+        Vector3 roomPosition = _room.transform.position;
+
+        return (_tilePosition.x > (roomPosition.x - (4 * 0.32f))
+             && _tilePosition.x < (roomPosition.x + (4 * 0.32f))
+             && _tilePosition.y > (roomPosition.y - (4 * 0.32f))
+             && _tilePosition.y < (roomPosition.y + (4 * 0.32f)));
+    }
+
+    public void SaveAsPrefab(string path)
+    {
+        if (instantiedRoom == null)
+        { return; }
+
+        GameObject prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(instantiedRoom, path, InteractionMode.UserAction);
+        Debug.Log("Room saved as prefab at: " + path);
+    }
 
     private void OnSceneGUI(SceneView _sceneView)
     {
@@ -93,13 +119,13 @@ public class RoomEditorTools : EditorWindow
             {
                 Vector3 worldPos = worldRay.GetPoint(distance);
                 Vector3 snappedPos = instantiedRoom.GetComponent<GridGizmo>().SnapToGrid(worldPos);
-                Debug.Log(snappedPos);
-                if(!IsInGrid(instantiedRoom, snappedPos))
+                if (!IsInGrid(instantiedRoom, snappedPos))
                 {
                     return;
                 }
 
                 Transform floorParent = instantiedRoom.transform.GetChild(1);
+                Transform wallParent = instantiedRoom.transform.GetChild(0);
 
                 for (int i = 0; i < floorParent.childCount; i++)
                 {
@@ -108,6 +134,14 @@ public class RoomEditorTools : EditorWindow
                     {
                         DestroyImmediate(child.gameObject);
                         break;
+                    }
+                }
+                for (int i = 0; i < wallParent.childCount; i++)
+                {
+                    Transform child = wallParent.GetChild(i);
+                    if (child.position == snappedPos)
+                    {
+                        DestroyImmediate(child.gameObject);
                     }
                 }
 
@@ -140,9 +174,8 @@ public class RoomEditorTools : EditorWindow
 
                     if (!hasNeighbor && i < roomCreatorData.wallPrefabs.Count)
                     {
-                        GameObject wall = Instantiate(roomCreatorData.wallPrefabs[i], floorParent);
+                        GameObject wall = Instantiate(roomCreatorData.wallPrefabs[i], wallParent);
                         wall.transform.position = neighborPos;
-                        wall.tag = "Tile";
                     }
                 }
             }
@@ -155,23 +188,76 @@ public class RoomEditorTools : EditorWindow
         }
     }
 
-    private bool IsInGrid(GameObject _room, Vector3 _tilePosition)
+    private void CreateDoor(SceneView _sceneView)
     {
-        Vector3 roomPosition = _room.transform.position;
+        Event @event = Event.current;
 
-        return (_tilePosition.x > (roomPosition.x - (4 * 0.32f))
-             && _tilePosition.x < (roomPosition.x + (4 * 0.32f))
-             && _tilePosition.y > (roomPosition.y - (4 * 0.32f))
-             && _tilePosition.y < (roomPosition.y + (4 * 0.32f)));
+        if (@event.type == EventType.MouseDown && @event.button == 0 && !@event.alt)
+        {
+            Ray worldRay = HandleUtility.GUIPointToWorldRay(@event.mousePosition);
+            Plane plane = new Plane(Vector3.forward, Vector3.zero);
+
+            if (plane.Raycast(worldRay, out float distance))
+            {
+                Vector3 worldPos = worldRay.GetPoint(distance);
+                Vector3 snappedPos = instantiedRoom.GetComponent<GridGizmo>().SnapToGrid(worldPos);
+                Transform tile = null;
+
+                Transform floorParent = instantiedRoom.transform.GetChild(1);
+
+                bool isFloorTile = false;
+                for (int i = 0; i < floorParent.childCount; i++)
+                {
+                    Transform child = floorParent.GetChild(i);
+                    if (child.position == snappedPos)
+                    {
+                        isFloorTile = true;
+                        tile = child;
+                        Debug.Log(isFloorTile);
+                        break;
+                    }
+                }
+
+                if (!isFloorTile || !tile)
+                    return;
+
+                Vector3[] directions = new Vector3[]
+                {
+                Vector3.down,
+                Vector3.left,
+                Vector3.right,
+                Vector3.up
+                };
+
+                int wallsDestroyed = 0;
+                Transform wallsParent = instantiedRoom.transform.GetChild(0);
+                for (int i = 0; i < directions.Length; i++)
+                {
+                    Vector3 neighborPos = snappedPos + directions[i] * 0.32f;
+                    Debug.Log(neighborPos);
+
+                    for (int j = 0; j < wallsParent.childCount; j++)
+                    {
+                        Transform child = wallsParent.GetChild(j);
+                        Debug.Log(child.position);
+                        if (child.position == neighborPos)
+                        {
+                            DestroyImmediate(child.gameObject);
+                            wallsDestroyed++;
+                            break;
+                        }
+                    }
+                }
+
+                if (wallsDestroyed > 0)
+                {
+                    tile.SetParent(instantiedRoom.transform.GetChild(2));
+                }
+            }
+
+            @event.Use();
+        }
     }
 
-    public void SaveAsPrefab(string path)
-    {
-        if(instantiedRoom == null)
-        { return; }
-
-        GameObject prefab = PrefabUtility.SaveAsPrefabAssetAndConnect(instantiedRoom, path, InteractionMode.UserAction);
-        Debug.Log("Room saved as prefab at: " + path);
-    }
 
 }
