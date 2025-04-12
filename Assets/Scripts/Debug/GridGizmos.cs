@@ -3,7 +3,7 @@ using UnityEngine;
 [ExecuteAlways]
 public class GridGizmo : MonoBehaviour
 {
-    public float cellSize = 0.32f;
+    public float cellSize = 32f;
     public int gridWidth = 100;
     public int gridHeight = 100;
     public Color gridColor = Color.green;
