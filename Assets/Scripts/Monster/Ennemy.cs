@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -55,6 +56,7 @@ public class Ennemy : MonoBehaviour
     {
         StateInitialization();
         ChangeState("Idle");
+        GetNodesMap();
     }
 
     public void ChangeState(string _state)
@@ -115,6 +117,7 @@ public class Ennemy : MonoBehaviour
         targetPlayer = null;
         target = null;
         ChangeState("Idle");
+        startNode = GetNearestNode();
     }
 
     public void PerformAttack()
@@ -149,6 +152,32 @@ public class Ennemy : MonoBehaviour
         grid = _grid;
     }
 
+    private Node GetNearestNode()
+    {
+        Node node = null;
+        float distanceMin = Vector3.Distance(nodes[0].transform.position, selfTransform.position);
+        float distance = 0f;
+        for (int i = 1; i < nodes.Count; i++)
+        {
+            distance = Vector3.Distance(nodes[i].transform.position, selfTransform.position);
+            if (distance < distanceMin)
+            {
+                node = nodes[i];
+                distanceMin = distance;
+            }
+        }
+        return node;
+    }
+
+    private void GetNodesMap()
+    {
+        Transform transformMap = GameObject.Find("graph").transform;
+        foreach (Transform child in transformMap)
+        {
+            nodes.Add(child.GetComponent<Node>());
+        }
+    }
+
     private GameObject GetTileNextTo(Vector2 target)
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(selfTransform.position, 10, cellLayer);
@@ -179,6 +208,7 @@ public class Ennemy : MonoBehaviour
     {
         return FindPathToCell(_startNode, _goalNode);
     }
+
     private List<Node> FindPathToCell(Node _startNode, Node _goalNode)
     {
         List<Link> openLinks = new List<Link>();
@@ -239,7 +269,6 @@ public class Ennemy : MonoBehaviour
         return null;
     }
 
-
     private List<Node> ReconstructPath(Link _endLink)
     {
         List<Node> path = new List<Node>();
@@ -268,7 +297,7 @@ public class Ennemy : MonoBehaviour
         {
             Vector3 look = (Vector3)targetPosition - transform.position;
             float angle = Mathf.Atan2(look.y, look.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
             Vector3 direction = (Vector3)targetPosition - selfTransform.position;
             selfTransform.position += direction.normalized * ennemyStats.speed * Time.deltaTime;
@@ -307,46 +336,26 @@ public class Ennemy : MonoBehaviour
             currentIndexNode = 0;
             if (nodes.Count >= 2)
             {
-                do
+                if (startNode != null && endNode == null)
                 {
-                    startNode = endNode ?? nodes[Random.Range(0, nodes.Count)];
-                    endNode = nodes[Random.Range(0, nodes.Count)];
-                    path = TestPathFinding(startNode, endNode);
+                    do
+                    {
+                        endNode = nodes[Random.Range(0, nodes.Count)];
+                        path = TestPathFinding(startNode, endNode);
+                    } while (startNode == endNode || path == null);
                 }
-                while (startNode == endNode || path == null);
+                else
+                {
+                    do
+                    {
+                        startNode = endNode ?? nodes[Random.Range(0, nodes.Count)];
+                        endNode = nodes[Random.Range(0, nodes.Count)];
+                        path = TestPathFinding(startNode, endNode);
+                    } while (startNode == endNode || path == null);
+                }
+
             }
         }
-                //    if (startNode == null && endNode == null)
-                //    {
-                //        do
-                //        {
-                //            int randomNode = Random.Range(0, nodes.Count);
-                //            startNode = nodes[randomNode];
-
-                //            randomNode = Random.Range(0, nodes.Count);
-                //            endNode = nodes[randomNode];
-                //            path = TestPathFinding(startNode, endNode);
-                //        } while (startNode == endNode || path == null);
-
-                //    }
-                //    else
-                //    {
-                //        foreach (var node in nodes)
-                //        {
-                //            if (endNode == node)
-                //            {
-                //                startNode = node;
-                //            }
-                //        }
-
-                //        do
-                //        {
-                //            int randomNode = Random.Range(0, nodes.Count);
-                //            endNode = nodes[randomNode];
-                //            path = TestPathFinding(startNode, endNode);
-                //        } while (startNode == endNode || path == null);
-                //    }
-                //}
 
         if (activeState != states[0] && activeState != states[3] && path != null && currentIndexNode < path.Count)
         {
