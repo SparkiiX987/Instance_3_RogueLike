@@ -15,8 +15,10 @@ public class Ennemy : MonoBehaviour
     [Header("PathFinding")]
     public float detectionRange;
     public Grid grid;
+
+    [Header("PathFinding"), HideInInspector]
+    public Vector2 nextPointToMove;
     private Vector2 playerPosition;
-    private Vector2 nextPointToMove;
     private GameObject currentTile;
     private GameObject targetTile;
     private LayerMask cellLayer;
@@ -39,8 +41,8 @@ public class Ennemy : MonoBehaviour
     [Header("Path")]
     public List<Node> nodes = new List<Node>();
     private Node startNode, endNode;
-    private List<Node> path = new List<Node>();
-    private int currentIndexNode;
+    public List<Node> path = new List<Node>();
+    public int currentIndexNode = 0;
 
 
     private void Awake()
@@ -73,6 +75,10 @@ public class Ennemy : MonoBehaviour
             case "Patrol":
                 {
                     activeState = states[1];
+
+                    Patrol patrol = activeState as Patrol;
+                    patrol.ennemy = this;
+                    patrol.Action();
                     break;
                 }
             case "Chase":
@@ -260,14 +266,12 @@ public class Ennemy : MonoBehaviour
     {
         if (targetPosition != null)
         {
-            //Look at the target
-            selfTransform.LookAt(targetPosition);
-            
+            Vector3 look = (Vector3)targetPosition - transform.position;
+            float angle = Mathf.Atan2(look.y, look.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
-            //Move towards the player
             Vector3 direction = (Vector3)targetPosition - selfTransform.position;
             selfTransform.position += direction.normalized * ennemyStats.speed * Time.deltaTime;
-
         }
     }
 
@@ -298,44 +302,60 @@ public class Ennemy : MonoBehaviour
             ResetState();
         }
 
-        if (path == null || currentIndexNode == path.Count - 1 || path.Count == 0)
+        if (path == null || currentIndexNode == path.Count || path.Count == 0)
         {
             currentIndexNode = 0;
-            if (startNode == null && endNode == null)
+            if (nodes.Count >= 2)
             {
                 do
                 {
-                    int randomNode = Random.Range(0, nodes.Count);
-                    startNode = nodes[randomNode];
-
-                    randomNode = Random.Range(0, nodes.Count);
-                    endNode = nodes[randomNode];
+                    startNode = endNode ?? nodes[Random.Range(0, nodes.Count)];
+                    endNode = nodes[Random.Range(0, nodes.Count)];
                     path = TestPathFinding(startNode, endNode);
-                } while (startNode == endNode || path == null);
-                
-            }
-            else
-            {
-                startNode = endNode;
-                do
-                {
-                    Debug.Log("Hello");
-                    int randomNode = Random.Range(0, nodes.Count);
-                    endNode = nodes[randomNode];
-                    path = TestPathFinding(startNode, endNode);
-                } while (startNode == endNode || path == null);
+                }
+                while (startNode == endNode || path == null);
             }
         }
+                //    if (startNode == null && endNode == null)
+                //    {
+                //        do
+                //        {
+                //            int randomNode = Random.Range(0, nodes.Count);
+                //            startNode = nodes[randomNode];
+
+                //            randomNode = Random.Range(0, nodes.Count);
+                //            endNode = nodes[randomNode];
+                //            path = TestPathFinding(startNode, endNode);
+                //        } while (startNode == endNode || path == null);
+
+                //    }
+                //    else
+                //    {
+                //        foreach (var node in nodes)
+                //        {
+                //            if (endNode == node)
+                //            {
+                //                startNode = node;
+                //            }
+                //        }
+
+                //        do
+                //        {
+                //            int randomNode = Random.Range(0, nodes.Count);
+                //            endNode = nodes[randomNode];
+                //            path = TestPathFinding(startNode, endNode);
+                //        } while (startNode == endNode || path == null);
+                //    }
+                //}
 
         if (activeState != states[0] && activeState != states[3] && path != null && currentIndexNode < path.Count)
         {
-            nextPointToMove = path[currentIndexNode].transform.position;
-            if (Vector3.Distance(path[currentIndexNode].transform.position, selfTransform.position) >= 0.2f)
+            if (Vector3.Distance(nextPointToMove, selfTransform.position) >= 0.2f)
                 OnMovement(nextPointToMove);
             else
             {
-                Debug.Log(Vector3.Distance(path[currentIndexNode].transform.position, selfTransform.position));
                 currentIndexNode++;
+                ChangeState("Idle");
             }
         }
 
