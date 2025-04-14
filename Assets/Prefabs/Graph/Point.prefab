@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 498fdffa417fe9944aee0514d113118c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextNodes: []
+  links: []
   parent: {fileID: 0}
+  connectionRange: 3
 --- !u!58 &5913278508464256139
 CircleCollider2D:
   m_ObjectHideFlags: 0

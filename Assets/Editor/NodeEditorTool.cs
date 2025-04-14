@@ -87,7 +87,7 @@ public class NodeEditorTool : EditorWindow
             return;
         }
 
-        ConnectToNearbyNodes(newNode);
+        //ConnectToNearbyNodes(newNode);
         Undo.RegisterCreatedObjectUndo(newNodeGO, "Place Node");
     }
 
@@ -104,8 +104,8 @@ public class NodeEditorTool : EditorWindow
             float dist = Vector2.Distance(newNode.GetNodePosition(), node.GetNodePosition());
             if (dist <= connectionRange)
             {
-                newNode.AddLink(new Link(node, dist, 0f));
-                node.AddLink(new Link(newNode, dist, 0f));
+                newNode.AddLink(new Link(node, 0, 0f));
+                node.AddLink(new Link(newNode, 0, 0f));
             }
         }
     }
