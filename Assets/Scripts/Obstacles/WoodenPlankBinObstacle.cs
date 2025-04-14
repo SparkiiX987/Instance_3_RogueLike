@@ -14,10 +14,10 @@ public class WoodenPlankBinObstacle : Obstacle
     {
         //Play animation
 
-        Vector3 newPos = new Vector2((destination.position.x - destination.localScale.x / 2) - (start.position.x - start.localScale.y/2), destination.position.y);
-        Vector3 newScale = new Vector3(newPos.x, 1);
-        newPos.x = destination.position.x / 2;
-
+        Vector3 newPos = Vector3.zero;
+        Vector3 newScale = new Vector3(Vector3.Distance(start.position, destination.position) - ((start.localScale.x / 2) + (destination.localScale.x / 2)),1);
+        newPos = (destination.position - start.position) / 2;
+        
         transformObstacle.localPosition = newPos;
         transformObstacle.localScale = newScale;
 
