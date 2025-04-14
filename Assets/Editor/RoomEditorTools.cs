@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEngine;
-using static UnityEditor.U2D.ScriptablePacker;
 
 public class RoomEditorTools : EditorWindow
 {
@@ -237,6 +236,7 @@ public class RoomEditorTools : EditorWindow
             {
                 Vector3 worldPos = worldRay.GetPoint(distance);
                 Vector3 snappedPos = instantiedRoom.GetComponent<GridGizmo>().SnapToGrid(worldPos);
+                snappedPos.z = 0;
                 if (!IsInGrid(instantiedRoom, snappedPos))
                 {
                     return;
@@ -254,7 +254,8 @@ public class RoomEditorTools : EditorWindow
                         break;
                     }
                 }
-                for (int i = 0; i < wallParent.childCount; i++)
+
+                for (int i = wallParent.childCount - 1; i >= 0; i--)
                 {
                     Transform child = wallParent.GetChild(i);
                     if (child.position == snappedPos)
@@ -269,10 +270,10 @@ public class RoomEditorTools : EditorWindow
 
                 Vector3[] directions = new Vector3[]
                 {
-                    Vector3.down,
-                    Vector3.left,
-                    Vector3.right,
-                    Vector3.up
+                Vector3.down,
+                Vector3.left,
+                Vector3.right,
+                Vector3.up
                 };
 
                 for (int i = 0; i < directions.Length; i++)
@@ -292,8 +293,22 @@ public class RoomEditorTools : EditorWindow
 
                     if (!hasNeighbor && i < roomCreatorData.wallPrefabs.Count)
                     {
+                        for (int j = wallParent.childCount - 1; j >= 0; j--)
+                        {
+                            Transform existingWall = wallParent.GetChild(j);
+                            if (existingWall.position == snappedPos)
+                            {
+                                Vector3 existingDir = existingWall.up;
+                                if (Vector3.Angle(existingDir, directions[i]) < 1f)
+                                {
+                                    DestroyImmediate(existingWall.gameObject);
+                                }
+                            }
+                        }
+
                         GameObject wall = Instantiate(roomCreatorData.wallPrefabs[i], wallParent);
-                        wall.transform.position = neighborPos;
+                        wall.transform.position = snappedPos;
+                        wall.transform.rotation = Quaternion.LookRotation(Vector3.forward, directions[i]);
                     }
                 }
             }
