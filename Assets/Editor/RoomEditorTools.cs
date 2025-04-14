@@ -236,6 +236,7 @@ public class RoomEditorTools : EditorWindow
             {
                 Vector3 worldPos = worldRay.GetPoint(distance);
                 Vector3 snappedPos = instantiedRoom.GetComponent<GridGizmo>().SnapToGrid(worldPos);
+                snappedPos.z = 0;
                 if (!IsInGrid(instantiedRoom, snappedPos))
                 {
                     return;
