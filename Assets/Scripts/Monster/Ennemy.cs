@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public class Ennemy : MonoBehaviour
 {
     [Header("stats"), HideInInspector]
     public Stats ennemyStats;
+    public float initialSpeed => ennemyStats.speed;
+    public float amplificater = 1f;
 
     [Header("States"), HideInInspector]
     public IState[] states = new IState[4];
@@ -34,12 +37,13 @@ public class Ennemy : MonoBehaviour
     [Header("Targets")]
     public PlayerControl targetPlayer;
     public ITargetable target;
+    private bool isMovingTowardPlayer = false;
 
     [Header("Idle"), HideInInspector]
     public float idleTimeMax = 3f;
     public float idleTimeMin = 1f;
 
-    [Header("Path")]
+    [Header("Path"), HideInInspector]
     public List<Node> nodes = new List<Node>();
     private Node startNode, endNode;
     public List<Node> path = new List<Node>();
@@ -55,12 +59,9 @@ public class Ennemy : MonoBehaviour
     void Start()
     {
         StateInitialization();
-        ChangeState("Idle");
         GetNodesMap();
-        startNode = GetNearestNode();
-        endNode = null;
-        nextPointToMove = startNode.transform.position;
-        path.Clear();
+        ResetState();
+        
     }
 
     public void ChangeState(string _state)
@@ -90,12 +91,25 @@ public class Ennemy : MonoBehaviour
             case "Chase":
                 {
                     activeState = states[2];
+                    Chase chase = activeState as Chase;
+                    chase.ennemy = this;
+                    chase.Action();
                     break;
                 }
             case "Attack":
                 {
+                    Debug.Log("Paa");
                     activeState = states[3];
-                    PerformAttack();
+                    Attack attack = (Attack)activeState;
+                    attack.target = this.target;
+                    attack.enemy = this;
+
+                    if (timer >= attackMaxTimer)
+                    {
+                        Debug.Log("Paaaaaa");
+                        PerformAttack(attack);
+                        timer -= attackMaxTimer;
+                    }
                     break;
                 }
         }
@@ -121,20 +135,17 @@ public class Ennemy : MonoBehaviour
         targetPlayer = null;
         target = null;
         ChangeState("Idle");
-        startNode = GetNearestNode();
+        startNode = GetNearestNode(selfTransform.position);
+        endNode = null;
+        path.Clear();
         nextPointToMove = startNode.transform.position;
+
+        amplificater = 1f;
     }
 
-    public void PerformAttack()
+    public void PerformAttack(Attack attack)
     {
-        activeState = states[3];
-        Attack attack = (Attack)activeState;
-        attack.target = this.target;
-        attack.enemy = this;
         attack.Action();
-
-        timer -= attackMaxTimer;
-
         if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
         {
             ResetState();
@@ -157,14 +168,14 @@ public class Ennemy : MonoBehaviour
         grid = _grid;
     }
 
-    private Node GetNearestNode()
+    private Node GetNearestNode(Vector2 position)
     {
         Node node = null;
-        float distanceMin = Vector3.Distance(nodes[0].transform.position, selfTransform.position);
+        float distanceMin = Vector3.Distance(nodes[0].transform.position, position);
         float distance = 0f;
         for (int i = 1; i < nodes.Count; i++)
         {
-            distance = Vector3.Distance(nodes[i].transform.position, selfTransform.position);
+            distance = Vector3.Distance(nodes[i].transform.position, position);
             if (distance < distanceMin)
             {
                 node = nodes[i];
@@ -230,7 +241,7 @@ public class Ennemy : MonoBehaviour
             startLink.parentLink = new Link(_startNode, 0f, h);
             openLinks.Add(startLink);
         }
-        print(openLinks.Count);
+        //print(openLinks.Count);
         closedNodes.Add(_startNode);
 
         while (openLinks.Count > 0)
@@ -305,7 +316,7 @@ public class Ennemy : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
             Vector3 direction = (Vector3)targetPosition - selfTransform.position;
-            selfTransform.position += direction.normalized * ennemyStats.speed * Time.deltaTime;
+            selfTransform.position += direction.normalized * (ennemyStats.speed * amplificater ) * Time.deltaTime;
         }
     }
 
@@ -330,14 +341,52 @@ public class Ennemy : MonoBehaviour
     void Update()
     {
         Debug.Log(activeState);
-        //If the player is still the main targeted by the ennemy, the monster chase him like a cat and mouse :)
-        if (targetPlayer != null && activeState == states[2]) { OnMovement(targetPlayer.transform.position); }
+        //If the monster is in chase state, we get a path throught player
+        if (activeState == states[2])
+        {
+            startNode = GetNearestNode(selfTransform.position);
+            if (targetPlayer == null) { ChangeState("Idle"); }
+            endNode = GetNearestNode(targetPlayer.transform.position);
+
+            if (endNode != startNode) 
+            {
+                List<Node> testpath = TestPathFinding(startNode, endNode);
+
+                if (testpath.Count != path.Count)
+                {
+                    currentIndexNode = 0;
+                    path = testpath;
+                    nextPointToMove = startNode.transform.position;
+                }
+
+                for (int i = 0; i < testpath.Count; i++)
+                {
+                    if (testpath[i] != path[i])
+                    {
+                        currentIndexNode = 0;
+                        path = testpath;
+                        nextPointToMove = startNode.transform.position;
+                    }
+                }
+            }
+        }
+
+        //If the monster is in chase state, move towards the nearest node of the player
+        if ((activeState == states[2]) && path != null && currentIndexNode < path.Count)
+        {
+            if ( Vector3.Distance(nextPointToMove, selfTransform.position) >= 0.2f) { OnMovement(nextPointToMove); }
+            else
+            {
+                currentIndexNode++;
+                if (currentIndexNode < path.Count) { nextPointToMove = path[currentIndexNode].transform.position; }
+            }
+        }
 
         //Player's too far, ennemy stops chasing him
         if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3) { ResetState(); }
 
         //Determine a new path for the ennemy to patrol
-        if ( activeState == states[1] && path == null || currentIndexNode == path.Count || path.Count == 0)
+        if ( (activeState == states[1]) && (path == null || currentIndexNode == path.Count || path.Count == 0))
         {
             currentIndexNode = 0;
             if ( nodes != null  && nodes.Count >= 2)
@@ -363,14 +412,14 @@ public class Ennemy : MonoBehaviour
             }
         }
 
-        //If it's in the state of patrol, ir moves towards the next spot
-        if (activeState == states[1] && path != null && currentIndexNode < path.Count)
+        //If it's in the state of patrol, it moves towards the next spot
+        if ((activeState == states[1]) && path != null && currentIndexNode < path.Count)
         {
             if (Vector3.Distance(nextPointToMove, selfTransform.position) >= 0.2f) { OnMovement(nextPointToMove); }
             else
             {
                 currentIndexNode++;
-                ChangeState("Idle");
+                if (activeState == states[1]) { ChangeState("Idle"); }
             }
         }
 
@@ -398,15 +447,17 @@ public class Ennemy : MonoBehaviour
             else
             {
                 Obstacle _obstacle = collision.GetComponent<Obstacle>();
-                if ( _obstacle != null && collision.GetComponent<FoodObstacle>() && _obstacle.activated)
+                
+                if ( _obstacle != null && collision.GetComponent<FoodObstacle>() && _obstacle.activated && Vector3.Distance(_obstacle.transform.position, selfTransform.position) <= 1f)
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
                 }
-                else if (targetPlayer != null && _obstacle != null && activeState == states[2] && _obstacle.activated)
+                else if (targetPlayer != null && _obstacle != null && _obstacle.activated && (activeState == states[2] || activeState == states[3]) && Vector3.Distance(_obstacle.transform.position, selfTransform.position) <= 1f)
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
+                    Debug.Log("yahooo");
                 }
             }
         }
