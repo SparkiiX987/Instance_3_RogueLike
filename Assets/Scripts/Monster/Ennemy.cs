@@ -31,7 +31,7 @@ public class Ennemy : MonoBehaviour
     private float timer = 0f;
     private float attackMaxTimer = 1f;
 
-    [Header("Targets"), HideInInspector]
+    [Header("Targets")]
     public PlayerControl targetPlayer;
     public ITargetable target;
 
@@ -57,6 +57,10 @@ public class Ennemy : MonoBehaviour
         StateInitialization();
         ChangeState("Idle");
         GetNodesMap();
+        startNode = GetNearestNode();
+        endNode = null;
+        nextPointToMove = startNode.transform.position;
+        path.Clear();
     }
 
     public void ChangeState(string _state)
@@ -118,6 +122,7 @@ public class Ennemy : MonoBehaviour
         target = null;
         ChangeState("Idle");
         startNode = GetNearestNode();
+        nextPointToMove = startNode.transform.position;
     }
 
     public void PerformAttack()
@@ -289,7 +294,7 @@ public class Ennemy : MonoBehaviour
 
     #endregion
 
-    #region movement
+    #region Movement
 
     public void OnMovement(Vector2 targetPosition)
     {
@@ -325,16 +330,17 @@ public class Ennemy : MonoBehaviour
     void Update()
     {
         Debug.Log(activeState);
+        //If the player is still the main targeted by the ennemy, the monster chase him like a cat and mouse :)
+        if (targetPlayer != null && activeState == states[2]) { OnMovement(targetPlayer.transform.position); }
 
-        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
-        {
-            ResetState();
-        }
+        //Player's too far, ennemy stops chasing him
+        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3) { ResetState(); }
 
-        if (path == null || currentIndexNode == path.Count || path.Count == 0)
+        //Determine a new path for the ennemy to patrol
+        if ( activeState == states[1] && path == null || currentIndexNode == path.Count || path.Count == 0)
         {
             currentIndexNode = 0;
-            if (nodes.Count >= 2)
+            if ( nodes != null  && nodes.Count >= 2)
             {
                 if (startNode != null && endNode == null)
                 {
@@ -346,9 +352,9 @@ public class Ennemy : MonoBehaviour
                 }
                 else
                 {
+                    startNode = endNode ?? nodes[Random.Range(0, nodes.Count)];
                     do
                     {
-                        startNode = endNode ?? nodes[Random.Range(0, nodes.Count)];
                         endNode = nodes[Random.Range(0, nodes.Count)];
                         path = TestPathFinding(startNode, endNode);
                     } while (startNode == endNode || path == null);
@@ -357,10 +363,10 @@ public class Ennemy : MonoBehaviour
             }
         }
 
-        if (activeState != states[0] && activeState != states[3] && path != null && currentIndexNode < path.Count)
+        //If it's in the state of patrol, ir moves towards the next spot
+        if (activeState == states[1] && path != null && currentIndexNode < path.Count)
         {
-            if (Vector3.Distance(nextPointToMove, selfTransform.position) >= 0.2f)
-                OnMovement(nextPointToMove);
+            if (Vector3.Distance(nextPointToMove, selfTransform.position) >= 0.2f) { OnMovement(nextPointToMove); }
             else
             {
                 currentIndexNode++;
@@ -368,35 +374,30 @@ public class Ennemy : MonoBehaviour
             }
         }
 
-        if (timer < attackMaxTimer)
-            timer += Time.deltaTime;
+        //Delay for attack
+        if (timer < attackMaxTimer) { timer += Time.deltaTime; }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
         ITargetable _tempTarget = collision.GetComponent<ITargetable>();
-
         if (_tempTarget != null)
         {
             PlayerControl _player = collision.GetComponent<PlayerControl>();
             if (_player != null && Vector3.Distance(selfTransform.position, collision.transform.position) <= attackRad && activeState == states[2])
             {
-                if (targetPlayer == null)
-                { 
-                    targetPlayer = _player;
-                }
                 target = _tempTarget;
                 ChangeState("Attack");
             }
             else if (_player != null && (activeState == states[0] || activeState == states[1]))
             {
+                if (targetPlayer == null) { targetPlayer = _player; }
                 target = _tempTarget;
                 ChangeState("Chase");
             }
             else
             {
                 Obstacle _obstacle = collision.GetComponent<Obstacle>();
-                Debug.Log(_obstacle);
                 if ( _obstacle != null && collision.GetComponent<FoodObstacle>() && _obstacle.activated)
                 {
                     target = _tempTarget;
@@ -411,10 +412,7 @@ public class Ennemy : MonoBehaviour
         }
         else
         {
-            if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
-            {
-                ResetState();
-            }
+            if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3) { ResetState(); }
         }
     }
 
