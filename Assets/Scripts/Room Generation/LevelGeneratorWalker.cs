@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,7 +6,9 @@ public class LevelGeneratorWalker : MonoBehaviour
     #region Global Variables
     
     [Header("Global Variables (info only)")]
-    public float roomsGenerated;
+    public int roomsGenerated;
+    public int cyclesPassed;
+    public int[] currentEntraces;
 
     #endregion
 
@@ -22,20 +23,33 @@ public class LevelGeneratorWalker : MonoBehaviour
 
     #endregion
 
-    #region Room Settings
-    
-    [Header("Room Settings")]
+    #region Room Generation Settings
+
+    [Header("Room Generation Settings")] 
+    [SerializeField] int maxCycles;
+    [SerializeField] int maxRooms;
     [SerializeField] float maxPosX;
     [SerializeField] float maxPosY;
-    [SerializeField] int maxRooms;
     [SerializeField] int MoveAmount;
     [SerializeField] int minMoveAmount;
     [SerializeField] int maxMoveAmount;
     [SerializeField] float moveDistance;
-    [SerializeField] GameObject[] roomsArray;
-    private int direction;
+    private int randomEntrance;
+    private RaycastHit Hit;
     
     #endregion
+
+    #region Rooms
+
+    [Header("Rooms")]
+    [SerializeField] GameObject[] tRoomPrefabs;
+    [SerializeField] GameObject[] lRoomPrefabs;
+    [SerializeField] GameObject[] rRoomPrefabs;
+    [SerializeField] GameObject[] bRoomPrefabs;
+
+    #endregion
+    
+    
     
     void Start()
     {
@@ -64,60 +78,88 @@ public class LevelGeneratorWalker : MonoBehaviour
         Instantiate(entrancePrefabs[selectedPrefab], transform.position, Quaternion.identity);
         roomsGenerated += 1;
     }
-
+    
     private void WalkerMovment()
     {
+        Physics.Raycast(transform.position, Vector3.forward, out Hit, 1);
+        currentEntraces = Hit.collider.gameObject.GetComponent<RoomParameters>().entraces;
+
         int amount = Random.Range(minMoveAmount, maxMoveAmount);
         for (; MoveAmount > 0; MoveAmount -= amount)
         {
+            
             transform.position = new Vector3(
                 Mathf.Clamp(transform.position.x, 0, maxPosX),
                 Mathf.Clamp(transform.position.y, 0, maxPosY), transform.position.z);
             amount = Random.Range(minMoveAmount, maxMoveAmount);
+            
+            Physics.Raycast(transform.position, Vector3.forward, out Hit, 1);
+            currentEntraces = Hit.collider.gameObject.GetComponent<RoomParameters>().entraces;
+            
+            cyclesPassed++;
+
+            if (cyclesPassed >= maxCycles)
+            {
+                return;
+            }
+
             if (roomsGenerated >= maxRooms)
             {
                 return;
             }
-            direction = Random.Range(0, 4);
-            switch (direction)
+            
+            randomEntrance = Random.Range(0, currentEntraces.Length);
+            switch (currentEntraces[randomEntrance])
             {
                 case 0:/*UP*/
-                    //print("up " + transform.position);
                     if (transform.position.y <= maxPosY) {
-                        transform.position += new Vector3(moveDistance, 0, 0);
-                        RoomGenerator(amount);
+                        transform.position += new Vector3(0, moveDistance, 0);
+                        RoomGenerator(amount, 0);
                     }
                     break;
                 case 1:/*Left*/
-                    //print("left " + transform.position);
                     if (transform.position.x >= 0) {
-                        transform.position += new Vector3(0, moveDistance, 0);
-                        RoomGenerator(amount);
+                        transform.position -= new Vector3(moveDistance, 0, 0);
+                        RoomGenerator(amount, 1);
                     }
                     break;
                 case 2:/*Right*/
-                    //print("right " + transform.position);
                     if (transform.position.x <= maxPosX) {
-                        transform.position -= new Vector3(moveDistance, 0, 0);
-                        RoomGenerator(amount);
+                        transform.position += new Vector3(moveDistance, 0, 0);
+                        RoomGenerator(amount, 2);
                     }
                     break;
                 case 3:/*Down*/
-                    //print("down " + transform.position);
                     if (transform.position.y >= 0) {
                         transform.position -= new Vector3(0, moveDistance, 0);
-                        RoomGenerator(amount);
+                        RoomGenerator(amount, 3);
                     }
                     break;
             }
         }
     }
 
-    private void RoomGenerator(int amount)
+   
+
+    private void RoomGenerator(int amount, int entrance)
     {
-        if(!Physics.Raycast(transform.position, Vector3.forward, 1))
+        if(!Physics.Raycast(transform.position, Vector3.forward, out Hit, 1))
         {
-            Instantiate(roomsArray[0], transform.position, Quaternion.identity);
+            switch (entrance)
+            {
+                case 0://Summon down room
+                    Instantiate(bRoomPrefabs[Random.Range(0, bRoomPrefabs.Length)], transform.position, Quaternion.identity);
+                    break;
+                case 1://Summon right room
+                    Instantiate(rRoomPrefabs[Random.Range(0, rRoomPrefabs.Length)], transform.position, Quaternion.identity);
+                    break;
+                case 2://Summon left room
+                    Instantiate(lRoomPrefabs[Random.Range(0, lRoomPrefabs.Length)], transform.position, Quaternion.identity);
+                    break;
+                case 3://Summon up room
+                    Instantiate(tRoomPrefabs[Random.Range(0, tRoomPrefabs.Length)], transform.position, Quaternion.identity);
+                    break;
+            }
             roomsGenerated += 1;
         }
         else
