@@ -22,6 +22,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
     private int health;
     private float stamina;
     private bool isRunning;
+    private Rigidbody2D rb;
     
     private Ray ray;
     private RaycastHit2D hit;
@@ -53,12 +54,12 @@ public class PlayerControl : MonoBehaviour, ITargetable
     {
         stamina = staminaMax;
         hit = Physics2D.Raycast(playerTransform.position, Vector2.up, 100f);
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
-        nextPlayerPos.Set(playerTransform.position.x + movementDir.x * stats.speed * Time.deltaTime, playerTransform.position.y + movementDir.y * stats.speed * Time.deltaTime);
-        playerTransform.position = nextPlayerPos;
+        
         
         LookAtMouse();
 
@@ -78,7 +79,13 @@ public class PlayerControl : MonoBehaviour, ITargetable
                 StaminaRegen();
         }
     }
-    
+
+    private void FixedUpdate()
+    {
+        nextPlayerPos.Set(playerTransform.position.x + movementDir.x * stats.speed * Time.deltaTime, playerTransform.position.y + movementDir.y * stats.speed * Time.deltaTime);
+        rb.MovePosition(nextPlayerPos);
+    }
+
     public int GetHealth()
     {
         return health;
