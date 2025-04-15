@@ -1,14 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class LevelGeneratorWalker : MonoBehaviour
 {
     #region Global Variables
+
+    [field:Header("Global Variables (info only)")]
+    [field:SerializeField] public int cyclesPassed{ get; private set;}
+    [field:SerializeField] public List<GameObject> roomsGenerated{ get; private set;}
+    public bool finished{ get; private set;}
+    [HideInInspector] public int[] currentEntraces;
     
-    [Header("Global Variables (info only)")]
-    public int roomsGenerated;
-    public int cyclesPassed;
-    public int[] currentEntraces;
 
     #endregion
 
@@ -25,7 +28,7 @@ public class LevelGeneratorWalker : MonoBehaviour
 
     #region Room Generation Settings
 
-    [Header("Room Generation Settings")] 
+    [Header("Room Generation Settings")]
     [SerializeField] int maxCycles;
     [SerializeField] int maxRooms;
     [SerializeField] float maxPosX;
@@ -49,18 +52,17 @@ public class LevelGeneratorWalker : MonoBehaviour
 
     #endregion
     
-    
-    
     void Start()
     {
+        finished = false;
         SetEntranceSpawn();
         WalkerMovment();
     }
 
     private void SetEntranceSpawn()
     {
-        int selectedPrefab = Random.Range(0, 4);
-        switch (selectedPrefab)
+        int _selectedPrefab = Random.Range(0, 4);
+        switch (_selectedPrefab)
         {
             case 0:/*UP*/
                 transform.position = topEntranceSpawns[Random.Range(0, topEntranceSpawns.Length)].position;
@@ -75,8 +77,7 @@ public class LevelGeneratorWalker : MonoBehaviour
                 transform.position = bottomEntranceSpawns[Random.Range(0, bottomEntranceSpawns.Length)].position;
                 break;
         }
-        Instantiate(entrancePrefabs[selectedPrefab], transform.position, Quaternion.identity);
-        roomsGenerated += 1;
+        roomsGenerated.Add(Instantiate(entrancePrefabs[_selectedPrefab], transform.position, Quaternion.identity));
     }
     
     private void WalkerMovment()
@@ -84,14 +85,14 @@ public class LevelGeneratorWalker : MonoBehaviour
         Physics.Raycast(transform.position, Vector3.forward, out Hit, 1);
         currentEntraces = Hit.collider.gameObject.GetComponent<RoomParameters>().entraces;
 
-        int amount = Random.Range(minMoveAmount, maxMoveAmount);
-        for (; MoveAmount > 0; MoveAmount -= amount)
+        int _amount = Random.Range(minMoveAmount, maxMoveAmount);
+        for (; MoveAmount > 0; MoveAmount -= _amount)
         {
             
             transform.position = new Vector3(
                 Mathf.Clamp(transform.position.x, 0, maxPosX),
                 Mathf.Clamp(transform.position.y, 0, maxPosY), transform.position.z);
-            amount = Random.Range(minMoveAmount, maxMoveAmount);
+            _amount = Random.Range(minMoveAmount, maxMoveAmount);
             
             Physics.Raycast(transform.position, Vector3.forward, out Hit, 1);
             currentEntraces = Hit.collider.gameObject.GetComponent<RoomParameters>().entraces;
@@ -100,11 +101,13 @@ public class LevelGeneratorWalker : MonoBehaviour
 
             if (cyclesPassed >= maxCycles)
             {
+                finished = true;
                 return;
             }
 
-            if (roomsGenerated >= maxRooms)
+            if (roomsGenerated.Count >= maxRooms)
             {
+                finished = true;
                 return;
             }
             
@@ -114,57 +117,57 @@ public class LevelGeneratorWalker : MonoBehaviour
                 case 0:/*UP*/
                     if (transform.position.y <= maxPosY) {
                         transform.position += new Vector3(0, moveDistance, 0);
-                        RoomGenerator(amount, 0);
+                        RoomGenerator(_amount, 0);
                     }
                     break;
                 case 1:/*Left*/
                     if (transform.position.x >= 0) {
                         transform.position -= new Vector3(moveDistance, 0, 0);
-                        RoomGenerator(amount, 1);
+                        RoomGenerator(_amount, 1);
                     }
                     break;
                 case 2:/*Right*/
                     if (transform.position.x <= maxPosX) {
                         transform.position += new Vector3(moveDistance, 0, 0);
-                        RoomGenerator(amount, 2);
+                        RoomGenerator(_amount, 2);
                     }
                     break;
                 case 3:/*Down*/
                     if (transform.position.y >= 0) {
                         transform.position -= new Vector3(0, moveDistance, 0);
-                        RoomGenerator(amount, 3);
+                        RoomGenerator(_amount, 3);
                     }
                     break;
             }
         }
+        finished = true;
     }
 
    
 
-    private void RoomGenerator(int amount, int entrance)
+    private void RoomGenerator(int _amount, int _entrance)
     {
         if(!Physics.Raycast(transform.position, Vector3.forward, out Hit, 1))
         {
-            switch (entrance)
+            switch (_entrance)
             {
                 case 0://Summon down room
-                    Instantiate(bRoomPrefabs[Random.Range(0, bRoomPrefabs.Length)], transform.position, Quaternion.identity);
+                    roomsGenerated.Add(Instantiate(bRoomPrefabs[Random.Range(0, bRoomPrefabs.Length)], transform.position, Quaternion.identity));
                     break;
                 case 1://Summon right room
-                    Instantiate(rRoomPrefabs[Random.Range(0, rRoomPrefabs.Length)], transform.position, Quaternion.identity);
+                    roomsGenerated.Add(Instantiate(rRoomPrefabs[Random.Range(0, rRoomPrefabs.Length)], transform.position, Quaternion.identity));
                     break;
                 case 2://Summon left room
-                    Instantiate(lRoomPrefabs[Random.Range(0, lRoomPrefabs.Length)], transform.position, Quaternion.identity);
+                    roomsGenerated.Add(Instantiate(lRoomPrefabs[Random.Range(0, lRoomPrefabs.Length)], transform.position, Quaternion.identity));
                     break;
                 case 3://Summon up room
-                    Instantiate(tRoomPrefabs[Random.Range(0, tRoomPrefabs.Length)], transform.position, Quaternion.identity);
+                    roomsGenerated.Add(Instantiate(tRoomPrefabs[Random.Range(0, tRoomPrefabs.Length)], transform.position, Quaternion.identity));
                     break;
             }
-            roomsGenerated += 1;
         }
         else
         {
-            MoveAmount += amount;
+            MoveAmount += _amount;
         }
     }
 }

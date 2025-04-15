@@ -2,15 +2,41 @@ using UnityEngine;
 
 public class MapGenerationController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private LevelGeneratorWalker walkerScript;
+    [SerializeField] GameObject playerPrefab;
+    private bool playerSpawned = false;
+    
+    #region Monster Spawn Settings
+    
+    [Header("Monster Spawn Settings")]
+    [SerializeField] GameObject monsterPrefab;
+    [SerializeField] int minRoomsBeforeSpawn;
+    
+    #endregion
+
+    private void Start()
     {
+        walkerScript = GetComponentInChildren<LevelGeneratorWalker>();
+    }
+
+    private void Update()
+    {
+        SpawnPlayer();
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void SpawnPlayer()
     {
-        
+        if (!walkerScript.finished || playerSpawned) return;
+        Instantiate(playerPrefab, walkerScript.roomsGenerated[0].transform.position, Quaternion.identity);
+        playerSpawned = true;
+        SpawnMonster();
+    }
+
+    private void SpawnMonster()
+    {
+        Instantiate(monsterPrefab,
+            walkerScript.roomsGenerated[Random.Range(minRoomsBeforeSpawn, walkerScript.roomsGenerated.Count)].transform
+                .position, Quaternion.identity);      
     }
 }
