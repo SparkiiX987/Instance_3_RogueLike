@@ -1,5 +1,3 @@
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -23,7 +21,7 @@ public class ButtonsMenuPrincipal : MonoBehaviour
     {
         if( _buttonPlay != null)
         {
-            SceneManager.LoadScene("Game");
+            SceneManager.LoadScene("GameScene");
         }
     }
 }

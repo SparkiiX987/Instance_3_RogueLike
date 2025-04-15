@@ -60,7 +60,7 @@ public class Ennemy : MonoBehaviour
     void Start()
     {
         StateInitialization();
-        GetNodesMap();
+        StartCoroutine(GetNodesMap());
         ResetState();
         
     }
@@ -135,6 +135,7 @@ public class Ennemy : MonoBehaviour
         target = null;
         ChangeState("Idle");
         startNode = GetNearestNode(selfTransform.position);
+        if(!startNode) { return; }
         endNode = null;
         path.Clear();
         nextPointToMove = startNode.transform.position;
@@ -169,6 +170,8 @@ public class Ennemy : MonoBehaviour
 
     private Node GetNearestNode(Vector2 position)
     {
+        if(nodes.Count == 0)
+        { return null; }
         Node node = null;
         float distanceMin = Vector3.Distance(nodes[0].transform.position, position);
         float distance = 0f;
@@ -184,12 +187,22 @@ public class Ennemy : MonoBehaviour
         return node;
     }
 
-    private void GetNodesMap()
+    private IEnumerator GetNodesMap()
     {
-        Transform transformMap = GameObject.Find("graph").transform;
-        foreach (Transform child in transformMap)
+        while(true)
         {
-            nodes.Add(child.GetComponent<Node>());
+            GameObject graphGameObject = GameObject.Find("graph");
+            if (!graphGameObject)
+            {
+                yield return new WaitForSeconds(1f);
+                continue;
+            }
+            Transform transformMap = graphGameObject.transform;
+            foreach (Transform child in transformMap)
+            {
+                nodes.Add(child.GetComponent<Node>());
+            }
+            break;
         }
     }
 
