@@ -333,22 +333,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 886840168882683237, guid: c903475f77d235245a0fc776a34ba078, type: 3}
-      propertyPath: maxRooms
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 886840168882683237, guid: c903475f77d235245a0fc776a34ba078, type: 3}
-      propertyPath: <monsterStartPosition>k__BackingField.x
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 886840168882683237, guid: c903475f77d235245a0fc776a34ba078, type: 3}
-      propertyPath: <monsterStartPosition>k__BackingField.y
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 886840168882683237, guid: c903475f77d235245a0fc776a34ba078, type: 3}
-      propertyPath: <monsterStartPosition>k__BackingField.z
-      value: -1
-      objectReference: {fileID: 0}
     - target: {fileID: 3517253582503252827, guid: c903475f77d235245a0fc776a34ba078, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -392,18 +376,6 @@ PrefabInstance:
     - target: {fileID: 6086833807239353430, guid: c903475f77d235245a0fc776a34ba078, type: 3}
       propertyPath: m_Name
       value: LevelGeneration
-      objectReference: {fileID: 0}
-    - target: {fileID: 6135982835572565854, guid: c903475f77d235245a0fc776a34ba078, type: 3}
-      propertyPath: playerPrefab
-      value: 
-      objectReference: {fileID: 4433176287854781845, guid: d877184fe98eee44cbc6cdd601948ef1, type: 3}
-    - target: {fileID: 6135982835572565854, guid: c903475f77d235245a0fc776a34ba078, type: 3}
-      propertyPath: monsterPrefab
-      value: 
-      objectReference: {fileID: 4280614735771462626, guid: 3a54b0d136fbff04e855684e10bd04fc, type: 3}
-    - target: {fileID: 6135982835572565854, guid: c903475f77d235245a0fc776a34ba078, type: 3}
-      propertyPath: minRoomsBeforeSpawn
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

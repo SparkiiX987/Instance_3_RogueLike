@@ -724,7 +724,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6989960baf5214c83baeb2ef8a3821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 0}
+  playerPrefab: {fileID: 4433176287854781845, guid: d877184fe98eee44cbc6cdd601948ef1, type: 3}
+  monsterPrefab: {fileID: 0}
+  minRoomsBeforeSpawn: 10
 --- !u!1 &6209754455480552733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1216,7 +1218,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
       propertyPath: maxRooms
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 2439906202951472064, guid: 6a003ca31582ef446ab4766ea0f5365a, type: 3}
       propertyPath: moveDistance
