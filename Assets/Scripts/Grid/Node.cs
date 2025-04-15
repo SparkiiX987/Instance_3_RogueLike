@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    [SerializeField] private List<Link> links = new List<Link>();
+    public List<Link> links = new List<Link>();
     public Node parent;
+    public float connectionRange;
 
     public Vector2 GetNodePosition() => transform.position;
 
@@ -18,10 +19,30 @@ public class Node : MonoBehaviour
         links.Add(_newLink);
     }
 
+    private void Awake()
+    {
+        ConnectToNearbyNodes();
+    }
+    private void ConnectToNearbyNodes()
+    {
+        Node[] allNodes = FindObjectsByType<Node>(FindObjectsSortMode.None);
+        foreach (Node node in allNodes)
+        {
+            if (node == this)
+            { continue; }
+
+            float dist = Vector2.Distance(GetNodePosition(), node.GetNodePosition());
+            if (dist <= connectionRange)
+            {
+                AddLink(new Link(node, dist, 0f));
+            }
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        foreach (var link in links)
+        foreach (Link link in links)
         {
             if (link.nodeTo != null)
                 Gizmos.DrawLine(transform.position, link.nodeTo.transform.position);
