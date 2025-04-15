@@ -3,6 +3,8 @@ using UnityEngine;
 public class MapGenerationController : MonoBehaviour
 {
     private LevelGeneratorWalker walkerScript;
+    
+    [SerializeField] Transform entitiesParent;
     [SerializeField] GameObject playerPrefab;
     private bool playerSpawned = false;
     
@@ -28,7 +30,7 @@ public class MapGenerationController : MonoBehaviour
     private void SpawnPlayer()
     {
         if (!walkerScript.finished || playerSpawned) return;
-        Instantiate(playerPrefab, walkerScript.roomsGenerated[0].transform.position, Quaternion.identity);
+        Instantiate(playerPrefab, walkerScript.roomsGenerated[0].transform.position, Quaternion.identity, entitiesParent);
         playerSpawned = true;
         SpawnMonster();
     }
@@ -37,6 +39,6 @@ public class MapGenerationController : MonoBehaviour
     {
         Instantiate(monsterPrefab,
             walkerScript.roomsGenerated[Random.Range(minRoomsBeforeSpawn, walkerScript.roomsGenerated.Count)].transform
-                .position, Quaternion.identity);      
+                .position, Quaternion.identity, entitiesParent);      
     }
 }

@@ -37,6 +37,7 @@ public class LevelGeneratorWalker : MonoBehaviour
     [SerializeField] int minMoveAmount;
     [SerializeField] int maxMoveAmount;
     [SerializeField] float moveDistance;
+    [SerializeField] private Transform roomsParent;
     private int randomEntrance;
     private RaycastHit Hit;
     
@@ -77,7 +78,7 @@ public class LevelGeneratorWalker : MonoBehaviour
                 transform.position = bottomEntranceSpawns[Random.Range(0, bottomEntranceSpawns.Length)].position;
                 break;
         }
-        roomsGenerated.Add(Instantiate(entrancePrefabs[_selectedPrefab], transform.position, Quaternion.identity));
+        roomsGenerated.Add(Instantiate(entrancePrefabs[_selectedPrefab], transform.position, Quaternion.identity, roomsParent));
     }
     
     private void WalkerMovment()
@@ -152,16 +153,16 @@ public class LevelGeneratorWalker : MonoBehaviour
             switch (_entrance)
             {
                 case 0://Summon down room
-                    roomsGenerated.Add(Instantiate(bRoomPrefabs[Random.Range(0, bRoomPrefabs.Length)], transform.position, Quaternion.identity));
+                    roomsGenerated.Add(Instantiate(bRoomPrefabs[Random.Range(0, bRoomPrefabs.Length)], transform.position, Quaternion.identity, roomsParent));
                     break;
                 case 1://Summon right room
-                    roomsGenerated.Add(Instantiate(rRoomPrefabs[Random.Range(0, rRoomPrefabs.Length)], transform.position, Quaternion.identity));
+                    roomsGenerated.Add(Instantiate(rRoomPrefabs[Random.Range(0, rRoomPrefabs.Length)], transform.position, Quaternion.identity, roomsParent));
                     break;
                 case 2://Summon left room
-                    roomsGenerated.Add(Instantiate(lRoomPrefabs[Random.Range(0, lRoomPrefabs.Length)], transform.position, Quaternion.identity));
+                    roomsGenerated.Add(Instantiate(lRoomPrefabs[Random.Range(0, lRoomPrefabs.Length)], transform.position, Quaternion.identity, roomsParent));
                     break;
                 case 3://Summon up room
-                    roomsGenerated.Add(Instantiate(tRoomPrefabs[Random.Range(0, tRoomPrefabs.Length)], transform.position, Quaternion.identity));
+                    roomsGenerated.Add(Instantiate(tRoomPrefabs[Random.Range(0, tRoomPrefabs.Length)], transform.position, Quaternion.identity, roomsParent));
                     break;
             }
         }
