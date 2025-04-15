@@ -8,7 +8,7 @@ public class Attack : IState
     //Enemy
     public Ennemy enemy;
 
-    private float attackRange = 1f;
+    private float attackRange = 1.5f;
     private int damage = 25; // remplace with stats.damage (I suppopse)
 
 

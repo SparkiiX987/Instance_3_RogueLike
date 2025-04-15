@@ -36,4 +36,9 @@ public class PathfindingDebugger : MonoBehaviour
             Gizmos.DrawSphere(path[path.Count - 1].GetNodePosition(), sphereRadius);
         }
     }
+
+    private void Update()
+    {
+        
+    }
 }

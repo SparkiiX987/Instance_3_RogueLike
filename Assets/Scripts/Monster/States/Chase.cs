@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class Chase : IState
 {
+    public Ennemy ennemy;
     public void Action()
     {
-        Debug.Log("start Chase");
+        if (ennemy.amplificater == 1f) { ennemy.amplificater *= 3f; }
     }
 }
