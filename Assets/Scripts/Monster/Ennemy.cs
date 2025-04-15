@@ -28,9 +28,10 @@ public class Ennemy : MonoBehaviour
     private LayerMask cellLayer;
 
     private Transform selfTransform;
+    private Animator animator;
 
     [Header("Attack")]
-    [SerializeField] private float attackRad = 1f;
+    [SerializeField] private float attackRad = 2f;
     private float timer = 0f;
     private float attackMaxTimer = 1f;
 
@@ -98,7 +99,6 @@ public class Ennemy : MonoBehaviour
                 }
             case "Attack":
                 {
-                    Debug.Log("Paa");
                     activeState = states[3];
                     Attack attack = (Attack)activeState;
                     attack.target = this.target;
@@ -106,7 +106,6 @@ public class Ennemy : MonoBehaviour
 
                     if (timer >= attackMaxTimer)
                     {
-                        Debug.Log("Paaaaaa");
                         PerformAttack(attack);
                         timer -= attackMaxTimer;
                     }
@@ -340,7 +339,6 @@ public class Ennemy : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(activeState);
         //If the monster is in chase state, we get a path throught player
         if (activeState == states[2])
         {
@@ -457,7 +455,6 @@ public class Ennemy : MonoBehaviour
                 {
                     target = _tempTarget;
                     ChangeState("Attack");
-                    Debug.Log("yahooo");
                 }
             }
         }
