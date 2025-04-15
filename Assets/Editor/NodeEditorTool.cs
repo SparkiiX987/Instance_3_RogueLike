@@ -63,7 +63,6 @@ public class NodeEditorTool : EditorWindow
             }
 
             isPlacingNode = false;
-            SceneView.duringSceneGui -= OnSceneGUI;
             @event.Use();
         }
     }
