@@ -165,13 +165,12 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1321829003928924911}
-  - {fileID: -5591490695287524003}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
   m_Mirror: 0
-  m_SpeedParameterActive: 0
+  m_SpeedParameterActive: 1
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
@@ -338,13 +337,13 @@ AnimatorController:
   m_Name: Player
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: IsWalkingBool
-    m_Type: 4
-    m_DefaultFloat: 0
+  - m_Name: WalkingSpeed
+    m_Type: 1
+    m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: IsRunning
+  - m_Name: IsWalkingBool
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -363,12 +362,6 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
   - m_Name: IsDrinkingItem
-    m_Type: 9
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: IsDead
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -520,33 +513,55 @@ AnimatorStateMachine:
     m_Position: {x: 600, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5715256521605998540}
-    m_Position: {x: 320, y: -80, z: 0}
+    m_Position: {x: 320, y: -40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -542766729445566113}
-    m_Position: {x: 320, y: -10, z: 0}
+    m_Position: {x: 320, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8461771757763867573}
-    m_Position: {x: 320, y: 60, z: 0}
+    m_Position: {x: 320, y: 100, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: -8400969355549617892}
-    m_Position: {x: 320, y: 140, z: 0}
-  - serializedVersion: 1
-    m_State: {fileID: -1289654613445363513}
-    m_Position: {x: 860, y: 120, z: 0}
+    m_State: {fileID: 6615734481720955821}
+    m_Position: {x: 355, y: 165, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: -3192268202210495154}
   - {fileID: 4040712951783690591}
   - {fileID: -2884211095543565884}
-  - {fileID: -3532301275571477531}
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 80, y: 40, z: 0}
   m_EntryPosition: {x: 620, y: -70, z: 0}
-  m_ExitPosition: {x: 610, y: 310, z: 0}
+  m_ExitPosition: {x: 620, y: 210, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -8619302562792040839}
+--- !u!1102 &6615734481720955821
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WakingUp
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 7314c64ed50cc1f49b434f36427582ed, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &8461771757763867573
 AnimatorState:
   serializedVersion: 6
