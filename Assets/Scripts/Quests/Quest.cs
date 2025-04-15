@@ -17,7 +17,7 @@ public class Quest : MonoBehaviour
     public string descriptionQuest;
     public SellableObject sellableObject;
     public Sprite customer;
-    private bool currentQuestCompleted; 
+    public bool questAccepted; 
 
     [Header("Quest Ui Elements"), HideInInspector]
     public Button button;
@@ -29,27 +29,40 @@ public class Quest : MonoBehaviour
         button = transform.GetChild(0).GetComponent<Button>();
         boxDescription = transform.GetChild(1).GetComponentInChildren<TMP_Text>();
         image = transform.GetChild(2).GetComponentInChildren<Image>();
+        
+        Shop.Instance.questsAvailables[numberQuestIndex] = this;
 
-        // PlayerPrefs.DeleteKey(Save.questsSaveKey);
-        bool loaded = Save.LoadQuests();
-        Debug.Log(loaded);
-        if (!loaded)
-        {
-            Debug.Log("Bouya");
+        if (!Save.LoadQuests() || questData == null)
             GetRandomQuest();
-        }
         else
-        {
-            if (questData == null) { GetRandomQuest(); }
-        }
+            GetQuestInfos();
     }
 
     public void AcceptQuest()
     {
-        button.GetComponentInChildren<TMP_Text>().text = "Recuperer la recompense";
+        questAccepted = true;
+
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() => CompletedQuest());
+        button.GetComponentInChildren<TMP_Text>().text = "Recuperer la recompense";
+
+        Save.SaveQuests();
         //SceneManager.LoadScene(1); // To replace with the index of the main game
+    }
+
+    public void CompletedQuest()
+    {
+        questAccepted = false;
+
+        PlayerMoney moneyPlayer = PlayerMoney.Instance;
+        moneyPlayer.AddMoney(rewards);
+
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() => AcceptQuest());
+        button.GetComponentInChildren<TMP_Text>().text = "Accepter";
+
+        GetRandomQuest();
+        Save.SaveQuests();
     }
 
     public void GetRandomQuest()
@@ -59,34 +72,32 @@ public class Quest : MonoBehaviour
 
         randomIndex = UnityEngine.Random.Range(0, questData.customerAvailables.Count);
         customer = questData.customerAvailables[randomIndex];
+        GetQuestInfos();
+
+        Shop shop = Shop.Instance;
+        Save.SaveQuests();
+    }
+
+    public void GetQuestInfos()
+    {
         rewards = questData.rewards;
         descriptionQuest = questData.description;
         sellableObject = questData.goalObject;
 
         boxDescription.text = descriptionQuest;
         image.sprite = customer;
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() => AcceptQuest());
 
-        Shop shop = Shop.Instance;
-        shop.questsAvailables[numberQuestIndex] = this;
-
-        Save.SaveQuests();
+        if (questAccepted)
+        {
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => AcceptQuest());
+            button.GetComponentInChildren<TMP_Text>().text = "Recuperer la recompense";
+        }
+        else
+        {
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => AcceptQuest());
+            button.GetComponentInChildren<TMP_Text>().text = "Accepter";
+        }
     }
-
-    public void CompletedQuest()
-    {
-        PlayerMoney moneyPlayer = PlayerMoney.Instance;
-        moneyPlayer.AddMoney(rewards);
-
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() => AcceptQuest());
-
-        button.GetComponentInChildren<TMP_Text>().text = "Accepter";
-        GetRandomQuest();
-
-        Save.SaveQuests();
-    }
-
-
 }

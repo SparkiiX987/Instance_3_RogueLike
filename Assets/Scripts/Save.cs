@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Save;
 
-public static class Save 
+public static class Save
 {
     public static string moneySaveKey => "Money";
     public static string questsSaveKey => "Quests";
@@ -9,11 +10,11 @@ public static class Save
     public static string loreSaveKey => "lorePage";
 
     //Money
-    public static void SaveMoney (int _value )
+    public static void SaveMoney(int _value)
     {
         PlayerPrefs.SetInt(moneySaveKey, _value);
     }
-    public static int GetMoney (int _value )
+    public static int GetMoney(int _value)
     {
         if (PlayerPrefs.HasKey(moneySaveKey))
         {
@@ -26,19 +27,24 @@ public static class Save
     public static void SaveQuests()
     {
         Shop shop = Shop.Instance;
-        Quests quest = new Quests();
-        foreach (Quest questAvailable in shop.questsAvailables)
+        Quests quests = new Quests();
+        for (int i = 0; i < shop.questsAvailables.Length; i++)
         {
-            QuestData questData = new QuestData();
-            if (questAvailable != null)
+            QuestInfos questInfos = new QuestInfos();
+            if (shop.questsAvailables[i] != null && shop.questsAvailables[i].questData != null)
             {
-                questData.sellableObject = questAvailable.sellableObject;
-                questData.rewards = questAvailable.rewards;
-                questData.customer = questAvailable.customer;
+                questInfos.id = shop.questsAvailables[i].questData.id;
+                questInfos.customer = shop.questsAvailables[i].customer.name;
             }
-            quest.questsDatas.Add(questData);
+            else
+            {
+                questInfos.id = -1;
+                questInfos.customer = "nothing";
+            }
+            questInfos.questAccepted = shop.questsAvailables[i].questAccepted;
+            quests.questsDatas.Add(questInfos);
         }
-        string json = JsonUtility.ToJson(quest);
+        string json = JsonUtility.ToJson(quests);
         PlayerPrefs.SetString(questsSaveKey, json);
 
         Debug.Log(json);
@@ -52,22 +58,48 @@ public static class Save
             Quests quests = JsonUtility.FromJson<Quests>(json);
             Debug.Log(json);
             Shop shop = Shop.Instance;
-            Debug.Log(shop.questsAvailables.Length);
             for (int i = 0; i < shop.questsAvailables.Length; i++)
             {
-                if (quests.questsDatas[i] != null)
+                if (shop.questsAvailables[i] != null)
                 {
-                    Quest quest = new Quest();
-                    quest.sellableObject = quests.questsDatas[i].sellableObject;
-                    quest.rewards = quests.questsDatas[i].rewards;
-                    quest.customer = quests.questsDatas[i].customer;
-                    shop.questsAvailables[i] = quest;
+                    shop.questsAvailables[i].questData = GetQuestScriptableObject(quests.questsDatas[i].id, shop.questsAvailables[i].questsPossibles);
+                    shop.questsAvailables[i].customer = GetSpriteCustomer(quests.questsDatas[i].customer, shop.questsAvailables[i].questData.customerAvailables);
+                    shop.questsAvailables[i].questAccepted = quests.questsDatas[i].questAccepted;
                 }
-                else { shop.questsAvailables[i] = null; }
             }
             return true;
         }
         return false;
+    }
+
+    public static QuestScriptableObject GetQuestScriptableObject (int _idQuest, List<QuestScriptableObject> _questScripts)
+    {
+        if (_idQuest == -1 ) { return null; }
+
+        foreach (QuestScriptableObject scriptableObject in _questScripts)
+        {
+            if (scriptableObject.id == _idQuest)
+            {
+                return scriptableObject;
+            }
+        }
+
+        return null;
+    }
+
+    public static Sprite GetSpriteCustomer(string _nameSprite, List<Sprite> _customers)
+    {
+        if (_nameSprite == "nothing") { return null; }
+
+        foreach (Sprite customer in _customers)
+        {
+            if (customer.name == _nameSprite)
+            {
+                return customer;
+            }
+        }
+
+        return null;
     }
 
     //Inventory
@@ -115,15 +147,15 @@ public static class Save
     [System.Serializable]
     public class Quests
     {
-        public List<QuestData> questsDatas = new List<QuestData>();
+        public List<QuestInfos> questsDatas = new List<QuestInfos>();
     }
 
     [System.Serializable]
-    public class QuestData
+    public class QuestInfos
     {
-        public SellableObject sellableObject;
-        public int rewards;
-        public Sprite customer;
+        public int id;
+        public string customer;
+        public bool questAccepted;
     }
 
 }
