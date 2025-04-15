@@ -74,9 +74,15 @@ public class PlayerControl : MonoBehaviour, ITargetable
             if (IsUsingStamina())
             {
                 LosingStamina();
+                animator.SetBool("IsRunning", true);
             }
             else
+            {
+                
                 StaminaRegen();
+                animator.SetBool("IsRunning", false);
+            }
+                
         }
     }
 
@@ -140,7 +146,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
         if (_ctx.started)
         {
             hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, obstacleLayer);
-            Debug.DrawRay(playerTransform.position, GetMousePosition(), Color.red, 2f);
             
             if (usableObject != null)
             {
@@ -173,14 +178,12 @@ public class PlayerControl : MonoBehaviour, ITargetable
         if (_ctx.performed && stamina > 0)
         {
             stats.speed = stats.speed * 2f;
-            animator.SetFloat("WalkingSpeed", 1.5f);
             isRunning = true;
         }
 
         else
         {
             stats.speed = walkingSpeed;
-            animator.SetFloat("WalkingSpeed", 1);
             isRunning = false;
         }
     }
