@@ -1,42 +1,129 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Save : MonoBehaviour
+public static class Save 
 {
-    public static Save Instance;
+    public static string moneySaveKey => "Money";
+    public static string questsSaveKey => "Quests";
+    public static string inventorySaveKey => "Inventory";
+    public static string loreSaveKey => "lorePage";
 
-    private void Awake()
+    //Money
+    public static void SaveMoney (int _value )
     {
-        if (Instance != null)
+        PlayerPrefs.SetInt(moneySaveKey, _value);
+    }
+    public static int GetMoney (int _value )
+    {
+        if (PlayerPrefs.HasKey(moneySaveKey))
         {
-            Debug.Log("trop de fois appelé");
-            Destroy(this);
+            return PlayerPrefs.GetInt(moneySaveKey);
         }
-        Instance = this;
+        return 0;
     }
 
-    public void SaveInt(int _value, string _name)
+    //Quests
+    public static void SaveQuests()
     {
-        PlayerPrefs.SetInt(_name, 5);
-    }
-    public void SaveFloat(float _value, string _name)
-    {
-        PlayerPrefs.SetFloat(_name, 0.6f);
-    }
-    public void SaveString(string _value, string _name)
-    {
-        PlayerPrefs.SetString(_name, "John Doe");
+        Shop shop = Shop.Instance;
+        Quests quest = new Quests();
+        foreach (Quest questAvailable in shop.questsAvailables)
+        {
+            QuestData questData = new QuestData();
+            if (questAvailable != null)
+            {
+                questData.sellableObject = questAvailable.sellableObject;
+                questData.rewards = questAvailable.rewards;
+                questData.customer = questAvailable.customer;
+            }
+            quest.questsDatas.Add(questData);
+        }
+        string json = JsonUtility.ToJson(quest);
+        PlayerPrefs.SetString(questsSaveKey, json);
+
+        Debug.Log(json);
     }
 
-    public int GetInt(string _name)
+    public static bool LoadQuests()
     {
-        return PlayerPrefs.GetInt(_name);
+        if (PlayerPrefs.HasKey(questsSaveKey))
+        {
+            string json = PlayerPrefs.GetString(questsSaveKey);
+            Quests quests = JsonUtility.FromJson<Quests>(json);
+            Debug.Log(json);
+            Shop shop = Shop.Instance;
+            Debug.Log(shop.questsAvailables.Length);
+            for (int i = 0; i < shop.questsAvailables.Length; i++)
+            {
+                if (quests.questsDatas[i] != null)
+                {
+                    Quest quest = new Quest();
+                    quest.sellableObject = quests.questsDatas[i].sellableObject;
+                    quest.rewards = quests.questsDatas[i].rewards;
+                    quest.customer = quests.questsDatas[i].customer;
+                    shop.questsAvailables[i] = quest;
+                }
+                else { shop.questsAvailables[i] = null; }
+            }
+            return true;
+        }
+        return false;
     }
-    public float GetFloat(string _name)
+
+    //Inventory
+    public static void SaveInventory()
     {
-        return PlayerPrefs.GetFloat(_name);
+        Transform entities = GameObject.Find("Entities").transform;
+        PlayerControl player = entities.gameObject.transform.GetChild(0).GetComponent<PlayerControl>();
+        InventoryData inventoryData = new InventoryData();
+        inventoryData.sellableObject = player.sellableObject;
+        inventoryData.usableObject = player.usableObject;
+        inventoryData.collectableObject = player.collectableObject;
+
+        string json = JsonUtility.ToJson(inventoryData);
+        PlayerPrefs.SetString(inventorySaveKey, json);
+
     }
-    public string GetString(string _name)
+    public static bool LoadInventory()
     {
-        return PlayerPrefs.GetString(_name);
+        if (PlayerPrefs.HasKey(inventorySaveKey))
+        {
+            string json = PlayerPrefs.GetString(inventorySaveKey);
+            InventoryData inventoryData = JsonUtility.FromJson<InventoryData>(json);
+
+            Transform entities = GameObject.Find("Entities").transform;
+            PlayerControl player = entities.gameObject.transform.GetChild(0).GetComponent<PlayerControl>();
+
+            player.sellableObject = inventoryData.sellableObject;
+            player.usableObject = inventoryData.usableObject;
+            player.collectableObject = inventoryData.collectableObject;
+            return true;
+        }
+        return false;
     }
+
+    //
+
+    [System.Serializable]
+    public class InventoryData
+    {
+        public SellableObject sellableObject;
+        public UsableObject usableObject;
+        public CollectableItem collectableObject;
+    }
+
+    [System.Serializable]
+    public class Quests
+    {
+        public List<QuestData> questsDatas = new List<QuestData>();
+    }
+
+    [System.Serializable]
+    public class QuestData
+    {
+        public SellableObject sellableObject;
+        public int rewards;
+        public Sprite customer;
+    }
+
 }

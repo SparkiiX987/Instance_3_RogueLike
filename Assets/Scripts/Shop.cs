@@ -7,6 +7,8 @@ public class Shop : MonoBehaviour
     public ShopOffer activeOffer;
     public ShopOffer[] offers = new ShopOffer[5];
 
+    public Quest[] questsAvailables = new Quest[3];
+
     private void Awake()
     {
         if(Instance != null)
@@ -31,4 +33,6 @@ public class Shop : MonoBehaviour
     {
 
     }
+
+
 }
