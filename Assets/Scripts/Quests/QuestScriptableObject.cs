@@ -7,6 +7,6 @@ public class QuestScriptableObject : ScriptableObject
     public int id;
     public int rewards;
     public string description;
-    public SellableObject goalObject;
+    public Sprite goalObject;
     public List<Sprite> customerAvailables;
 }

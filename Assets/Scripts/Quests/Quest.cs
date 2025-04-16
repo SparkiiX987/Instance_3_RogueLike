@@ -13,9 +13,7 @@ public class Quest : MonoBehaviour
 
     [Header("QuestDataChosen"), HideInInspector]
     public QuestScriptableObject questData;
-    public int rewards;
-    public string descriptionQuest;
-    public SellableObject sellableObject;
+    public Sprite sellableObject;
     public Sprite customer;
     public bool questAccepted; 
 
@@ -24,6 +22,7 @@ public class Quest : MonoBehaviour
     public TMP_Text boxDescription;
     public Image image;
 
+    private Save save => Save.Instance;
     private void Start()
     {
         button = transform.GetChild(0).GetComponent<Button>();
@@ -31,8 +30,8 @@ public class Quest : MonoBehaviour
         image = transform.GetChild(2).GetComponentInChildren<Image>();
         
         Shop.Instance.questsAvailables[numberQuestIndex] = this;
-
-        if (!Save.LoadQuests() || questData == null)
+        //PlayerPrefs.DeleteKey(save.questsSaveKey);
+        if (!save.LoadQuests() || questData == null)
             GetRandomQuest();
         else
             GetQuestInfos();
@@ -41,28 +40,22 @@ public class Quest : MonoBehaviour
     public void AcceptQuest()
     {
         questAccepted = true;
+        ChangeButtonFunction(questAccepted);
 
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() => CompletedQuest());
-        button.GetComponentInChildren<TMP_Text>().text = "Recuperer la recompense";
-
-        Save.SaveQuests();
+        save.SaveQuests();
         //SceneManager.LoadScene(1); // To replace with the index of the main game
     }
 
     public void CompletedQuest()
     {
         questAccepted = false;
+        ChangeButtonFunction(questAccepted);
 
         PlayerMoney moneyPlayer = PlayerMoney.Instance;
-        moneyPlayer.AddMoney(rewards);
-
-        button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() => AcceptQuest());
-        button.GetComponentInChildren<TMP_Text>().text = "Accepter";
+        moneyPlayer.AddMoney(questData.rewards);
 
         GetRandomQuest();
-        Save.SaveQuests();
+        save.SaveQuests();
     }
 
     public void GetRandomQuest()
@@ -75,19 +68,21 @@ public class Quest : MonoBehaviour
         GetQuestInfos();
 
         Shop shop = Shop.Instance;
-        Save.SaveQuests();
+        save.SaveQuests();
     }
 
     public void GetQuestInfos()
     {
-        rewards = questData.rewards;
-        descriptionQuest = questData.description;
         sellableObject = questData.goalObject;
-
-        boxDescription.text = descriptionQuest;
+        boxDescription.text = questData.description;
         image.sprite = customer;
 
-        if (questAccepted)
+        ChangeButtonFunction(questAccepted);
+    }
+
+    public void ChangeButtonFunction(bool _hasBeenAccepted)
+    {
+        if (_hasBeenAccepted)
         {
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => AcceptQuest());
