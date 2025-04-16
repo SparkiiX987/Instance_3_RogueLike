@@ -37,7 +37,7 @@ public class LevelGeneratorWalker : MonoBehaviour
     [SerializeField] int minMoveAmount;
     [SerializeField] int maxMoveAmount;
     [SerializeField] float moveDistance;
-    [SerializeField] private Transform roomsParent;
+    [SerializeField] Transform roomsParent;
     private int randomEntrance;
     private RaycastHit Hit;
     
