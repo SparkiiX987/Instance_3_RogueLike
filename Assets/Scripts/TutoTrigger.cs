@@ -21,7 +21,6 @@ public class TutoTrigger : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             panel.SetActive(false);
-            Destroy(gameObject);
         }
     }
 }
