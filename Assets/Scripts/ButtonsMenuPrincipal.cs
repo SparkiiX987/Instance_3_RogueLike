@@ -24,4 +24,9 @@ public class ButtonsMenuPrincipal : MonoBehaviour
             SceneManager.LoadScene("GameScene");
         }
     }
+
+    public void Tutorial()
+    {
+        SceneManager.LoadScene(2);
+    }
 }

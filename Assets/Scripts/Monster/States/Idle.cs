@@ -7,7 +7,6 @@ public class Idle : IState
     public UnityEvent onIdle = new();
     public void Action()
     {
-        Debug.Log("start idle");
         //Play animation of idle
         onIdle.Invoke();
     }

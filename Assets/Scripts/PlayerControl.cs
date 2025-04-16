@@ -217,17 +217,15 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void Sprint(InputAction.CallbackContext _ctx)
     {
-        float walkingSpeed = 5f;
-
         if (_ctx.performed && stamina > 0)
         {
             stats.speed = stats.speed * 2f;
             isRunning = true;
         }
 
-        else
+        else if (_ctx.canceled)
         {
-            stats.speed = walkingSpeed;
+            stats.speed = stats.speed / 2;
             isRunning = false;
         }
     }
