@@ -19,12 +19,18 @@ public class Attack : IState
         {
             if (hit.transform.gameObject != enemy.transform.gameObject)
             {
-                Obstacle obstacle = hit.transform.GetComponent<FoodObstacle>();
-                if (hit.transform.gameObject.GetComponent<ITargetable>() == target && !obstacle)
+                Obstacle obstacle = hit.transform.GetComponent<Obstacle>();
+                PlayerControl player = hit.transform.GetComponent<PlayerControl>();
+                if (hit.transform.gameObject.GetComponent<ITargetable>() == target && player != null)
+                {
+                    Debug.Log("PlayerIsDead");
+                }
+                if (hit.transform.gameObject.GetComponent<ITargetable>() == target && obstacle != null)
                 {
                     int healthTarget = target.GetHealth();
                     healthTarget -= damage;
                     target.SetHealth(healthTarget);
+                    Debug.Log("Attacking obstacle");
                 }
             }
         }
