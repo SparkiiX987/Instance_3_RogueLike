@@ -52,6 +52,9 @@ public class LevelGeneratorWalker : MonoBehaviour
     [SerializeField] GameObject[] bRoomPrefabs;
 
     #endregion
+
+    [Header("graph")]
+    [SerializeField] private Transform graph;
     
     void Start()
     {
@@ -102,12 +105,14 @@ public class LevelGeneratorWalker : MonoBehaviour
 
             if (cyclesPassed >= maxCycles)
             {
+                RegroupNodes();
                 finished = true;
                 return;
             }
 
             if (roomsGenerated.Count >= maxRooms)
             {
+                RegroupNodes();
                 finished = true;
                 return;
             }
@@ -141,10 +146,28 @@ public class LevelGeneratorWalker : MonoBehaviour
                     break;
             }
         }
+        RegroupNodes();
         finished = true;
     }
 
-   
+   private void RegroupNodes()
+   {
+        print(roomsGenerated.Count);
+        List<Transform> nodes = new List<Transform>();
+        for(int i = 0; i < roomsGenerated.Count; i++)
+        {
+            Node[] nodesInRoom = roomsGenerated[i].transform.GetChild(4).GetComponentsInChildren<Node>();
+            print(roomsGenerated[i].transform.GetChild(4).name);
+            foreach(Node node in nodesInRoom)
+            {
+                nodes.Add(node.transform);
+            }
+        }
+        for(int y = 0; y < nodes.Count; ++y)
+        {
+            nodes[y].SetParent(graph);
+        }
+   }
 
     private void RoomGenerator(int _amount, int _entrance)
     {
