@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Net;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Quest : MonoBehaviour
@@ -30,6 +29,7 @@ public class Quest : MonoBehaviour
         image = transform.GetChild(2).GetComponentInChildren<Image>();
         
         Shop.Instance.questsAvailables[numberQuestIndex] = this;
+
         //PlayerPrefs.DeleteKey(save.questsSaveKey);
         if (!save.LoadQuests() || questData == null)
             GetRandomQuest();
@@ -43,7 +43,7 @@ public class Quest : MonoBehaviour
         ChangeButtonFunction(questAccepted);
 
         save.SaveQuests();
-        //SceneManager.LoadScene(1); // To replace with the index of the main game
+        SceneManager.LoadScene(1);
     }
 
     public void CompletedQuest()
