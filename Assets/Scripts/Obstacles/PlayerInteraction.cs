@@ -16,6 +16,22 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
+    public void SavePlayer(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Save.Instance.SaveInventory(GetComponentInParent<PlayerControl>());
+        }
+    }
+
+    public void LoadPlayer(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Save.Instance.LoadInventory(GetComponentInParent<PlayerControl>());
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     { 
         Obstacle _tempObstacle = collision.gameObject.GetComponent<Obstacle>();

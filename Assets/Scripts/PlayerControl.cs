@@ -26,9 +26,9 @@ public class PlayerControl : MonoBehaviour, ITargetable
     private RaycastHit2D hit;
 
     private Stats stats;
-    private SellableObject sellableObject;
-    private UsableObject usableObject;
-    private CollectableItem collectableObject;
+    public SellableObject sellableObject;
+    public UsableObject usableObject;
+    public CollectableItem collectableObject;
     
     private float currentCooldown;
     
