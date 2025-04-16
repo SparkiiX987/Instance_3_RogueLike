@@ -6,7 +6,8 @@ public class TutoTrigger : MonoBehaviour
     [SerializeField] private string text;
     [SerializeField] private GameObject panel;
     [SerializeField] private TextMeshProUGUI paneltext;
-    private void OnTriggerEnter2D(Collider collision)
+    
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
@@ -15,7 +16,7 @@ public class TutoTrigger : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
