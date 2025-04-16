@@ -62,7 +62,6 @@ public class NodeEditorTool : EditorWindow
                 Debug.LogWarning("Ray did not hit the Z=0 plane.");
             }
 
-            isPlacingNode = false;
             @event.Use();
         }
     }

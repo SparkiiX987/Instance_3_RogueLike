@@ -4,24 +4,29 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour, ITargetable
 {
     [SerializeField] private float rotationSpeed;
-    
+
     [SerializeField] private float staminaMax;
 
     [SerializeField] private float cooldown;
 
     [SerializeField] private float pickupDistance;
-    [SerializeField] private LayerMask itemLayer;
+    [SerializeField] private LayerMask interactibleLayer;
     [SerializeField] private LayerMask obstacleLayer;
-    
+
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
-    
+
+    [SerializeField] private bool paused;
+
+    [SerializeField] private GameObject shop;
+    [SerializeField] private GameObject quests;
+
     private bool isDetectable;
     private int health;
     private float stamina;
     private bool isRunning;
     private Rigidbody2D rb;
-    
+
     private Ray ray;
     private RaycastHit2D hit;
 
@@ -31,7 +36,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
     public CollectableItem collectableObject;
     
     private float currentCooldown;
-    
+
     private InputAction moveAction;
     private InputAction lookAction;
 
@@ -39,7 +44,9 @@ public class PlayerControl : MonoBehaviour, ITargetable
     private Vector2 nextPlayerPos;
     private Vector2 dir;
     private Transform playerTransform;
-    
+
+    private Collider2D selfCollider;
+
     private void Awake()
     {
         stats = GetComponent<Stats>();
@@ -53,15 +60,21 @@ public class PlayerControl : MonoBehaviour, ITargetable
         stamina = staminaMax;
         hit = Physics2D.Raycast(playerTransform.position, Vector2.up, 100f);
         rb = GetComponent<Rigidbody2D>();
+        selfCollider = GetComponent<Collider2D>();
+        if (paused)
+        {
+            animator.SetBool("IsInBed", paused);
+            selfCollider.enabled = false;
+        }
     }
 
     private void Update()
     {
-        
-        
+        if (paused) { return; }
+
         LookAtMouse();
 
-        if(currentCooldown >= 0)
+        if (currentCooldown >= 0)
         {
             currentCooldown -= Time.deltaTime;
         }
@@ -76,12 +89,25 @@ public class PlayerControl : MonoBehaviour, ITargetable
             }
             else
             {
-                
+
                 StaminaRegen();
                 animator.SetBool("IsRunning", false);
             }
-                
+
         }
+    }
+
+    public Vector2 GetMovementDir => movementDir;
+
+    public void WakeUp()
+    {
+        animator.SetBool("IsInBed", false);
+    }
+
+    public void UnPause()
+    {
+        selfCollider.enabled = true;
+        paused = false;
     }
 
     private void FixedUpdate()
@@ -102,13 +128,15 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void Movement(InputAction.CallbackContext _ctx)
     {
+        if (paused) { return; }
+
         movementDir = _ctx.ReadValue<Vector2>();
         animator.SetBool("IsWalkingBool", true);
-        
+
         if (_ctx.canceled)
             animator.SetBool("IsWalkingBool", false);
     }
-    
+
     private void LookAtMouse()
     {
         var dir = Input.mousePosition - Camera.main.WorldToScreenPoint(playerTransform.position);
@@ -116,25 +144,43 @@ public class PlayerControl : MonoBehaviour, ITargetable
         Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
-    
+
     public void PickUp(InputAction.CallbackContext _ctx)
     {
         if (_ctx.started)
         {
-            hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, itemLayer);
-            if (hit.collider!= null && hit.collider.transform.GetComponent<CollectableItem>()) 
+            hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, interactibleLayer);
+            if (hit.collider != null)
             {
-                if (hit.collider.transform.GetComponent<CollectableItem>().item.GetType() == typeof(SellableObject))
+                Transform hitTransform = hit.collider.transform;
+                if (hitTransform.GetComponent<CollectableItem>())
                 {
-                    sellableObject = (SellableObject)hit.collider.transform.GetComponent<CollectableItem>().item;
+                    if (hitTransform.GetComponent<CollectableItem>().item.GetType() == typeof(SellableObject))
+                    {
+                        sellableObject = (SellableObject)hitTransform.GetComponent<CollectableItem>().item;
+                    }
+
+                    else if (hitTransform.GetComponent<CollectableItem>().item.GetType() == typeof(UsableObject))
+                    {
+                        usableObject = (UsableObject)hitTransform.GetComponent<CollectableItem>().item;
+                    }
+                    animator.SetTrigger("IsPickingUpItem");
+                    Destroy(hit.collider.gameObject);
                 }
-                
-                else if (hit.collider.transform.GetComponent<CollectableItem>().item.GetType() == typeof(UsableObject))
+                else if (hitTransform.TryGetComponent(out Door door))
                 {
-                    usableObject = (UsableObject)hit.collider.transform.GetComponent<CollectableItem>().item;
+                    door.UseDoor(playerTransform.position);
                 }
-                animator.SetTrigger("IsPickingUpItem");
-                Destroy(hit.collider.gameObject);
+                else if (hitTransform.tag == "Shop")
+                {
+                    paused = true;
+                    shop.SetActive(true);
+                }
+                else if (hitTransform.tag == "Quests")
+                {
+                    paused = true;
+                    quests.SetActive(true);
+                }
             }
         }
     }
@@ -144,31 +190,31 @@ public class PlayerControl : MonoBehaviour, ITargetable
         if (_ctx.started)
         {
             hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, obstacleLayer);
-            
+
             if (usableObject != null)
             {
                 usableObject.Action();
-            
+
                 if (usableObject.GetType() == typeof(EmptyBottle))
                 {
                     animator.SetTrigger("IsThrowingItem");
                 }
-            
+
                 if (usableObject.GetType() == typeof(MonsterCan))
                 {
                     animator.SetTrigger("IsDrinkingItem");
                 }
             }
-            
+
             else if (hit.collider != null && hit.collider.transform.GetComponent<Obstacle>())
             {
                 Obstacle obstacleObject = hit.collider.transform.GetComponent<Obstacle>();
                 obstacleObject.Action();
             }
-            
+
         }
     }
-    
+
     public void Sprint(InputAction.CallbackContext _ctx)
     {
         float walkingSpeed = 5f;
@@ -210,7 +256,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
     {
         if (movementDir != Vector2.zero && isRunning)
             return true;
-        
+
         else
             return false;
     }
