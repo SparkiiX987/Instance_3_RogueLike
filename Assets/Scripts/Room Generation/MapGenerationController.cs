@@ -67,6 +67,7 @@ public class MapGenerationController : MonoBehaviour
                 .position, Quaternion.identity, entitiesParent);      
     }
 
+
     #region Spawn Items
     private void GenerateItems()
     {
