@@ -213,6 +213,7 @@ public class Ennemy : MonoBehaviour
 
     private List<Node> FindPathToCell(Node _startNode, Node _goalNode)
     {
+        if(_startNode is null || _goalNode is null) { return null; }
         List<Link> openLinks = new List<Link>();
         HashSet<Node> closedNodes = new HashSet<Node>();
 
@@ -220,7 +221,7 @@ public class Ennemy : MonoBehaviour
 
         foreach (Link startNeighbor in _startNode.GetLinks())
         {
-            if (_startNode is null || startNeighbor is null || _goalNode is null) { continue; }
+            if (_startNode is null || _goalNode is null) { continue; }
             float g = Vector2.Distance(_startNode.GetNodePosition(), startNeighbor.nodeTo.GetNodePosition());
             float h = Vector2.Distance(startNeighbor.nodeTo.GetNodePosition(), _goalNode.GetNodePosition());
 

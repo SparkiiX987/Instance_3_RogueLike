@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 631223254305302023}
   - component: {fileID: 2277653727795147197}
   - component: {fileID: 13536588161606287}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Item Cigarette
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -2346873283927307752, guid: d88407fff4a972343b5a52f0f1b0f073, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -109,6 +109,7 @@ MonoBehaviour:
   floorSprite: {fileID: -2346873283927307752, guid: d88407fff4a972343b5a52f0f1b0f073, type: 3}
   highlightedFloorSprite: {fileID: 8654938049537718954, guid: 44a2c81f6e009654889551f315b2464f, type: 3}
   distance: 1
+  itemType: 0
 --- !u!61 &13536588161606287
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -21,6 +21,11 @@ public class PlayerControl : MonoBehaviour, ITargetable
     [SerializeField] private GameObject shop;
     [SerializeField] private GameObject quests;
 
+    private InputSystem_Actions inputSystem;
+    private InputAction moveInput;
+    private InputAction interact;
+    private InputAction sprint;
+
     private bool isDetectable;
     private int health;
     private float stamina;
@@ -34,7 +39,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
     public SellableObject sellableObject;
     public UsableObject usableObject;
     public CollectableItem collectableObject;
-    
+
     private float currentCooldown;
 
     private InputAction moveAction;
@@ -53,6 +58,30 @@ public class PlayerControl : MonoBehaviour, ITargetable
         ray = new Ray(transform.position, transform.forward);
         playerTransform = GetComponent<Transform>();
         collectableObject = GetComponent<CollectableItem>();
+
+
+        inputSystem = new InputSystem_Actions();
+        moveInput = inputSystem.Player.Move;
+        interact = inputSystem.Player.Interact;
+        sprint = inputSystem.Player.Sprint;
+        interact.started += PickUp;
+        interact.started += UseItem;
+        sprint.started += Sprint;
+        sprint.canceled += StopPrint;
+    }
+
+    private void OnEnable()
+    {
+        moveInput.Enable();
+        interact.Enable();
+        sprint.Enable();
+    }
+
+    private void OnDisable()
+    {
+        moveInput.Disable();
+        interact.Disable();
+        sprint.Disable();
     }
 
     private void Start()
@@ -112,8 +141,10 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private void FixedUpdate()
     {
+        movementDir = moveInput.ReadValue<Vector2>();
         nextPlayerPos.Set(playerTransform.position.x + movementDir.x * stats.speed * Time.deltaTime, playerTransform.position.y + movementDir.y * stats.speed * Time.deltaTime);
         rb.MovePosition(nextPlayerPos);
+        animator.SetBool("IsWalkingBool", (movementDir != Vector2.zero));
     }
 
     public int GetHealth()
@@ -126,17 +157,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
         health = _health;
     }
 
-    public void Movement(InputAction.CallbackContext _ctx)
-    {
-        if (paused) { return; }
-
-        movementDir = _ctx.ReadValue<Vector2>();
-        animator.SetBool("IsWalkingBool", true);
-
-        if (_ctx.canceled)
-            animator.SetBool("IsWalkingBool", false);
-    }
-
     private void LookAtMouse()
     {
         var dir = Input.mousePosition - Camera.main.WorldToScreenPoint(playerTransform.position);
@@ -147,89 +167,82 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void PickUp(InputAction.CallbackContext _ctx)
     {
-        if (_ctx.started)
+        hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, interactibleLayer);
+        if (hit.collider != null)
         {
-            hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, interactibleLayer);
-            if (hit.collider != null)
+            print("a");
+            Transform hitTransform = hit.collider.transform;
+            if (hitTransform.GetComponent<CollectableItem>())
             {
-                Transform hitTransform = hit.collider.transform;
-                if (hitTransform.GetComponent<CollectableItem>())
+                print("b");
+                print(hitTransform.GetComponent<CollectableItem>().itemType);
+                if (hitTransform.GetComponent<CollectableItem>().itemType == 0)
                 {
-                    if (hitTransform.GetComponent<CollectableItem>().item.GetType() == typeof(SellableObject))
-                    {
-                        sellableObject = (SellableObject)hitTransform.GetComponent<CollectableItem>().item;
-                    }
+                    sellableObject = (SellableObject)hitTransform.GetComponent<CollectableItem>().Item;
+                }
 
-                    else if (hitTransform.GetComponent<CollectableItem>().item.GetType() == typeof(UsableObject))
-                    {
-                        usableObject = (UsableObject)hitTransform.GetComponent<CollectableItem>().item;
-                    }
-                    animator.SetTrigger("IsPickingUpItem");
-                    Destroy(hit.collider.gameObject);
-                }
-                else if (hitTransform.TryGetComponent(out Door door))
+                else if (hitTransform.GetComponent<CollectableItem>().itemType == 1)
                 {
-                    door.UseDoor(playerTransform.position);
+                    usableObject = (UsableObject)hitTransform.GetComponent<CollectableItem>().Item;
                 }
-                else if (hitTransform.tag == "Shop")
-                {
-                    paused = true;
-                    shop.SetActive(true);
-                }
-                else if (hitTransform.tag == "Quests")
-                {
-                    paused = true;
-                    quests.SetActive(true);
-                }
+                animator.SetTrigger("IsPickingUpItem");
+                Destroy(hit.collider.gameObject);
+            }
+            else if (hitTransform.TryGetComponent(out Door door))
+            {
+                door.UseDoor(playerTransform.position);
+            }
+            else if (hitTransform.tag == "Shop")
+            {
+                paused = true;
+                shop.SetActive(true);
+            }
+            else if (hitTransform.tag == "Quests")
+            {
+                paused = true;
+                quests.SetActive(true);
             }
         }
     }
 
     public void UseItem(InputAction.CallbackContext _ctx)
     {
-        if (_ctx.started)
+        hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, obstacleLayer);
+
+        if (usableObject != null)
         {
-            hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, obstacleLayer);
+            usableObject.Action();
 
-            if (usableObject != null)
+            if (usableObject.GetType() == typeof(EmptyBottle))
             {
-                usableObject.Action();
-
-                if (usableObject.GetType() == typeof(EmptyBottle))
-                {
-                    animator.SetTrigger("IsThrowingItem");
-                }
-
-                if (usableObject.GetType() == typeof(MonsterCan))
-                {
-                    animator.SetTrigger("IsDrinkingItem");
-                }
+                animator.SetTrigger("IsThrowingItem");
             }
 
-            else if (hit.collider != null && hit.collider.transform.GetComponent<Obstacle>())
+            if (usableObject.GetType() == typeof(MonsterCan))
             {
-                Obstacle obstacleObject = hit.collider.transform.GetComponent<Obstacle>();
-                obstacleObject.Action();
+                animator.SetTrigger("IsDrinkingItem");
             }
+        }
 
+        else if (hit.collider != null && hit.collider.transform.GetComponent<Obstacle>())
+        {
+            Obstacle obstacleObject = hit.collider.transform.GetComponent<Obstacle>();
+            obstacleObject.Action();
         }
     }
 
     public void Sprint(InputAction.CallbackContext _ctx)
     {
-        float walkingSpeed = 5f;
+        if (stamina <= 0) { return; }
 
-        if (_ctx.performed && stamina > 0)
-        {
-            stats.speed = stats.speed * 2f;
-            isRunning = true;
-        }
+        stats.speed = stats.speed * 2f;
+        isRunning = true;
+    }
 
-        else
-        {
-            stats.speed = walkingSpeed;
-            isRunning = false;
-        }
+    private void StopPrint(InputAction.CallbackContext _ctx)
+    {
+        stats.speed = stats.speed / 2;
+        isRunning = false;
     }
 
     private void StaminaRegen()
