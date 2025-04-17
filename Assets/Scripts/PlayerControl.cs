@@ -21,7 +21,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
     [SerializeField] private GameObject shop;
     [SerializeField] private GameObject quests;
 
-    private bool isDetectable;
     private int health;
     private float stamina;
     private bool isRunning;
@@ -37,12 +36,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
     
     private float currentCooldown;
 
-    private InputAction moveAction;
-    private InputAction lookAction;
-
     private Vector2 movementDir;
     private Vector2 nextPlayerPos;
-    private Vector2 dir;
     private Transform playerTransform;
 
     private Collider2D selfCollider;
@@ -86,12 +81,13 @@ public class PlayerControl : MonoBehaviour, ITargetable
             {
                 LosingStamina();
                 animator.SetBool("IsRunning", true);
+                AudioManager.Instance.PlaySound(AudioType.run);
             }
             else
             {
-
                 StaminaRegen();
                 animator.SetBool("IsRunning", false);
+                AudioManager.Instance.StopSound(AudioType.run);
             }
 
         }
@@ -132,9 +128,13 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
         movementDir = _ctx.ReadValue<Vector2>();
         animator.SetBool("IsWalkingBool", true);
+        AudioManager.Instance.PlaySound(AudioType.walk);
 
         if (_ctx.canceled)
+        {
             animator.SetBool("IsWalkingBool", false);
+            AudioManager.Instance.StopSound(AudioType.walk);
+        }
     }
 
     private void LookAtMouse()
@@ -165,6 +165,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
                         usableObject = (UsableObject)hitTransform.GetComponent<CollectableItem>().item;
                     }
                     animator.SetTrigger("IsPickingUpItem");
+                    AudioManager.Instance.PlaySound(AudioType.itemTake);
                     Destroy(hit.collider.gameObject);
                 }
                 else if (hitTransform.TryGetComponent(out Door door))

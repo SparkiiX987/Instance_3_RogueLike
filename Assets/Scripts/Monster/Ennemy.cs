@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
 public class Ennemy : MonoBehaviour
 {
@@ -77,7 +74,6 @@ public class Ennemy : MonoBehaviour
                     idleEnnemy.ennemy = this;
                     idleEnnemy.onIdle.AddListener(() => PerformIdle());
                     idleEnnemy.Action();
-
                     break;
                 }
             case "Patrol":
@@ -87,6 +83,7 @@ public class Ennemy : MonoBehaviour
                     Patrol patrol = activeState as Patrol;
                     patrol.ennemy = this;
                     patrol.Action();
+                    AudioManager.Instance.PlaySound(AudioType.monsterRoaming);
                     break;
                 }
             case "Chase":
@@ -95,6 +92,7 @@ public class Ennemy : MonoBehaviour
                     Chase chase = activeState as Chase;
                     chase.ennemy = this;
                     chase.Action();
+                    AudioManager.Instance.StopSound(AudioType.monsterRoaming);
                     break;
                 }
             case "Attack":
@@ -103,6 +101,7 @@ public class Ennemy : MonoBehaviour
                     Attack attack = (Attack)activeState;
                     attack.target = this.target;
                     attack.enemy = this;
+                    AudioManager.Instance.StopSound(AudioType.monsterRoaming);
 
                     if (timer >= attackMaxTimer)
                     {
@@ -258,7 +257,7 @@ public class Ennemy : MonoBehaviour
 
         while (openLinks.Count > 0)
         {
-            if (tryNumber++ >= 1000)
+            if (tryNumber++ >= 10000)
             {
                 Debug.LogError("Error : Infinite loop detected !");
                 return null;

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,7 +8,10 @@ public class ButtonsMenuPrincipal : MonoBehaviour
     [SerializeField] private Button _buttonPlay;
     [SerializeField] private Button _buttonLeave;
 
-
+    private void Start()
+    {
+        AudioManager.Instance.PlaySound(AudioType.ambianceMenu);
+    }
 
     public void Leave()
     {
@@ -22,6 +26,8 @@ public class ButtonsMenuPrincipal : MonoBehaviour
         if( _buttonPlay != null)
         {
             SceneManager.LoadScene("GameScene");
+            AudioManager.Instance.StopSound(AudioType.ambianceMenu);
+            AudioManager.Instance.PlaySound(AudioType.ambianceIG);
         }
     }
 }
