@@ -34,6 +34,7 @@ public class CollectableItem : MonoBehaviour
     {
         if(player is null) { return; }
 
+        print(Vector3.Distance(player.transform.position, transform.position));
         spriteRenderer.sprite = distance <= Vector3.Distance(player.transform.position, transform.position) ? highlightedFloorSprite : floorSprite;
     }
 }

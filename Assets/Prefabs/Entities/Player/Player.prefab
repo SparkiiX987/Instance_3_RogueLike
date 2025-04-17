@@ -16,9 +16,9 @@ GameObject:
   - component: {fileID: 504757266895053390}
   - component: {fileID: 1061186539374534105}
   - component: {fileID: 8269850364204786899}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -339,14 +339,18 @@ MonoBehaviour:
   staminaMax: 100
   cooldown: 0.1
   pickupDistance: 1
-  itemLayer:
+  interactibleLayer:
     serializedVersion: 2
-    m_Bits: 1280
+    m_Bits: 0
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1536
   animator: {fileID: 8269850364204786899}
   spriteRenderer: {fileID: 7494689437763589261}
+  paused: 0
+  shop: {fileID: 0}
+  quests: {fileID: 0}
+  collectableObject: {fileID: 0}
 --- !u!114 &1061186539374534105
 MonoBehaviour:
   m_ObjectHideFlags: 0
