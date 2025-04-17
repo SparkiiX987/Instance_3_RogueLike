@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2277653727795147197}
   - component: {fileID: 13536588161606287}
   m_Layer: 0
-  m_Name: CollectableItem
+  m_Name: Item Beer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 6634229662551346580, guid: 3a698680e6ff8bc4da66727ecabd8558, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,12 +102,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    price: 0
-    name: 
+    price: 25
+    name: Beer
     description: 
   spriteRenderer: {fileID: 631223254305302023}
-  sprite: {fileID: 0}
-  highlightedSprite: {fileID: 0}
+  inventorySprite: {fileID: 1553890642158186845, guid: bc591f49befcb35489123c39029b84ba, type: 3}
+  floorSprite: {fileID: 6634229662551346580, guid: 3a698680e6ff8bc4da66727ecabd8558, type: 3}
+  highlightedFloorSprite: {fileID: 7292646015831284769, guid: 90de0e12e6d9ddb46a02c14b401e43b0, type: 3}
   distance: 1
 --- !u!61 &13536588161606287
 BoxCollider2D:
