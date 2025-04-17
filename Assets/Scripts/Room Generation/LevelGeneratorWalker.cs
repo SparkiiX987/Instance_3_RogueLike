@@ -100,9 +100,6 @@ public class LevelGeneratorWalker : MonoBehaviour
             _amount = Random.Range(minMoveAmount, maxMoveAmount);
             
             Physics.Raycast(transform.position, Vector3.forward, out hit, 1);
-            print(hit);
-            print(hit.collider);
-            print(hit.collider.gameObject.name);
             currentEntraces = hit.collider.gameObject.GetComponent<RoomParameters>().entraces;
             
             cyclesPassed++;
@@ -161,10 +158,9 @@ public class LevelGeneratorWalker : MonoBehaviour
    {
         print(roomsGenerated.Count);
         List<Transform> nodes = new List<Transform>();
-        for(int i = 0; i < roomsGenerated.Count; i++)
+        for(int i = 0; i < roomsGenerated.Count; ++i)
         {
             Node[] nodesInRoom = roomsGenerated[i].transform.GetChild(4).GetComponentsInChildren<Node>();
-            print(roomsGenerated[i].transform.GetChild(4).name);
             foreach(Node node in nodesInRoom)
             {
                 nodes.Add(node.transform);

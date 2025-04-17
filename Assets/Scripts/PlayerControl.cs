@@ -1,5 +1,8 @@
+using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Progress;
 
 public class PlayerControl : MonoBehaviour, ITargetable
 {
@@ -170,12 +173,24 @@ public class PlayerControl : MonoBehaviour, ITargetable
         hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, interactibleLayer);
         if (hit.collider != null)
         {
-            print("a");
             Transform hitTransform = hit.collider.transform;
             if (hitTransform.GetComponent<CollectableItem>())
             {
-                print("b");
-                print(hitTransform.GetComponent<CollectableItem>().itemType);
+                switch(hitTransform.GetComponent<CollectableItem>().itemType)
+                {
+                    case 1:
+                        sellableObject = (SellableObject)hitTransform.GetComponent<CollectableItem>().Item;
+                        break;
+                    case 2:
+                        usableObject = (EmptyBottle)hitTransform.GetComponent<CollectableItem>().Item;
+                        break;
+                    case 3:
+                        usableObject = (MonsterCan)hitTransform.GetComponent<CollectableItem>().Item;
+                        break;
+                    case 4:
+                        usableObject = (WoodenPlank)hitTransform.GetComponent<CollectableItem>().Item;
+                        break;
+                }
                 if (hitTransform.GetComponent<CollectableItem>().itemType == 0)
                 {
                     sellableObject = (SellableObject)hitTransform.GetComponent<CollectableItem>().Item;
