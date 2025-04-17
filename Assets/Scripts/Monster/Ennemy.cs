@@ -189,7 +189,7 @@ public class Ennemy : MonoBehaviour
 
     private IEnumerator GetNodesMap()
     {
-        while(true)
+        while (true)
         {
             GameObject graphGameObject = GameObject.Find("graph");
             if (!graphGameObject)
@@ -206,32 +206,6 @@ public class Ennemy : MonoBehaviour
         }
     }
 
-    private GameObject GetTileNextTo(Vector2 target)
-    {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(selfTransform.position, 10, cellLayer);
-        if (hits.Length == 0)
-        {
-            GetComponent<SpriteRenderer>().color = Color.red;
-            Debug.LogError("Error : No points next to the entity " + gameObject.name);
-        }
-
-        GameObject tile = hits[0].gameObject;
-        if (hits.Length == 0)
-        {
-            return tile;
-        }
-
-        for (int i = 1; i < hits.Length; i++)
-        {
-            if (Vector2.Distance(target, tile.transform.position) < Vector2.Distance(target, hits[i].transform.position))
-            {
-                tile = hits[i].gameObject;
-            }
-        }
-
-        return tile;
-    }
-
     public List<Node> TestPathFinding(Node _startNode, Node _goalNode)
     {
         return FindPathToCell(_startNode, _goalNode);
@@ -246,6 +220,7 @@ public class Ennemy : MonoBehaviour
 
         foreach (Link startNeighbor in _startNode.GetLinks())
         {
+            if (_startNode is null || startNeighbor is null || _goalNode is null) { continue; }
             float g = Vector2.Distance(_startNode.GetNodePosition(), startNeighbor.nodeTo.GetNodePosition());
             float h = Vector2.Distance(startNeighbor.nodeTo.GetNodePosition(), _goalNode.GetNodePosition());
 
@@ -361,7 +336,7 @@ public class Ennemy : MonoBehaviour
 
             if (endNode != startNode) 
             {
-                List<Node> testpath = TestPathFinding(startNode, endNode);
+                List<Node> testpath = FindPathToCell(startNode, endNode);
 
                 if (testpath.Count != path.Count)
                 {
@@ -407,7 +382,7 @@ public class Ennemy : MonoBehaviour
                     do
                     {
                         endNode = nodes[Random.Range(0, nodes.Count)];
-                        path = TestPathFinding(startNode, endNode);
+                        path = FindPathToCell(startNode, endNode);
                     } while (startNode == endNode || path == null);
                 }
                 else
@@ -416,7 +391,7 @@ public class Ennemy : MonoBehaviour
                     do
                     {
                         endNode = nodes[Random.Range(0, nodes.Count)];
-                        path = TestPathFinding(startNode, endNode);
+                        path = FindPathToCell(startNode, endNode);
                     } while (startNode == endNode || path == null);
                 }
 

@@ -57,7 +57,7 @@ public class Save : MonoBehaviour
             {
                 questInfos.id = -1;
                 questInfos.customer = "nothing";
-                questInfos.questAccepted = false ;
+                questInfos.questAccepted = false;
             }
             quests.questsDatas.Add(questInfos);
         }
@@ -89,9 +89,9 @@ public class Save : MonoBehaviour
         return false;
     }
 
-    public QuestScriptableObject GetQuestScriptableObject (int _idQuest, List<QuestScriptableObject> _questScripts)
+    public QuestScriptableObject GetQuestScriptableObject(int _idQuest, List<QuestScriptableObject> _questScripts)
     {
-        if (_idQuest == -1 ) { return null; }
+        if (_idQuest == -1) { return null; }
 
         foreach (QuestScriptableObject scriptableObject in _questScripts)
         {
@@ -132,13 +132,13 @@ public class Save : MonoBehaviour
             itemData.description = pickableObject.description;
             foreach (KeyValuePair<int, ItemData> entry in items)
             {
-                if (entry.Value == itemData)
+                if (entry.Value.name == itemData.name && entry.Value.price == itemData.price && entry.Value.description == itemData.description)
                 {
                     inventoryData.sellableObject = entry.Key;
                     break;
                 }
             }
-            if (inventoryData.sellableObject != null)
+            if (inventoryData.sellableObject == -1)
             {
                 items.Add(lastIndex, itemData);
 
@@ -151,19 +151,19 @@ public class Save : MonoBehaviour
             inventoryData.sellableObject = -1;
         }
 
-            pickableObject = _player.usableObject as PickableObject;
-        if (pickableObject != null) 
+        pickableObject = _player.usableObject as PickableObject;
+        if (pickableObject != null)
         {
             itemData.price = pickableObject.price; itemData.name = pickableObject.name; itemData.description = pickableObject.description;
             foreach (KeyValuePair<int, ItemData> entry in items)
             {
-                if (entry.Value == itemData)
+                if (entry.Value.name == itemData.name && entry.Value.price == itemData.price && entry.Value.description == itemData.description)
                 {
                     inventoryData.usableObject = entry.Key;
                     break;
                 }
             }
-            if (inventoryData.usableObject != null)
+            if (inventoryData.usableObject == -1)
             {
                 items.Add(lastIndex, itemData);
                 inventoryData.usableObject = lastIndex - 1;
@@ -179,14 +179,14 @@ public class Save : MonoBehaviour
             itemData.price = pickableObject.price; itemData.name = pickableObject.name; itemData.description = pickableObject.description;
             foreach (KeyValuePair<int, ItemData> entry in items)
             {
-                if (entry.Value == itemData)
+                if (entry.Value.name == itemData.name && entry.Value.price == itemData.price && entry.Value.description == itemData.description)
                 {
                     inventoryData.collectableObject = entry.Key;
                     Debug.Log("Hola");
                     break;
                 }
             }
-            if (inventoryData.collectableObject != null)
+            if (inventoryData.collectableObject == -1)
             {
                 items.Add(lastIndex, itemData);
                 inventoryData.collectableObject = lastIndex - 1;
@@ -264,7 +264,7 @@ public class Save : MonoBehaviour
                 GameObject objectCreated = Instantiate(collectableObject, transform.position, Quaternion.identity);
                 CollectableItem collectable = objectCreated.GetComponent<CollectableItem>();
                 objectCreated.SetActive(false);
-                
+
                 id = inventoryData.collectableObject;
                 Debug.Log(items.Count);
                 itemData = items[id];
@@ -280,7 +280,7 @@ public class Save : MonoBehaviour
 
     public void DisplayArray()
     {
-        foreach(KeyValuePair<int, ItemData> entry in items)
+        foreach (KeyValuePair<int, ItemData> entry in items)
         {
             Debug.Log(entry.Key.ToString() + ": " + entry.Value.ToString());
         }
@@ -322,9 +322,9 @@ public class Save : MonoBehaviour
     [System.Serializable]
     public class InventoryData
     {
-        public int sellableObject;
-        public int usableObject;
-        public int collectableObject;
+        public int sellableObject = -1;
+        public int usableObject = -1;
+        public int collectableObject = -1;
 
 
     }

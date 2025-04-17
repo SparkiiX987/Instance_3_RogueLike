@@ -39,7 +39,7 @@ public class LevelGeneratorWalker : MonoBehaviour
     [SerializeField] float moveDistance;
     [SerializeField] Transform roomsParent;
     private int randomEntrance;
-    private RaycastHit Hit;
+    private RaycastHit hit;
     
     #endregion
 
@@ -86,8 +86,8 @@ public class LevelGeneratorWalker : MonoBehaviour
     
     private void WalkerMovment()
     {
-        Physics.Raycast(transform.position, Vector3.forward, out Hit, 1);
-        currentEntraces = Hit.collider.gameObject.GetComponent<RoomParameters>().entraces;
+        Physics.Raycast(transform.position, Vector3.forward, out hit, 1);
+        currentEntraces = hit.collider.gameObject.GetComponent<RoomParameters>().entraces;
 
         int _amount = Random.Range(minMoveAmount, maxMoveAmount);
         for (; MoveAmount > 0; MoveAmount -= _amount)
@@ -98,8 +98,11 @@ public class LevelGeneratorWalker : MonoBehaviour
                 Mathf.Clamp(transform.position.y, 0, maxPosY), transform.position.z);
             _amount = Random.Range(minMoveAmount, maxMoveAmount);
             
-            Physics.Raycast(transform.position, Vector3.forward, out Hit, 1);
-            currentEntraces = Hit.collider.gameObject.GetComponent<RoomParameters>().entraces;
+            Physics.Raycast(transform.position, Vector3.forward, out hit, 1);
+            print(hit);
+            print(hit.collider);
+            print(hit.collider.gameObject.name);
+            currentEntraces = hit.collider.gameObject.GetComponent<RoomParameters>().entraces;
             
             cyclesPassed++;
 
@@ -171,7 +174,7 @@ public class LevelGeneratorWalker : MonoBehaviour
 
     private void RoomGenerator(int _amount, int _entrance)
     {
-        if(!Physics.Raycast(transform.position, Vector3.forward, out Hit, 1))
+        if(!Physics.Raycast(transform.position, Vector3.forward, out hit, 1))
         {
             switch (_entrance)
             {
