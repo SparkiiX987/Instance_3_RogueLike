@@ -156,7 +156,6 @@ public class LevelGeneratorWalker : MonoBehaviour
 
    private void RegroupNodes()
    {
-        print(roomsGenerated.Count);
         List<Transform> nodes = new List<Transform>();
         for(int i = 0; i < roomsGenerated.Count; ++i)
         {

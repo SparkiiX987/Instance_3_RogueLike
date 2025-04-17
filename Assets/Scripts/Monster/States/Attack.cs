@@ -23,7 +23,8 @@ public class Attack : IState
                 PlayerControl player = hit.transform.GetComponent<PlayerControl>();
                 if (hit.transform.gameObject.GetComponent<ITargetable>() == target && player != null)
                 {
-                    Debug.Log("PlayerIsDead");
+                    player.Death();
+                    enemy.gameObject.SetActive(false);
                 }
                 if (hit.transform.gameObject.GetComponent<ITargetable>() == target && obstacle != null)
                 {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapGenerationController : MonoBehaviour
@@ -13,22 +14,22 @@ public class MapGenerationController : MonoBehaviour
     [Header("Monster Spawn Settings")]
     [SerializeField] GameObject monsterPrefab;
     [SerializeField] int minRoomsBeforeSpawn;
-    
-    #endregion
 
     #region Spawn Items Variables
     [Header("Rooms")]
     private RoomParameters[] rooms;
     float timer = 0.1f;
     bool done;
-    
+
     [Header("Items")]
     [SerializeField] private List<GameObject> sellablesObjects;
     [SerializeField] private List<GameObject> usableObjects;
-    
+
     [Header("Percentage")]
     [SerializeField] private float percentageOfObject;
     [SerializeField] private float percentageOfType;
+    #endregion
+
     #endregion
 
     private void Start()
@@ -39,6 +40,16 @@ public class MapGenerationController : MonoBehaviour
     private void Update()
     {
         SpawnPlayer();
+        if (!done)
+        {
+            timer -= Time.deltaTime;
+            if (timer <= 0)
+            {
+                rooms = FindObjectsByType(typeof(RoomParameters), FindObjectsSortMode.None) as RoomParameters[];
+                GenerateItems();
+                done = true;
+            }
+        }
     }
 
     private void SpawnPlayer()
@@ -71,7 +82,7 @@ public class MapGenerationController : MonoBehaviour
 
         foreach (RoomParameters room in rooms)
         {
-            itemsParent = room.transform.GetChild(room.transform.childCount - 1);
+            itemsParent = room.transform.GetChild(5);
             int limit = itemsParent.childCount;
             for (int i = 0; i < limit; i++)
             {

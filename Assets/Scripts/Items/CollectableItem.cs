@@ -22,6 +22,8 @@ public class CollectableItem : MonoBehaviour
         StartCoroutine(GetPlayer());
     }
 
+    public Sprite GetInventorySprite => inventorySprite;
+
     private void InitializeItem()
     {
         switch (itemType)
@@ -64,6 +66,6 @@ public class CollectableItem : MonoBehaviour
         if(player is null) { return; }
 
         //print(Vector3.Distance(player.transform.position, transform.position));
-        spriteRenderer.sprite = distance <= Vector3.Distance(player.transform.position, transform.position) ? highlightedFloorSprite : floorSprite;
+        spriteRenderer.sprite = distance <= Vector3.Distance(player.transform.position, transform.position) ? floorSprite : highlightedFloorSprite;
     }
 }
