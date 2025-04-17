@@ -102,7 +102,7 @@ public class LevelGeneratorWalker : MonoBehaviour
             print(hit);
             print(hit.collider);
             print(hit.collider.gameObject.name);
-            currentEntraces = hit.collider.gameObject.GetComponent<RoomParameters>().entraces;
+            currentEntraces = hit.collider.GetComponent<RoomParameters>().entraces;
             
             cyclesPassed++;
 

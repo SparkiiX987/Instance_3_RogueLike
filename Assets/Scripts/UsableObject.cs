@@ -2,5 +2,5 @@ using UnityEngine;
 
 public abstract class UsableObject : PickableObject
 {
-    public abstract void Action();
+    public abstract void Action(GameObject _player);
 }

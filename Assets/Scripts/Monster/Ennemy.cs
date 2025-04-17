@@ -11,10 +11,13 @@ public class Ennemy : MonoBehaviour
     public Stats ennemyStats;
     public float initialSpeed => ennemyStats.speed;
     public float amplificater = 1f;
+    public float stunDuration;
+    private float stunTimer;
 
     [Header("States"), HideInInspector]
     public IState[] states = new IState[4];
     public  IState activeState;
+    public bool isStunned = false;
 
     [Header("PathFinding")]
     public float detectionRange;
@@ -296,6 +299,7 @@ public class Ennemy : MonoBehaviour
 
     public void OnMovement(Vector2 targetPosition)
     {
+        if (isStunned) return;
         if (targetPosition != null)
         {
             Vector3 look = (Vector3)targetPosition - transform.position;
@@ -303,7 +307,7 @@ public class Ennemy : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
             Vector3 direction = (Vector3)targetPosition - selfTransform.position;
-            selfTransform.position += direction.normalized * (ennemyStats.speed * amplificater ) * Time.deltaTime;
+            selfTransform.position += direction.normalized * (ennemyStats.speed * amplificater * Time.deltaTime);
         }
     }
 
@@ -327,6 +331,17 @@ public class Ennemy : MonoBehaviour
 
     void Update()
     {
+        if (isStunned)
+        {
+           stunTimer += Time.deltaTime; 
+        }
+
+        if (stunTimer >= stunDuration)
+        {
+            isStunned = !isStunned;
+            stunTimer = 0f;
+        }
+        
         //If the monster is in chase state, we get a path throught player
         if (activeState == states[2])
         {
