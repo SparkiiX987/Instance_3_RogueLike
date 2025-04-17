@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2277653727795147197}
   - component: {fileID: 13536588161606287}
   m_Layer: 0
-  m_Name: Item Magazine
+  m_Name: Item Whisky bottle Tutorial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,8 +77,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -318428691225633517, guid: 9e6903a6c63a162459a6461d7c4acf42, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: -7044527696425451788, guid: c8601890a47e0ef4d94d495ad275a4ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,12 +102,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item:
-    price: 25
-    name: Magazine JouerGarcon
+    price: 100
+    name: Whisky bottle
     description: 
-  inventorySprite: {fileID: -8325325679899800282, guid: 2bf7da0f721eed944ac5b745fae4ceea, type: 3}
-  floorSprite: {fileID: -318428691225633517, guid: 9e6903a6c63a162459a6461d7c4acf42, type: 3}
-  highlightedFloorSprite: {fileID: 8341424632218560292, guid: dab522cfa3ad93f479b8e8effd1646a0, type: 3}
+  inventorySprite: {fileID: -6265572309554476903, guid: 2427d368a8adb0244bd16c42b0fa7322, type: 3}
+  floorSprite: {fileID: -7044527696425451788, guid: c8601890a47e0ef4d94d495ad275a4ff, type: 3}
+  highlightedFloorSprite: {fileID: 1860948478867470346, guid: 622120bdf3f303e47b732d247a0ffbe6, type: 3}
   distance: 1
 --- !u!61 &13536588161606287
 BoxCollider2D:
@@ -143,15 +143,15 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.002822712, y: 0.0014113933}
+  m_Offset: {x: -0.04121661, y: 0.06388569}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.28125, y: 0.34375}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.23787138, y: 0.30843857}
+  m_Size: {x: 0.15918398, y: 0.29519844}
   m_EdgeRadius: 0

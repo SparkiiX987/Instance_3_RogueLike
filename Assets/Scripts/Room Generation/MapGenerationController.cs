@@ -19,6 +19,7 @@ public class MapGenerationController : MonoBehaviour
     private void Start()
     {
         walkerScript = GetComponentInChildren<LevelGeneratorWalker>();
+
     }
 
     private void Update()

@@ -11,7 +11,8 @@ public class LevelGeneratorWalker : MonoBehaviour
     [field:SerializeField] public List<GameObject> roomsGenerated{ get; private set;}
     public bool finished{ get; private set;}
     [HideInInspector] public int[] currentEntraces;
-    
+    [SerializeField] GameObject endZonePrefab;
+
 
     #endregion
 
@@ -53,7 +54,7 @@ public class LevelGeneratorWalker : MonoBehaviour
 
     #endregion
 
-    [Header("graph")]
+    [Header("Graph")]
     [SerializeField] private Transform graph;
     
     void Start()
@@ -109,6 +110,7 @@ public class LevelGeneratorWalker : MonoBehaviour
             if (cyclesPassed >= maxCycles)
             {
                 RegroupNodes();
+                SpawnEndZone();
                 finished = true;
                 return;
             }
@@ -116,6 +118,7 @@ public class LevelGeneratorWalker : MonoBehaviour
             if (roomsGenerated.Count >= maxRooms)
             {
                 RegroupNodes();
+                SpawnEndZone();
                 finished = true;
                 return;
             }
@@ -150,6 +153,7 @@ public class LevelGeneratorWalker : MonoBehaviour
             }
         }
         RegroupNodes();
+        SpawnEndZone();
         finished = true;
     }
 
@@ -196,5 +200,10 @@ public class LevelGeneratorWalker : MonoBehaviour
         {
             MoveAmount += _amount;
         }
+    }
+
+    private void SpawnEndZone()
+    {
+       GameObject endZoneInstance = Instantiate(endZonePrefab, roomsGenerated[0].transform);
     }
 }
