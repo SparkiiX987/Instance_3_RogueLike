@@ -212,6 +212,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   achievementPanel: {fileID: 563446924}
+  achievementImage: {fileID: 1892177051}
+  achievementTitle: {fileID: 2028642163}
+  achievementDesc: {fileID: 662071769}
   achievementsIcons:
   - {fileID: 9158884529557622325, guid: c5f9ec0b7d79e6240bdc9e1a22a2d04b, type: 3}
   - {fileID: -6573734269700068937, guid: 15d715636d74b1c4597b23978b84b564, type: 3}
@@ -379,7 +382,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -11.511108, y: -65.89075, z: -60.26001, w: 12.01123}
+  m_margin: {x: -11.511108, y: -55.689697, z: -60.26001, w: 12.01123}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -620,7 +623,6 @@ GameObject:
   - component: {fileID: 1533829794}
   - component: {fileID: 1533829793}
   - component: {fileID: 1533829792}
-  - component: {fileID: 1533829796}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -712,28 +714,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!95 &1533829796
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1533829791}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fe71831106b75a5429be14d33d85bda4, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1590127695
 GameObject:
   m_ObjectHideFlags: 0
