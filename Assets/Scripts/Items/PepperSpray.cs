@@ -1,20 +1,14 @@
-using UnityEngine;
-
 public class PepperSpray : UsableObject
 {
     [SerializeField] GameObject sprayPrefab;
 
-    public override void Action(GameObject _player)
+    public PepperSpray(int _price, string _name, string _description) : base(_price, _name, _description)
     {
+    }  
+
+    public override void Action()
+    {
+        AudioManager.Instance.PlaySound(AudioType.lacrymogene);
         Instantiate(sprayPrefab, _player.transform.position, _player.transform.rotation);
     }
-    
-    // hit = Physics2D.BoxCast(player.transform.position, new Vector2(1, distance), player.transform.rotation.z, new Vector2(0, 1), distance/2);
-    // if (hit.collider == null) return;
-    // try
-    // {
-    //     monster = hit.collider.GetComponent<Ennemy>();
-    //         
-    // }
-    // catch { /*ignored*/ }
 }

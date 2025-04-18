@@ -2,7 +2,20 @@ using UnityEngine;
 
 public enum AudioType
 {
-    walk
+    walk,
+    bottleBreak,
+    death,
+    drinkSoda,
+    footstepWood,
+    itemTake,
+    lacrymogene,
+    Throw,
+    monsterRoaming,
+    run,
+    ambianceIG,
+    ambianceMenu,
+    buttons,
+    wind
 }
 
 public class AudioManager : MonoBehaviour

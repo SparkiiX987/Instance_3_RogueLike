@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +22,11 @@ public class PlayerControl : MonoBehaviour, ITargetable
     [SerializeField] private GameObject shop;
     [SerializeField] private GameObject quests;
 
+    private InputSystem_Actions inputSystem;
+    private InputAction moveInput;
+    private InputAction interact;
+    private InputAction sprint;
+
     private bool isDetectable;
     private int health;
     public float stamina;
@@ -34,18 +40,20 @@ public class PlayerControl : MonoBehaviour, ITargetable
     public SellableObject sellableObject;
     public UsableObject usableObject;
     public CollectableItem collectableObject;
-    
-    private float currentCooldown;
 
-    private InputAction moveAction;
-    private InputAction lookAction;
+    private ItemSlot[] slots = new ItemSlot[2];
+
+    private float currentCooldown;
 
     private Vector2 movementDir;
     private Vector2 nextPlayerPos;
-    private Vector2 dir;
     private Transform playerTransform;
 
     private Collider2D selfCollider;
+
+    [SerializeField] private EnduranceBar enduranceBar;
+
+    private GameObject deathPanel;
 
     private void Awake()
     {
@@ -53,6 +61,32 @@ public class PlayerControl : MonoBehaviour, ITargetable
         ray = new Ray(transform.position, transform.forward);
         playerTransform = GetComponent<Transform>();
         collectableObject = GetComponent<CollectableItem>();
+
+
+        inputSystem = new InputSystem_Actions();
+        moveInput = inputSystem.Player.Move;
+        interact = inputSystem.Player.Interact;
+        sprint = inputSystem.Player.Sprint;
+        interact.started += PickUp;
+        interact.started += UseItem;
+        sprint.started += Sprint;
+        sprint.canceled += StopPrint;
+
+        deathPanel = GameObject.Find("Canvas").transform.GetChild(2).gameObject;
+    }
+
+    private void OnEnable()
+    {
+        moveInput.Enable();
+        interact.Enable();
+        sprint.Enable();
+    }
+
+    private void OnDisable()
+    {
+        moveInput.Disable();
+        interact.Disable();
+        sprint.Disable();
     }
 
     private void Start()
@@ -66,6 +100,11 @@ public class PlayerControl : MonoBehaviour, ITargetable
             animator.SetBool("IsInBed", paused);
             selfCollider.enabled = false;
         }
+
+        GameObject canva = GameObject.Find("Canvas");
+        slots[0] = canva.transform.GetChild(0).GetChild(0).GetComponent<ItemSlot>();
+        slots[1] = canva.transform.GetChild(0).GetChild(1).GetComponent<ItemSlot>();
+        deathPanel = canva.transform.GetChild(2).gameObject;
     }
 
     private void Update()
@@ -86,15 +125,32 @@ public class PlayerControl : MonoBehaviour, ITargetable
             {
                 LosingStamina();
                 animator.SetBool("IsRunning", true);
+                AudioManager.Instance.PlaySound(AudioType.run);
             }
             else
             {
-
                 StaminaRegen();
                 animator.SetBool("IsRunning", false);
+                AudioManager.Instance.StopSound(AudioType.run);
             }
 
         }
+    }
+
+    public void Death()
+    {
+        StartCoroutine(DeathCoroutine());
+    }
+
+    private IEnumerator DeathCoroutine()
+    {
+        paused = true;
+        animator.SetTrigger("IsDead");
+        yield return new WaitForSeconds(0.8f);
+        deathPanel.SetActive(true);
+        slots[0].transform.parent.gameObject.SetActive(false);
+        enduranceBar.gameObject.SetActive(false);
+        Time.timeScale = 0;
     }
 
     public Vector2 GetMovementDir => movementDir;
@@ -112,8 +168,12 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private void FixedUpdate()
     {
+        if(paused is not false) { return; }
+
+        movementDir = moveInput.ReadValue<Vector2>();
         nextPlayerPos.Set(playerTransform.position.x + movementDir.x * stats.speed * Time.deltaTime, playerTransform.position.y + movementDir.y * stats.speed * Time.deltaTime);
         rb.MovePosition(nextPlayerPos);
+        animator.SetBool("IsWalkingBool", (movementDir != Vector2.zero));
     }
 
     public int GetHealth()
@@ -126,17 +186,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
         health = _health;
     }
 
-    public void Movement(InputAction.CallbackContext _ctx)
-    {
-        if (paused) { return; }
-
-        movementDir = _ctx.ReadValue<Vector2>();
-        animator.SetBool("IsWalkingBool", true);
-
-        if (_ctx.canceled)
-            animator.SetBool("IsWalkingBool", false);
-    }
-
     private void LookAtMouse()
     {
         var dir = Input.mousePosition - Camera.main.WorldToScreenPoint(playerTransform.position);
@@ -147,51 +196,69 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void PickUp(InputAction.CallbackContext _ctx)
     {
-        if (_ctx.started)
+        hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, interactibleLayer);
+        if (hit.collider != null)
         {
-            hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, interactibleLayer);
-            if (hit.collider != null)
+            Transform hitTransform = hit.collider.transform;
+            if (hitTransform.GetComponent<CollectableItem>())
             {
-                Transform hitTransform = hit.collider.transform;
-                if (hitTransform.GetComponent<CollectableItem>())
+                switch(hitTransform.GetComponent<CollectableItem>().itemType)
                 {
-                    if (hitTransform.GetComponent<CollectableItem>().item.GetType() == typeof(SellableObject))
-                    {
-                        sellableObject = (SellableObject)hitTransform.GetComponent<CollectableItem>().item;
-                    }
+                    case 0:
+                        if (sellableObject is not null) { return; }
 
-                    else if (hitTransform.GetComponent<CollectableItem>().item.GetType() == typeof(UsableObject))
-                    {
-                        usableObject = (UsableObject)hitTransform.GetComponent<CollectableItem>().item;
-                    }
-                    animator.SetTrigger("IsPickingUpItem");
-                    Destroy(hit.collider.gameObject);
+                        sellableObject = (SellableObject)hitTransform.GetComponent<CollectableItem>().Item;
+                        print(slots[0]);
+                        slots[0].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
+                        break;
+                    case 2:
+                        if (usableObject is not null) { return; }
+
+                        usableObject = (EmptyBottle)hitTransform.GetComponent<CollectableItem>().Item;
+                        slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
+                        break;
+                    case 3:
+                        if (usableObject is not null) { return; }
+
+                        usableObject = (MonsterCan)hitTransform.GetComponent<CollectableItem>().Item;
+                        slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
+                        break;
+                    case 4:
+                        if (usableObject is not null) { return; }
+
+                        usableObject = (WoodenPlank)hitTransform.GetComponent<CollectableItem>().Item;
+                        slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
+                        break;
                 }
-                else if (hitTransform.TryGetComponent(out Door door))
-                {
-                    door.UseDoor(playerTransform.position);
-                }
-                else if (hitTransform.tag == "Shop")
-                {
-                    paused = true;
-                    shop.SetActive(true);
-                }
-                else if (hitTransform.tag == "Quests")
-                {
-                    paused = true;
-                    quests.SetActive(true);
-                }
+                animator.SetTrigger("IsPickingUpItem");
+                Destroy(hit.collider.gameObject);
+            }
+            else if (hitTransform.TryGetComponent(out Door door))
+            {
+                door.UseDoor(playerTransform.position);
+            }
+            else if (hitTransform.tag == "Shop")
+            {
+                paused = true;
+                shop.SetActive(true);
+            }
+            else if (hitTransform.tag == "Quests")
+            {
+                paused = true;
+                quests.SetActive(true);
             }
         }
     }
 
     public void UseItem(InputAction.CallbackContext _ctx)
     {
-        if (_ctx.started)
-        {
-            hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, obstacleLayer);
+        hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, obstacleLayer);
 
-            if (usableObject != null)
+        if (usableObject != null)
+        {
+            usableObject.Action();
+
+            if (usableObject.GetType() == typeof(EmptyBottle))
             {
                 usableObject.Action(this.gameObject);
 
@@ -206,30 +273,31 @@ public class PlayerControl : MonoBehaviour, ITargetable
                 }
             }
 
-            else if (hit.collider != null && hit.collider.transform.GetComponent<Obstacle>())
+            if (usableObject.GetType() == typeof(MonsterCan))
             {
-                Obstacle obstacleObject = hit.collider.transform.GetComponent<Obstacle>();
-                obstacleObject.Action();
+                animator.SetTrigger("IsDrinkingItem");
             }
+        }
 
+        else if (hit.collider != null && hit.collider.transform.GetComponent<Obstacle>())
+        {
+            Obstacle obstacleObject = hit.collider.transform.GetComponent<Obstacle>();
+            obstacleObject.Action();
         }
     }
 
     public void Sprint(InputAction.CallbackContext _ctx)
     {
-        float walkingSpeed = 5f;
+        if (stamina <= 0) { return; }
 
-        if (_ctx.performed && stamina > 0)
-        {
-            stats.speed = stats.speed * 2f;
-            isRunning = true;
-        }
+        stats.speed = stats.speed * 2f;
+        isRunning = true;
+    }
 
-        else
-        {
-            stats.speed = walkingSpeed;
-            isRunning = false;
-        }
+    private void StopPrint(InputAction.CallbackContext _ctx)
+    {
+        stats.speed = stats.speed / 2;
+        isRunning = false;
     }
 
     private void StaminaRegen()
@@ -240,6 +308,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
             return;
         }
         stamina += 1;
+        enduranceBar.fillBar.fillAmount = stamina / 100f;
     }
 
     private void LosingStamina()
@@ -250,6 +319,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
             return;
         }
         stamina -= 1;
+        enduranceBar.fillBar.fillAmount = stamina / 100f;
     }
 
     private bool IsUsingStamina()

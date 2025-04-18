@@ -173,7 +173,7 @@ public class Save : MonoBehaviour
         {
             inventoryData.usableObject = -1;
         }
-        pickableObject = _player.collectableObject.item;
+        pickableObject = _player.collectableObject.Item;
         if (pickableObject != null)
         {
             itemData.price = pickableObject.price; itemData.name = pickableObject.name; itemData.description = pickableObject.description;
@@ -214,17 +214,17 @@ public class Save : MonoBehaviour
             ItemData itemData;
             if (inventoryData.sellableObject != -1)
             {
-                SellableObject sellableObject = new SellableObject();
+                /*SellableObject sellableObject = new SellableObject();
                 id = inventoryData.sellableObject;
                 itemData = items[id];
                 sellableObject.price = itemData.price;
                 sellableObject.name = itemData.name;
-                sellableObject.description = itemData.description;
+                sellableObject.description = itemData.description;*/
             }
 
             if (inventoryData.usableObject != -1)
             {
-                id = inventoryData.usableObject;
+                /*id = inventoryData.usableObject;
                 itemData = items[id];
                 PickableObject pickableObject = new PickableObject();
                 switch (itemData.name)
@@ -256,7 +256,7 @@ public class Save : MonoBehaviour
                 }
                 pickableObject.price = itemData.price;
                 pickableObject.name = itemData.name;
-                pickableObject.description = itemData.description;
+                pickableObject.description = itemData.description;*/
             }
             DisplayArray();
             if (inventoryData.collectableObject != -1)
@@ -268,9 +268,9 @@ public class Save : MonoBehaviour
                 id = inventoryData.collectableObject;
                 Debug.Log(items.Count);
                 itemData = items[id];
-                collectable.item.price = itemData.price;
-                collectable.item.name = itemData.name;
-                collectable.item.description = itemData.description;
+                collectable.Item.price = itemData.price;
+                collectable.Item.name = itemData.name;
+                collectable.Item.description = itemData.description;
             }
 
             return true;

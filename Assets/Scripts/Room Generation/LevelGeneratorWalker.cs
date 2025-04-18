@@ -11,7 +11,8 @@ public class LevelGeneratorWalker : MonoBehaviour
     [field:SerializeField] public List<GameObject> roomsGenerated{ get; private set;}
     public bool finished{ get; private set;}
     [HideInInspector] public int[] currentEntraces;
-    
+    [SerializeField] GameObject endZonePrefab;
+
 
     #endregion
 
@@ -53,7 +54,7 @@ public class LevelGeneratorWalker : MonoBehaviour
 
     #endregion
 
-    [Header("graph")]
+    [Header("Graph")]
     [SerializeField] private Transform graph;
     
     void Start()
@@ -99,16 +100,16 @@ public class LevelGeneratorWalker : MonoBehaviour
             _amount = Random.Range(minMoveAmount, maxMoveAmount);
             
             Physics.Raycast(transform.position, Vector3.forward, out hit, 1);
-            print(hit);
-            print(hit.collider);
-            print(hit.collider.gameObject.name);
+
             currentEntraces = hit.collider.GetComponent<RoomParameters>().entraces;
+
             
             cyclesPassed++;
 
             if (cyclesPassed >= maxCycles)
             {
                 RegroupNodes();
+                SpawnEndZone();
                 finished = true;
                 return;
             }
@@ -116,6 +117,7 @@ public class LevelGeneratorWalker : MonoBehaviour
             if (roomsGenerated.Count >= maxRooms)
             {
                 RegroupNodes();
+                SpawnEndZone();
                 finished = true;
                 return;
             }
@@ -150,17 +152,16 @@ public class LevelGeneratorWalker : MonoBehaviour
             }
         }
         RegroupNodes();
+        SpawnEndZone();
         finished = true;
     }
 
    private void RegroupNodes()
    {
-        print(roomsGenerated.Count);
         List<Transform> nodes = new List<Transform>();
-        for(int i = 0; i < roomsGenerated.Count; i++)
+        for(int i = 0; i < roomsGenerated.Count; ++i)
         {
             Node[] nodesInRoom = roomsGenerated[i].transform.GetChild(4).GetComponentsInChildren<Node>();
-            print(roomsGenerated[i].transform.GetChild(4).name);
             foreach(Node node in nodesInRoom)
             {
                 nodes.Add(node.transform);
@@ -196,5 +197,10 @@ public class LevelGeneratorWalker : MonoBehaviour
         {
             MoveAmount += _amount;
         }
+    }
+
+    private void SpawnEndZone()
+    {
+       GameObject endZoneInstance = Instantiate(endZonePrefab, roomsGenerated[0].transform);
     }
 }
