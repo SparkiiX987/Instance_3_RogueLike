@@ -9,15 +9,15 @@ public class MonsterCan : UsableObject
     public override void Action(GameObject _player)
     {
         playerControl = _player.GetComponent<PlayerControl>();
-        StartCoroutine(staminaBuff());
+        //call the stamina buff here
     }
 
-    private IEnumerator staminaBuff()
-    {
-        if (!(bonusDuration > elapsedTime)) yield break;
-        elapsedTime += Time.deltaTime;
-        playerControl.stamina = playerControl.staminaMax;
-        yield return null;
-        StartCoroutine(staminaBuff());
-    }
+    // private IEnumerator staminaBuff()
+    // {
+    //     if (!(bonusDuration > elapsedTime)) yield break;
+    //     elapsedTime += Time.deltaTime;
+    //     playerControl.stamina = playerControl.staminaMax;
+    //     yield return null;
+    //     StartCoroutine(staminaBuff());
+    // }
 }

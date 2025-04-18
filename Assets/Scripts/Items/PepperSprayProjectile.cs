@@ -4,13 +4,12 @@ using UnityEngine;
 public class PepperSprayProjectile : MonoBehaviour
 {
     [SerializeField] private float detonationTime;
-    [SerializeField] private float cloudDuration;
     [SerializeField] private float cloudRadius;
     [SerializeField] private GameObject smoke;
+    [SerializeField] private float launchStrength;
     private bool hasDetonated = false;
     private float elapsedTime;
     private Rigidbody2D rb;
-    private float launchStrength;
     private Ennemy monster;
     private RaycastHit2D hit;
     
@@ -23,30 +22,38 @@ public class PepperSprayProjectile : MonoBehaviour
     
     private void Update()
     {
-        if (!(elapsedTime >= detonationTime) || hasDetonated != false) return;
-        StartCoroutine(TriggerCloud());
-        hasDetonated = true;
-        elapsedTime = 0;
+        elapsedTime += Time.deltaTime;
+        if (elapsedTime < detonationTime) return;
+        if (hasDetonated == false)
+        {
+            smoke.GetComponent<ParticleSystem>().Play();
+            hasDetonated = true;
+            elapsedTime = 0;
+            StartCoroutine(CloudColission());
+        }
+        
     }
 
-    private void OnCollisionEnter()
+    private void OnCollisionEnter2D()
     {
-        StartCoroutine(TriggerCloud());
-        hasDetonated = true;
-        elapsedTime = 0;
+        rb.linearVelocity = Vector2.zero;
     }
 
-    private IEnumerator TriggerCloud()
+    private IEnumerator CloudColission()
     {
-        if (!(smoke.GetComponent<ParticleSystem>().main.duration >= cloudDuration))
+        if (!smoke)
         {
             Destroy(gameObject);
             yield break;
         }
-        smoke.SetActive(true);
-        smoke.GetComponent<ParticleSystem>().Play();
         hit = Physics2D.CircleCast(transform.position, cloudRadius,transform.up);
         //make the monster run away here
         yield return null;
+        StartCoroutine(CloudColission());
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, cloudRadius);
     }
 }

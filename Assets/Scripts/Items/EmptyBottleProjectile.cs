@@ -1,10 +1,13 @@
-using System;
 using UnityEngine;
 
 public class EmptyBottleProjectile : MonoBehaviour
 {
     [SerializeField] float stunDuration;
     [SerializeField] private float launchStrength;
+    [SerializeField] private float minSpeed;
+    [SerializeField] private GameObject particleEffect;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    bool particleEffectActive = false;
     private Rigidbody2D rb;
     private Ennemy monster;
     
@@ -16,7 +19,11 @@ public class EmptyBottleProjectile : MonoBehaviour
 
     private void Update()
     {
-        if (rb.linearVelocity.magnitude < 0.2f)
+        if (rb.linearVelocity.magnitude < minSpeed && particleEffectActive == false)
+        {
+            PlayParticleEffect();
+        }
+        if (!particleEffect)
         {
             Destroy(gameObject);
         }
@@ -26,11 +33,19 @@ public class EmptyBottleProjectile : MonoBehaviour
     {
         try
         {
-            monster = other.collider.GetComponent<Ennemy>();
-            monster.stunDuration = stunDuration;
-            monster.isStunned = true;
-            Destroy(gameObject);
+            
+            // monster = other.collider.GetComponent<Ennemy>();
+            // monster.stunDuration = stunDuration;
+            // monster.isStunned = true;
         }
-        catch { /*ignored*/ }
+        catch { return; }
+        PlayParticleEffect();
+    }
+
+    private void PlayParticleEffect()
+    {
+        particleEffectActive = true;
+        spriteRenderer.enabled = false;
+        particleEffect.GetComponent<ParticleSystem>().Play();
     }
 }
