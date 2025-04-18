@@ -26,6 +26,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
     private InputAction moveInput;
     private InputAction interact;
     private InputAction sprint;
+    private InputAction useItem;
 
     private bool isDetectable;
     private int health;
@@ -55,6 +56,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private GameObject deathPanel;
 
+    private bool isCafeinated;
+
     private void Awake()
     {
         stats = GetComponent<Stats>();
@@ -67,8 +70,9 @@ public class PlayerControl : MonoBehaviour, ITargetable
         moveInput = inputSystem.Player.Move;
         interact = inputSystem.Player.Interact;
         sprint = inputSystem.Player.Sprint;
+        useItem = inputSystem.Player.Attack;
         interact.started += PickUp;
-        interact.started += UseItem;
+        useItem.started += UseItem;
         sprint.started += Sprint;
         sprint.canceled += StopPrint;
 
@@ -80,6 +84,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
         moveInput.Enable();
         interact.Enable();
         sprint.Enable();
+        useItem.Enable();
     }
 
     private void OnDisable()
@@ -87,6 +92,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
         moveInput.Disable();
         interact.Disable();
         sprint.Disable();
+        useItem.Disable();
     }
 
     private void Start()
@@ -208,8 +214,13 @@ public class PlayerControl : MonoBehaviour, ITargetable
                         if (sellableObject is not null) { return; }
 
                         sellableObject = (SellableObject)hitTransform.GetComponent<CollectableItem>().Item;
-                        print(slots[0]);
                         slots[0].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
+                        break;
+                    case 1:
+                        if (usableObject is not null) { return; }
+
+                        usableObject = (PepperSpray)hitTransform.GetComponent<CollectableItem>().Item;
+                        slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
                         break;
                     case 2:
                         if (usableObject is not null) { return; }
@@ -221,12 +232,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
                         if (usableObject is not null) { return; }
 
                         usableObject = (MonsterCan)hitTransform.GetComponent<CollectableItem>().Item;
-                        slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
-                        break;
-                    case 4:
-                        if (usableObject is not null) { return; }
-
-                        usableObject = (WoodenPlank)hitTransform.GetComponent<CollectableItem>().Item;
                         slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
                         break;
                 }
@@ -254,28 +259,18 @@ public class PlayerControl : MonoBehaviour, ITargetable
     {
         hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, obstacleLayer);
 
-        if (usableObject != null)
+        if (usableObject is not null)
         {
+            usableObject.Action(gameObject);
 
-            if (usableObject.GetType() == typeof(EmptyBottle))
+            if (usableObject.type == 1 || usableObject.type == 2)
             {
-                usableObject.Action(gameObject);
-
-                if (usableObject.GetType() == typeof(EmptyBottle) || usableObject.GetType() == typeof(PepperSpray))
-                {
-                    animator.SetTrigger("IsThrowingItem");
-                }
-
-                if (usableObject.GetType() == typeof(MonsterCan))
-                {
-                    animator.SetTrigger("IsDrinkingItem");
-                }
+                animator.SetTrigger("IsThrowingItem");
             }
 
-            if (usableObject.GetType() == typeof(MonsterCan))
+            if (usableObject.type == 3)
             {
                 animator.SetTrigger("IsDrinkingItem");
-                usableObject.Action(gameObject);
             }
         }
 
@@ -313,6 +308,11 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private void LosingStamina()
     {
+        if (isCafeinated)
+        {
+            return;
+        }
+
         if (stamina <= 0)
         {
             stamina = 0;
@@ -325,10 +325,13 @@ public class PlayerControl : MonoBehaviour, ITargetable
     private bool IsUsingStamina()
     {
         if (movementDir != Vector2.zero && isRunning)
+        {
             return true;
-
+        }
         else
+        {
             return false;
+        }
     }
 
     private Vector2 GetMousePosition()

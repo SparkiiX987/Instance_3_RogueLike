@@ -33,10 +33,9 @@ public class EmptyBottleProjectile : MonoBehaviour
     {
         try
         {
-            
-            // monster = other.collider.GetComponent<Ennemy>();
-            // monster.stunDuration = stunDuration;
-            // monster.isStunned = true;
+            monster = other.collider.GetComponent<Ennemy>();
+            monster.stunDuration = stunDuration;
+            monster.isStunned = true;
         }
         catch { return; }
         PlayParticleEffect();

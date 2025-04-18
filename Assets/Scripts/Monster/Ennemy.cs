@@ -332,6 +332,8 @@ public class Ennemy : MonoBehaviour
     private void SetNewPathToPatrol()
     {
         currentIndexNode = 0;
+        print((currentPatrolsDone + 1));
+        print(patrolsDoneBeforeGoingToPlayer);
         currentPatrolsDone = (currentPatrolsDone + 1) % patrolsDoneBeforeGoingToPlayer;
         if (currentPatrolsDone > patrolsDoneBeforeGoingToPlayer - 1) { SetPathToPlayer();  return; }
 
@@ -427,9 +429,6 @@ public class Ennemy : MonoBehaviour
             isStunned = !isStunned;
             stunTimer = 0f;
         }
-    
-        Debug.Log("The monster is in " + activeState);
-        Debug.Log("The distance between player and monster is :" + Vector3.Distance(playerControl.transform.position, selfTransform.position));
 
         HandleChaseState();
         HandlingPatrolState();

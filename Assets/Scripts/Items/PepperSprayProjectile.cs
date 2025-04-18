@@ -10,8 +10,6 @@ public class PepperSprayProjectile : MonoBehaviour
     private bool hasDetonated = false;
     private float elapsedTime;
     private Rigidbody2D rb;
-    private Ennemy monster;
-    private RaycastHit2D hit;
     
     
     private void Start()
@@ -27,16 +25,12 @@ public class PepperSprayProjectile : MonoBehaviour
         if (hasDetonated == false)
         {
             smoke.GetComponent<ParticleSystem>().Play();
+            GetComponent<Collider2D>().enabled = false;
             hasDetonated = true;
             elapsedTime = 0;
             StartCoroutine(CloudColission());
         }
         
-    }
-
-    private void OnCollisionEnter2D()
-    {
-        rb.linearVelocity = Vector2.zero;
     }
 
     private IEnumerator CloudColission()
@@ -46,7 +40,6 @@ public class PepperSprayProjectile : MonoBehaviour
             Destroy(gameObject);
             yield break;
         }
-        hit = Physics2D.CircleCast(transform.position, cloudRadius,transform.up);
         //make the monster run away here
         yield return null;
         StartCoroutine(CloudColission());
