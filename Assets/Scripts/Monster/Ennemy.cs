@@ -19,9 +19,6 @@ public class Ennemy : MonoBehaviour
     [Header("PathFinding"), HideInInspector]
     public Vector2 nextPointToMove;
     private Vector2 playerPosition;
-    private GameObject currentTile;
-    private GameObject targetTile;
-    private LayerMask cellLayer;
 
     private Transform selfTransform;
     private Animator animator;
@@ -64,6 +61,11 @@ public class Ennemy : MonoBehaviour
         playerControl = selfTransform.parent.GetChild(0).GetComponent<PlayerControl>();
     }
 
+    public void SetPlayerPosition(Vector2 _position)
+    {
+        playerPosition = _position;
+    }
+
     #region Handling States
     public void ChangeState(string _state)
     {
@@ -77,7 +79,6 @@ public class Ennemy : MonoBehaviour
                     idleEnnemy.ennemy = this;
                     idleEnnemy.onIdle.AddListener(() => PerformIdle());
                     idleEnnemy.Action();
-
                     break;
                 }
             case "Patrol":
@@ -123,18 +124,12 @@ public class Ennemy : MonoBehaviour
         states[3] = new Attack();
     }
 
-    public void SetPlayerPosition(Vector2 _position)
-    {
-        playerPosition = _position;
-    }
-
     public void ResetState()
     {
         targetPlayer = null;
         target = null;
         ChangeState("Idle");
         startNode = GetNearestNode(selfTransform.position);
-        if (!startNode) { return; }
         endNode = null;
         path.Clear();
         nextPointToMove = startNode.transform.position;
@@ -143,41 +138,22 @@ public class Ennemy : MonoBehaviour
 
     public void HandlingPatrolState()
     {
-        if (activeState == states[1]) { return; }
+        if (activeState != states[1]) { return; }
 
         if (path == null || currentIndexNode == path.Count || path.Count == 0)
         {
             SetNewPathToPatrol();
         }
     }
-    #endregion
-
-    #region Attack
-    public void PerformAttack(Attack attack)
-    {
-        attack.Action();
-        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3)
-        {
-            ResetState();
-        }
-        else if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) <= detectionRange * 3)
-        {
-            if (target == null)
-            {
-                ChangeState("Chase");
-            }
-        }
-    }
-
     private void HandleChaseState()
     {
         if (activeState != states[2]) { return; }
-        if (targetPlayer == null) { ChangeState("Idle"); return; }
+        if (targetPlayer == null) { ResetState(); return; }
 
         startNode = GetNearestNode(selfTransform.position);
         endNode = GetNearestNode(targetPlayer.transform.position);
         if (endNode == startNode) { return; }
-        
+
         List<Node> testpath = FindPathToCell(startNode, endNode);
 
         if (testpath != null && PathChanged(testpath))
@@ -185,6 +161,23 @@ public class Ennemy : MonoBehaviour
             currentIndexNode = 0;
             path = testpath;
             nextPointToMove = startNode.transform.position;
+        }
+    }
+
+    #endregion
+
+    #region Attack
+    public void PerformAttack(Attack attack)
+    {
+        attack.Action();
+        if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) >= detectionRange * 3) { ResetState(); }
+
+        else if (targetPlayer != null && Vector3.Distance(targetPlayer.transform.position, selfTransform.position) <= detectionRange * 3)
+        {
+            if (target == null)
+            {
+                ChangeState("Chase");
+            }
         }
     }
 
@@ -199,9 +192,8 @@ public class Ennemy : MonoBehaviour
 
     private Node GetNearestNode(Vector2 position)
     {
-        if (nodes.Count == 0)
-        { return null; }
-        Node node = null;
+        if (nodes.Count < 2) { return null; }
+        Node node = nodes[0];
         float distanceMin = Vector3.Distance(nodes[0].transform.position, position);
         float distance = 0f;
         for (int i = 1; i < nodes.Count; i++)
@@ -335,7 +327,7 @@ public class Ennemy : MonoBehaviour
     {
         currentIndexNode = 0;
         currentPatrolsDone = (currentPatrolsDone + 1) % patrolsDoneBeforeGoingToPlayer;
-        if (currentPatrolsDone > 2) { SetPathToPlayer();  return; }
+        if (currentPatrolsDone > patrolsDoneBeforeGoingToPlayer - 1) { SetPathToPlayer();  return; }
 
         startNode = GetNearestNode(selfTransform.position);
         int tryNumbers = 0;
@@ -345,10 +337,13 @@ public class Ennemy : MonoBehaviour
             path = TestPathFinding(startNode, endNode);
             tryNumbers++;
         } while ((startNode == endNode || path == null || path.Count > 20) && tryNumbers < 1000);
+
+        if (path == null) { SetPathToPlayer(); }
     }
 
     private void SetPathToPlayer()
     {
+        currentIndexNode = patrolsDoneBeforeGoingToPlayer - 1;
         startNode = GetNearestNode(selfTransform.position);
         int tryNumbers = 0;
         do
@@ -367,7 +362,7 @@ public class Ennemy : MonoBehaviour
     {
         if ( (activeState == states[1] || activeState == states[2]) && path != null && currentIndexNode < path.Count)
         {
-            if (Vector3.Distance(nextPointToMove, selfTransform.position) >= 0.2f) { OnMovement(nextPointToMove); }
+            if (Vector3.Distance(nextPointToMove, selfTransform.position) >= 0.2f) { MooveTowardsTarget(nextPointToMove); }
             else
             {
                 currentIndexNode++;
@@ -377,7 +372,7 @@ public class Ennemy : MonoBehaviour
         }
     }
 
-    public void OnMovement(Vector2 targetPosition)
+    public void MooveTowardsTarget(Vector2 targetPosition)
     {
         if (targetPosition != null)
         {
@@ -418,6 +413,7 @@ public class Ennemy : MonoBehaviour
     void Update()
     {
         Debug.Log("The monster is in " + activeState);
+        Debug.Log("The distance between player and monster is :" + Vector3.Distance(playerControl.transform.position, selfTransform.position));
 
         HandleChaseState();
         HandlingPatrolState();

@@ -25,7 +25,7 @@ public class PlayerDetection : MonoBehaviour
     {
         dir.Set(playerTransform.position.x - selfTransform.position.x, playerTransform.position.y - selfTransform.position.y);
         dir.Normalize();
-        dir *= 3;
+        dir *= 1.5f;
     }
 
     private void DetectPlayer()
@@ -37,7 +37,7 @@ public class PlayerDetection : MonoBehaviour
         ennemy.targetPlayer = hit.collider.GetComponent<PlayerControl>();
         ennemy.ChangeState("Chase");
         ennemy.SetPlayerPosition(hit.collider.transform.position);
-        //print("player is at " + hit.collider.transform.position);
+        print("player is at " + hit.collider.transform.position);
     }
 
     private void DecrementTimer()
