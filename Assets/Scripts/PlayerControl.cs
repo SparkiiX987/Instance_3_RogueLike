@@ -1,8 +1,6 @@
-using System.Diagnostics;
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Progress;
 
 public class PlayerControl : MonoBehaviour, ITargetable
 {
@@ -43,6 +41,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
     public UsableObject usableObject;
     public CollectableItem collectableObject;
 
+    private ItemSlot[] slots = new ItemSlot[2];
+
     private float currentCooldown;
 
     private InputAction moveAction;
@@ -54,6 +54,10 @@ public class PlayerControl : MonoBehaviour, ITargetable
     private Transform playerTransform;
 
     private Collider2D selfCollider;
+
+    [SerializeField] private EnduranceBar enduranceBar;
+
+    private GameObject deathPanel;
 
     private void Awake()
     {
@@ -71,6 +75,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
         interact.started += UseItem;
         sprint.started += Sprint;
         sprint.canceled += StopPrint;
+
+        deathPanel = GameObject.Find("Canvas").transform.GetChild(2).gameObject;
     }
 
     private void OnEnable()
@@ -98,6 +104,11 @@ public class PlayerControl : MonoBehaviour, ITargetable
             animator.SetBool("IsInBed", paused);
             selfCollider.enabled = false;
         }
+
+        GameObject canva = GameObject.Find("Canvas");
+        slots[0] = canva.transform.GetChild(0).GetChild(0).GetComponent<ItemSlot>();
+        slots[1] = canva.transform.GetChild(0).GetChild(1).GetComponent<ItemSlot>();
+        deathPanel = canva.transform.GetChild(2).gameObject;
     }
 
     private void Update()
@@ -129,6 +140,22 @@ public class PlayerControl : MonoBehaviour, ITargetable
         }
     }
 
+    public void Death()
+    {
+        StartCoroutine(DeathCoroutine());
+    }
+
+    private IEnumerator DeathCoroutine()
+    {
+        paused = true;
+        animator.SetTrigger("IsDead");
+        yield return new WaitForSeconds(0.8f);
+        deathPanel.SetActive(true);
+        slots[0].transform.parent.gameObject.SetActive(false);
+        enduranceBar.gameObject.SetActive(false);
+        Time.timeScale = 0;
+    }
+
     public Vector2 GetMovementDir => movementDir;
 
     public void WakeUp()
@@ -144,6 +171,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private void FixedUpdate()
     {
+        if(paused is not false) { return; }
+
         movementDir = moveInput.ReadValue<Vector2>();
         nextPlayerPos.Set(playerTransform.position.x + movementDir.x * stats.speed * Time.deltaTime, playerTransform.position.y + movementDir.y * stats.speed * Time.deltaTime);
         rb.MovePosition(nextPlayerPos);
@@ -178,27 +207,31 @@ public class PlayerControl : MonoBehaviour, ITargetable
             {
                 switch(hitTransform.GetComponent<CollectableItem>().itemType)
                 {
-                    case 1:
+                    case 0:
+                        if (sellableObject is not null) { return; }
+
                         sellableObject = (SellableObject)hitTransform.GetComponent<CollectableItem>().Item;
+                        print(slots[0]);
+                        slots[0].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
                         break;
                     case 2:
+                        if (usableObject is not null) { return; }
+
                         usableObject = (EmptyBottle)hitTransform.GetComponent<CollectableItem>().Item;
+                        slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
                         break;
                     case 3:
+                        if (usableObject is not null) { return; }
+
                         usableObject = (MonsterCan)hitTransform.GetComponent<CollectableItem>().Item;
+                        slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
                         break;
                     case 4:
-                        usableObject = (WoodenPlank)hitTransform.GetComponent<CollectableItem>().Item;
-                        break;
-                }
-                if (hitTransform.GetComponent<CollectableItem>().itemType == 0)
-                {
-                    sellableObject = (SellableObject)hitTransform.GetComponent<CollectableItem>().Item;
-                }
+                        if (usableObject is not null) { return; }
 
-                else if (hitTransform.GetComponent<CollectableItem>().itemType == 1)
-                {
-                    usableObject = (UsableObject)hitTransform.GetComponent<CollectableItem>().Item;
+                        usableObject = (WoodenPlank)hitTransform.GetComponent<CollectableItem>().Item;
+                        slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
+                        break;
                 }
                 animator.SetTrigger("IsPickingUpItem");
                 Destroy(hit.collider.gameObject);
@@ -268,6 +301,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
             return;
         }
         stamina += 1;
+        enduranceBar.fillBar.fillAmount = stamina / 100f;
     }
 
     private void LosingStamina()
@@ -278,6 +312,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
             return;
         }
         stamina -= 1;
+        enduranceBar.fillBar.fillAmount = stamina / 100f;
     }
 
     private bool IsUsingStamina()

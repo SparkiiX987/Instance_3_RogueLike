@@ -45,7 +45,7 @@ public class MapGenerationController : MonoBehaviour
             timer -= Time.deltaTime;
             if (timer <= 0)
             {
-                rooms = FindObjectsOfType(typeof(RoomParameters)) as RoomParameters[];
+                rooms = FindObjectsByType(typeof(RoomParameters), FindObjectsSortMode.None) as RoomParameters[];
                 GenerateItems();
                 done = true;
             }
@@ -83,7 +83,7 @@ public class MapGenerationController : MonoBehaviour
 
         foreach (RoomParameters room in rooms)
         {
-            itemsParent = room.transform.GetChild(room.transform.childCount - 1);
+            itemsParent = room.transform.GetChild(5);
             int limit = itemsParent.childCount;
             for (int i = 0; i < limit; i++)
             {
