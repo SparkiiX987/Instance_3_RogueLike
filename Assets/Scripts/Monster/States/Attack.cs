@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Attack : IState
@@ -25,6 +24,7 @@ public class Attack : IState
                 {
                     player.Death();
                     enemy.gameObject.SetActive(false);
+                    AudioManager.Instance.PlaySound(AudioType.death);
                 }
                 if (hit.transform.gameObject.GetComponent<ITargetable>() == target && obstacle != null)
                 {

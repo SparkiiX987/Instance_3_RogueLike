@@ -88,6 +88,7 @@ public class Ennemy : MonoBehaviour
                     Patrol patrol = activeState as Patrol;
                     patrol.ennemy = this;
                     patrol.Action();
+                    AudioManager.Instance.PlaySound(AudioType.monsterRoaming);
                     break;
                 }
             case "Chase":
@@ -97,6 +98,7 @@ public class Ennemy : MonoBehaviour
                     chase.ennemy = this;
                     chase.multiplicater = 3f;
                     chase.Action();
+                    AudioManager.Instance.StopSound(AudioType.monsterRoaming);
                     break;
                 }
             case "Attack":
@@ -105,6 +107,7 @@ public class Ennemy : MonoBehaviour
                     Attack attack = (Attack)activeState;
                     attack.target = this.target;
                     attack.enemy = this;
+                    AudioManager.Instance.StopSound(AudioType.monsterRoaming);
 
                     if (timer >= attackMaxTimer)
                     {
@@ -255,7 +258,7 @@ public class Ennemy : MonoBehaviour
 
         while (openLinks.Count > 0)
         {
-            if (tryNumber++ >= 1000)
+            if (tryNumber++ >= 10000)
             {
                 Debug.LogError("Error : Infinite loop detected !");
                 return null;

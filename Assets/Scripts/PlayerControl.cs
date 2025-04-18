@@ -45,12 +45,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private float currentCooldown;
 
-    private InputAction moveAction;
-    private InputAction lookAction;
-
     private Vector2 movementDir;
     private Vector2 nextPlayerPos;
-    private Vector2 dir;
     private Transform playerTransform;
 
     private Collider2D selfCollider;
@@ -129,12 +125,13 @@ public class PlayerControl : MonoBehaviour, ITargetable
             {
                 LosingStamina();
                 animator.SetBool("IsRunning", true);
+                AudioManager.Instance.PlaySound(AudioType.run);
             }
             else
             {
-
                 StaminaRegen();
                 animator.SetBool("IsRunning", false);
+                AudioManager.Instance.StopSound(AudioType.run);
             }
 
         }
