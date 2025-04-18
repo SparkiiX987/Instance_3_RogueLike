@@ -45,14 +45,9 @@ public class AchievementsManager : MonoBehaviour
         }
     }
 
-    public void PlayAddAchievement()
+    public void PlayAddAchievement(int _achivementIndex)
     {
-        AddAchievements(0);
-        AddAchievements(8);
+        Awaitable addAchivement = AddAchievements(_achivementIndex);
     }
     
-    public void DEL()
-    {
-        PlayerPrefs.DeleteAll();
-    }
 }
