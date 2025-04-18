@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,12 +16,15 @@ public class PlayerControl : MonoBehaviour, ITargetable
     [SerializeField] private LayerMask obstacleLayer;
 
     [SerializeField] private Animator animator;
+    [SerializeField] private Animator animatorLegs;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
     [SerializeField] private bool paused;
 
     [SerializeField] private GameObject shop;
     [SerializeField] private GameObject quests;
+    
+    [SerializeField] private GameObject legs;
 
     private InputSystem_Actions inputSystem;
     private InputAction moveInput;
@@ -174,6 +178,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
         nextPlayerPos.Set(playerTransform.position.x + movementDir.x * stats.speed * Time.deltaTime, playerTransform.position.y + movementDir.y * stats.speed * Time.deltaTime);
         rb.MovePosition(nextPlayerPos);
         animator.SetBool("IsWalkingBool", (movementDir != Vector2.zero));
+        animatorLegs.SetBool("IsWalkingLeg", (movementDir != Vector2.zero));
     }
 
     public int GetHealth()
