@@ -168,7 +168,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private void FixedUpdate()
     {
-        if(paused is not false) { return; }
+        if (paused is not false) { return; }
 
         movementDir = moveInput.ReadValue<Vector2>();
         nextPlayerPos.Set(playerTransform.position.x + movementDir.x * stats.speed * Time.deltaTime, playerTransform.position.y + movementDir.y * stats.speed * Time.deltaTime);
@@ -202,7 +202,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
             Transform hitTransform = hit.collider.transform;
             if (hitTransform.GetComponent<CollectableItem>())
             {
-                switch(hitTransform.GetComponent<CollectableItem>().itemType)
+                switch (hitTransform.GetComponent<CollectableItem>().itemType)
                 {
                     case 0:
                         if (sellableObject is not null) { return; }
@@ -256,13 +256,12 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
         if (usableObject != null)
         {
-            usableObject.Action();
 
             if (usableObject.GetType() == typeof(EmptyBottle))
             {
-                usableObject.Action(this.gameObject);
+                usableObject.Action(gameObject);
 
-                if (usableObject.GetType() == typeof(EmptyBottle)||usableObject.GetType() == typeof(PepperSpray))
+                if (usableObject.GetType() == typeof(EmptyBottle) || usableObject.GetType() == typeof(PepperSpray))
                 {
                     animator.SetTrigger("IsThrowingItem");
                 }
@@ -276,6 +275,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
             if (usableObject.GetType() == typeof(MonsterCan))
             {
                 animator.SetTrigger("IsDrinkingItem");
+                usableObject.Action(gameObject);
             }
         }
 

@@ -1,10 +1,8 @@
-
-using System.Collections;
 using UnityEngine;
 
 public class MonsterCan : UsableObject
 {
-    SerializeField] private float bonusDuration;
+    public float bonusDuration;
     private float elapsedTime;
     private PlayerControl playerControl;
 
@@ -12,7 +10,7 @@ public class MonsterCan : UsableObject
     {
     }
 
-    public override void Action()
+    public override void Action(GameObject _player)
     {
         playerControl = _player.GetComponent<PlayerControl>();
         AudioManager.Instance.PlaySound(AudioType.drinkSoda);

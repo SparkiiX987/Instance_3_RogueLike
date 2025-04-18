@@ -11,6 +11,10 @@ public class CollectableItem : MonoBehaviour
     [SerializeField] private Sprite floorSprite;
     [SerializeField] private Sprite highlightedFloorSprite;
     [SerializeField] private float distance;
+
+    [Header("Only for pepper spray and empty bottle")]
+    [SerializeField] private GameObject projectile;
+
     public int itemType;
     private GameObject player;
     private SpriteRenderer spriteRenderer;
@@ -32,10 +36,10 @@ public class CollectableItem : MonoBehaviour
                 item = new SellableObject(price, itemName, description);
                 break;
             case 1:
-                item = new PepperSpray(price, itemName, description);
+                item = new PepperSpray(price, itemName, description, projectile);
                 break;
             case 2:
-                item = new EmptyBottle(price, itemName, description);
+                item = new EmptyBottle(price, itemName, description, projectile);
                 break;
             case 3:
                 item = new MonsterCan(price, itemName, description);

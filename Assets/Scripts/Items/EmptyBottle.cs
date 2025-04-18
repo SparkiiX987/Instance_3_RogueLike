@@ -1,9 +1,12 @@
+using UnityEngine;
+
 public class EmptyBottle : UsableObject
 {
-    [SerializeField] GameObject bottlePrefab;
+    public GameObject bottlePrefab;
 
-    public EmptyBottle(int _price, string _name, string _description) : base(_price, _name, _description)
+    public EmptyBottle(int _price, string _name, string _description, GameObject _bottlePrefabs) : base(_price, _name, _description)
     {
+        bottlePrefab = _bottlePrefabs;
     }
     
     public override void Action(GameObject _player)
