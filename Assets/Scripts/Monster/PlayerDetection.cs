@@ -25,13 +25,14 @@ public class PlayerDetection : MonoBehaviour
     {
         dir.Set(playerTransform.position.x - selfTransform.position.x, playerTransform.position.y - selfTransform.position.y);
         dir.Normalize();
+        dir *= 1.5f;
     }
 
     private void DetectPlayer()
     {
         hit = Physics2D.Raycast(selfTransform.position, dir, ennemy.detectionRange);
         Debug.DrawRay(selfTransform.position, dir, Color.red, detectionCooldown);
-        if (!hit || hit.collider.tag != playerTag) { return; }
+        if (!hit || hit.collider.tag != playerTag) { ennemy.targetPlayer = null;  return; }
 
         ennemy.targetPlayer = hit.collider.GetComponent<PlayerControl>();
         ennemy.ChangeState("Chase");
