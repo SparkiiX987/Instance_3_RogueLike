@@ -22,30 +22,37 @@ public class AchievementsManager : MonoBehaviour
 
     private async Awaitable AddAchievements(int achievementsID)
     {
+        if (PlayerPrefs.GetInt(achievementsID.ToString()) == 1)
+            return;
+        
         compAchievementList.Add(achievementsID);
+        PlayerPrefs.SetInt(achievementsID.ToString(), 1);
         
         while (compAchievementList.Count > 0 && !isPlaying)
         {
-            PlayerPrefs.SetInt(achievementsID.ToString(), 1);
             achievementPanel.SetActive(true);
             isPlaying = true;
-            achievementTitle.text = achievementsTitles[compAchievementList[achievementsID]];
-            achievementDesc.text = achievementsDescs[compAchievementList[achievementsID]];
-            achievementImage.sprite = achievementsIcons[compAchievementList[achievementsID]];
+            achievementTitle.text = achievementsTitles[compAchievementList[0]];
+            achievementDesc.text = achievementsDescs[compAchievementList[0]];
+            achievementImage.sprite = achievementsIcons[compAchievementList[0]];
             achievementPanel.transform.DOMoveY(990, 2f);
             await Awaitable.WaitForSecondsAsync(5f);
             achievementPanel.transform.DOMoveY(1230, 2f);
             await Awaitable.WaitForSecondsAsync(3f);
             achievementPanel.SetActive(false);
             isPlaying = false;
-            compAchievementList.Remove(compAchievementList[achievementsID]);
+            compAchievementList.Remove(compAchievementList[0]);
         }
     }
 
-    public async void PlayAddAchievement()
+    public void PlayAddAchievement()
     {
         AddAchievements(0);
-        await Awaitable.WaitForSecondsAsync(2f);
         AddAchievements(8);
+    }
+    
+    public void DEL()
+    {
+        PlayerPrefs.DeleteAll();
     }
 }
