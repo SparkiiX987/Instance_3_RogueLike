@@ -6,7 +6,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
 {
     [SerializeField] private float rotationSpeed;
 
-    [SerializeField] private float staminaMax;
+    public float staminaMax;
 
     [SerializeField] private float cooldown;
 
@@ -29,7 +29,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private bool isDetectable;
     private int health;
-    private float stamina;
+    public float stamina;
     private bool isRunning;
     private Rigidbody2D rb;
 
@@ -260,7 +260,17 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
             if (usableObject.GetType() == typeof(EmptyBottle))
             {
-                animator.SetTrigger("IsThrowingItem");
+                usableObject.Action(this.gameObject);
+
+                if (usableObject.GetType() == typeof(EmptyBottle)||usableObject.GetType() == typeof(PepperSpray))
+                {
+                    animator.SetTrigger("IsThrowingItem");
+                }
+
+                if (usableObject.GetType() == typeof(MonsterCan))
+                {
+                    animator.SetTrigger("IsDrinkingItem");
+                }
             }
 
             if (usableObject.GetType() == typeof(MonsterCan))

@@ -100,7 +100,9 @@ public class LevelGeneratorWalker : MonoBehaviour
             _amount = Random.Range(minMoveAmount, maxMoveAmount);
             
             Physics.Raycast(transform.position, Vector3.forward, out hit, 1);
-            currentEntraces = hit.collider.gameObject.GetComponent<RoomParameters>().entraces;
+
+            currentEntraces = hit.collider.GetComponent<RoomParameters>().entraces;
+
             
             cyclesPassed++;
 

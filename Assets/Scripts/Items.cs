@@ -1,6 +1,6 @@
 using UnityEngine;
 [System.Serializable]
-public class PickableObject : IPickableObject
+public class PickableObject : MonoBehaviour, IPickableObject
 {
     public int price;
     public string name;
