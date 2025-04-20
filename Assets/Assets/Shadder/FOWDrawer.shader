@@ -8,7 +8,7 @@ Shader "Unlit/FOVReveal"
     {
         Tags { "Queue"="Transparent" "RenderType"="Transparent" }
         ZWrite Off
-        Blend One One // Additive blending
+        Blend One One
         Pass
         {
             CGPROGRAM

@@ -79,6 +79,6 @@ public class FieldOfView : MonoBehaviour
     public void SetAimDirection(float _angle)
     {
         if (_angle < 0) _angle += 360;
-        startingAngle = _angle + (fov / 2f); 
+        startingAngle = _angle + (fov / 2f);
     }
 }
