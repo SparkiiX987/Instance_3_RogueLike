@@ -54,7 +54,7 @@ Shader "Unlit/FogOfWarShader"
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv) + tex2D(_SecondTex, i.uv);
 
-                col.a = 2.0f - col.r * 1.5f - col.b * 0.5f;
+                col.a = 2.0f - col.r * 1.05f - col.b * 0.2f;
                 return fixed4(0, 0, 0, col.a);
 
                 // apply fog
