@@ -56,6 +56,11 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private GameObject deathPanel;
 
+    private FieldOfView fovMain;
+    private FieldOfView fovSecond;
+    private FieldOfView playerMain;
+    private FieldOfView playerSecond;
+
     private bool isCafeinated;
 
     private void Awake()
@@ -112,6 +117,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
         slots[0] = canva.transform.GetChild(0).GetChild(0).GetComponent<ItemSlot>();
         slots[1] = canva.transform.GetChild(0).GetChild(1).GetComponent<ItemSlot>();
         deathPanel = canva.transform.GetChild(2).gameObject;
+        Debug.Log(animator.GetCurrentAnimatorStateInfo(0).IsName("IdleInBed"));
     }
 
     private void Update()

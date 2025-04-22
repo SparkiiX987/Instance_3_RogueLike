@@ -419,6 +419,32 @@ public class Ennemy : MonoBehaviour
 
     void Update()
     {
+        startNode = GetNearestNode(selfTransform.position);
+            if (targetPlayer == null) { ChangeState("Idle"); }
+            endNode = GetNearestNode(targetPlayer.transform.position);
+
+            if (endNode != startNode) 
+            {
+                List<Node> testpath = FindPathToCell(startNode, endNode);
+
+                if (testpath != null  && testpath.Count != path.Count)
+                {
+                    currentIndexNode = 0;
+                    path = testpath;
+                    nextPointToMove = startNode.transform.position;
+                }
+
+                for (int i = 0; i < testpath.Count; i++)
+                {
+                    if (testpath[i] != path[i])
+                    {
+                        currentIndexNode = 0;
+                        path = testpath;
+                        nextPointToMove = startNode.transform.position;
+                    }
+                }
+            }
+    
         if (isStunned)
         {
            stunTimer += Time.deltaTime; 
