@@ -23,7 +23,7 @@ public class GeneratorItems : MonoBehaviour
             timer -= Time.deltaTime;
             if (timer <= 0)
             {
-                rooms = FindObjectsOfType(typeof(RoomParameters)) as RoomParameters[];
+                rooms = FindObjectsByType(typeof(RoomParameters), FindObjectsSortMode.None) as RoomParameters[];
                 GenerateItems();
                 done = true;
             }

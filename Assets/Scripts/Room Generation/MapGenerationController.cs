@@ -63,7 +63,7 @@ public class MapGenerationController : MonoBehaviour
     private void SpawnMonster()
     {
         Instantiate(monsterPrefab,
-            walkerScript.roomsGenerated[Random.Range(minRoomsBeforeSpawn, walkerScript.roomsGenerated.Count)].transform
+            walkerScript.roomsGenerated[Random.Range(minRoomsBeforeSpawn, walkerScript.roomsGenerated.Count - 1)].transform
                 .position, Quaternion.identity, entitiesParent);
     }
 

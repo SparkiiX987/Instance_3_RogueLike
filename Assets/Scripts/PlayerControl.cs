@@ -18,17 +18,17 @@ public class PlayerControl : MonoBehaviour, ITargetable
     [SerializeField] private SpriteRenderer spriteRenderer;
 
     [SerializeField] private bool paused;
+    [SerializeField] private bool isInHub;
 
     [SerializeField] private GameObject shop;
     [SerializeField] private GameObject quests;
-
-    [SerializeField] private bool isInTutorial;
 
     private InputSystem_Actions inputSystem;
     private InputAction moveInput;
     private InputAction interact;
     private InputAction sprint;
     private InputAction useItem;
+    private InputAction pause;
 
     private int health;
     public float stamina;
@@ -56,6 +56,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
     [SerializeField] private EnduranceBar enduranceBar;
 
     private GameObject deathPanel;
+    private GameObject pauseMenu;
 
     private FieldOfView fovMain;
     private FieldOfView fovSecond;
@@ -77,10 +78,12 @@ public class PlayerControl : MonoBehaviour, ITargetable
         interact = inputSystem.Player.Interact;
         sprint = inputSystem.Player.Sprint;
         useItem = inputSystem.Player.Attack;
+        pause = inputSystem.Player.Pause;
         interact.started += PickUp;
         useItem.started += UseItem;
         sprint.started += Sprint;
         sprint.canceled += StopPrint;
+        pause.performed += OpenPauseMenu;
 
     }
 
@@ -90,6 +93,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
         interact.Enable();
         sprint.Enable();
         useItem.Enable();
+        pause.Enable();
     }
 
     private void OnDisable()
@@ -98,6 +102,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
         interact.Disable();
         sprint.Disable();
         useItem.Disable();
+        pause.Disable();
     }
 
     private void Start()
@@ -108,15 +113,18 @@ public class PlayerControl : MonoBehaviour, ITargetable
         selfCollider = GetComponent<Collider2D>();
 
         Time.timeScale = 1;
-        if(isInTutorial)
+        if(paused)
         { animator.SetTrigger("Sleep"); }
 
         GameObject canva = GameObject.Find("Canvas");
-        slots[0] = canva.transform.GetChild(0).GetChild(0).GetComponent<ItemSlot>();
-        slots[1] = canva.transform.GetChild(0).GetChild(1).GetComponent<ItemSlot>();
-        deathPanel = canva.transform.GetChild(2).gameObject;
+        Transform canvaTransform = canva.transform;
+        slots[0] = canvaTransform.GetChild(0).GetChild(0).GetComponent<ItemSlot>();
+        slots[1] = canvaTransform.GetChild(0).GetChild(1).GetComponent<ItemSlot>();
+        deathPanel = canvaTransform.GetChild(2).gameObject;
+        if(canvaTransform.GetChild(3))
+        { pauseMenu = canvaTransform.GetChild(3).gameObject; }
 
-        if(isInTutorial is not true)
+        if (isInHub is not true)
         {
             print("recup");
             GameObject FogOfWar = GameObject.Find("FogOfWar");
@@ -178,13 +186,11 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void WakeUp()
     {
-        print("wake up");
         animator.SetTrigger("WakeUp");
     }
 
     public void UnPause()
     {
-        print("unpause");
         selfCollider.enabled = true;
         paused = false;
     }
@@ -209,6 +215,12 @@ public class PlayerControl : MonoBehaviour, ITargetable
         health = _health;
     }
 
+    private void OpenPauseMenu(InputAction.CallbackContext _ctx)
+    {
+        if(paused) { return; }
+        pauseMenu.SetActive(!pauseMenu.activeInHierarchy);
+    }
+
     private void LookAtMouse()
     {
         var dir = Input.mousePosition - Camera.main.WorldToScreenPoint(playerTransform.position);
@@ -216,7 +228,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
         Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
-        if(isInTutorial is not true)
+        if(isInHub is not true)
         {
             fovMain.SetAimDirection(angle + 90);
             fovMain.SetOrigin(playerTransform.position);
