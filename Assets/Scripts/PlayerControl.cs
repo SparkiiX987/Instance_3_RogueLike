@@ -118,6 +118,13 @@ public class PlayerControl : MonoBehaviour, ITargetable
         slots[1] = canva.transform.GetChild(0).GetChild(1).GetComponent<ItemSlot>();
         deathPanel = canva.transform.GetChild(2).gameObject;
         Debug.Log(animator.GetCurrentAnimatorStateInfo(0).IsName("IdleInBed"));
+
+        GameObject FogOfWar = GameObject.Find("FogOfWar");
+        Transform fowTransform = FogOfWar.transform;
+        fovMain = fowTransform.GetChild(2).GetChild(0).GetComponent<FieldOfView>();
+        fovSecond = fowTransform.GetChild(2).GetChild(1).GetComponent<FieldOfView>();
+        playerMain = fowTransform.GetChild(2).GetChild(2).GetComponent<FieldOfView>();
+        playerSecond = fowTransform.GetChild(2).GetChild(3).GetComponent<FieldOfView>();
     }
 
     private void Update()
@@ -207,6 +214,18 @@ public class PlayerControl : MonoBehaviour, ITargetable
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
         Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
+        fovMain.SetAimDirection(angle + 90);
+        fovMain.SetOrigin(playerTransform.position);
+
+        fovSecond.SetAimDirection(angle + 90);
+        fovSecond.SetOrigin(playerTransform.position);
+
+        playerMain.SetAimDirection(angle + 90);
+        playerMain.SetOrigin(playerTransform.position);
+
+        playerSecond.SetAimDirection(angle + 90);
+        playerSecond.SetOrigin(playerTransform.position);
     }
 
     public void PickUp(InputAction.CallbackContext _ctx)
