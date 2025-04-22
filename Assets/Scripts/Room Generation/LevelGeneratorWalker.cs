@@ -108,17 +108,13 @@ public class LevelGeneratorWalker : MonoBehaviour
 
             if (cyclesPassed >= maxCycles)
             {
-                RegroupNodes();
-                SpawnEndZone();
-                finished = true;
+                RoomSpawnFinish();
                 return;
             }
 
             if (roomsGenerated.Count >= maxRooms)
             {
-                RegroupNodes();
-                SpawnEndZone();
-                finished = true;
+                RoomSpawnFinish();
                 return;
             }
             
@@ -151,9 +147,7 @@ public class LevelGeneratorWalker : MonoBehaviour
                     break;
             }
         }
-        RegroupNodes();
-        SpawnEndZone();
-        finished = true;
+        RoomSpawnFinish();
     }
 
    private void RegroupNodes()
@@ -197,6 +191,17 @@ public class LevelGeneratorWalker : MonoBehaviour
         {
             MoveAmount += _amount;
         }
+    }
+
+    private void RoomSpawnFinish()
+    {
+        foreach (GameObject g in roomsGenerated)
+        {
+            g.GetComponent<RoomParameters>().SpawnWallsCheck();
+        }
+        RegroupNodes();
+        SpawnEndZone();
+        finished = true;
     }
 
     private void SpawnEndZone()
