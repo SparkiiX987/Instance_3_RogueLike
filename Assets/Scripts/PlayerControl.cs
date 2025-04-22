@@ -30,7 +30,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
     private InputAction sprint;
     private InputAction useItem;
 
-    private bool isDetectable;
     private int health;
     public float stamina;
     private bool isRunning;
@@ -305,6 +304,9 @@ public class PlayerControl : MonoBehaviour, ITargetable
             {
                 animator.SetTrigger("IsDrinkingItem");
             }
+
+            usableObject = null;
+            slots[1].RemoveSprite();
         }
 
         else if (hit.collider != null && hit.collider.transform.GetComponent<Obstacle>())
@@ -337,6 +339,23 @@ public class PlayerControl : MonoBehaviour, ITargetable
         }
         stamina += 1;
         enduranceBar.fillBar.fillAmount = stamina / 100f;
+    }
+
+    public void StartCafeinatePlayer(float _cooldown)
+    {
+        StartCoroutine(CafeinatePlayer(_cooldown));
+    }
+
+    private IEnumerator CafeinatePlayer(float _cooldown)
+    {
+        isCafeinated = true;
+        float remainingTime = 0;
+        while(remainingTime < _cooldown)
+        {
+            remainingTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        isCafeinated = false;
     }
 
     private void LosingStamina()

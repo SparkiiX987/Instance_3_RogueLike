@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class MonsterCan : UsableObject
 {
-    public float bonusDuration;
-    private PlayerControl playerControl;
+    private float bonusDuration;
 
-    public MonsterCan(int _price, string _name, string _description, int _type) : base(_price, _name, _description, _type)
+    public MonsterCan(int _price, string _name, string _description, int _type, float _bonusDuration) : base(_price, _name, _description, _type)
     {
+        bonusDuration = _bonusDuration;
     }
 
     public override void Action(GameObject _player)
     {
-        playerControl = _player.GetComponent<PlayerControl>();
+        _player.GetComponent<PlayerControl>().StartCafeinatePlayer(bonusDuration);
         AudioManager.Instance.PlaySound(AudioType.drinkSoda);
     }
 }

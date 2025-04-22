@@ -2383,6 +2383,67 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6084514027663177394, guid: 5056fa7ac1ba51c4dabb11682576c7ac, type: 3}
   m_PrefabInstance: {fileID: 391258060}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &851571401
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.1959333
+      objectReference: {fileID: 0}
+    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -13.727061
+      objectReference: {fileID: 0}
+    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857222089601363009, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: m_Name
+      value: MonstreCan
+      objectReference: {fileID: 0}
+    - target: {fileID: 4746973551826508413, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
+      propertyPath: distance
+      value: 1.5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
 --- !u!1001 &893201341
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2636,6 +2697,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 735810827}
     m_Modifications:
+    - target: {fileID: 2277653727795147197, guid: 5c59ba0c90a33e244b9927ca1aaac335, type: 3}
+      propertyPath: distance
+      value: 1.65
+      objectReference: {fileID: 0}
     - target: {fileID: 4865535000034621515, guid: 5c59ba0c90a33e244b9927ca1aaac335, type: 3}
       propertyPath: m_Name
       value: Item Whisky bottle Tutorial
@@ -2646,7 +2711,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6841816735972616052, guid: 5c59ba0c90a33e244b9927ca1aaac335, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.88
+      value: -1.922
       objectReference: {fileID: 0}
     - target: {fileID: 6841816735972616052, guid: 5c59ba0c90a33e244b9927ca1aaac335, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5513,3 +5578,4 @@ SceneRoots:
   - {fileID: 1563376762}
   - {fileID: 442503938}
   - {fileID: 735810827}
+  - {fileID: 851571401}

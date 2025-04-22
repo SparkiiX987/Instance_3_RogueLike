@@ -6,7 +6,7 @@ public class EndZone : MonoBehaviour
 
     private void Start()
     {
-        GameObject.Find("PanelVictory");
+        EndGamePanel = GameObject.Find("Canvas").transform.GetChild(1).gameObject;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

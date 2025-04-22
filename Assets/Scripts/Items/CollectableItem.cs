@@ -43,7 +43,7 @@ public class CollectableItem : MonoBehaviour
                 item = new EmptyBottle(price, itemName, description, 1, projectile);
                 break;
             case 3:
-                item = new MonsterCan(price, itemName, description, 1);
+                item = new MonsterCan(price, itemName, description, 1, 3f);
                 break;
         }
     }
@@ -67,7 +67,6 @@ public class CollectableItem : MonoBehaviour
     {
         if(player is null) { return; }
 
-        //print(Vector3.Distance(player.transform.position, transform.position));
         spriteRenderer.sprite = distance <= Vector3.Distance(player.transform.position, transform.position) ? floorSprite : highlightedFloorSprite;
     }
 }
