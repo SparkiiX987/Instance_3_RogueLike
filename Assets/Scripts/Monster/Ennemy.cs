@@ -7,7 +7,7 @@ public class Ennemy : MonoBehaviour
     [Header("stats"), HideInInspector]
     public Stats ennemyStats;
     public float amplificater = 1f;
-    public float stunDuration;
+    public float stunDuration = 3f;
     private float stunTimer;
 
     [Header("States"), HideInInspector]
@@ -332,8 +332,6 @@ public class Ennemy : MonoBehaviour
     private void SetNewPathToPatrol()
     {
         currentIndexNode = 0;
-        print((currentPatrolsDone + 1));
-        print(patrolsDoneBeforeGoingToPlayer);
         currentPatrolsDone = (currentPatrolsDone + 1) % patrolsDoneBeforeGoingToPlayer;
         if (currentPatrolsDone > patrolsDoneBeforeGoingToPlayer - 1) { SetPathToPlayer();  return; }
 
@@ -419,41 +417,14 @@ public class Ennemy : MonoBehaviour
 
     void Update()
     {
-        startNode = GetNearestNode(selfTransform.position);
-            if (targetPlayer == null) { ChangeState("Idle"); }
-            endNode = GetNearestNode(targetPlayer.transform.position);
-
-            if (endNode != startNode) 
+        if (isStunned) 
+        { 
+            stunTimer += Time.deltaTime;
+            if (stunTimer >= stunDuration)
             {
-                List<Node> testpath = FindPathToCell(startNode, endNode);
-
-                if (testpath != null  && testpath.Count != path.Count)
-                {
-                    currentIndexNode = 0;
-                    path = testpath;
-                    nextPointToMove = startNode.transform.position;
-                }
-
-                for (int i = 0; i < testpath.Count; i++)
-                {
-                    if (testpath[i] != path[i])
-                    {
-                        currentIndexNode = 0;
-                        path = testpath;
-                        nextPointToMove = startNode.transform.position;
-                    }
-                }
+                isStunned = !isStunned;
+                stunTimer = 0f;
             }
-    
-        if (isStunned)
-        {
-           stunTimer += Time.deltaTime; 
-        }
-
-        if (stunTimer >= stunDuration)
-        {
-            isStunned = !isStunned;
-            stunTimer = 0f;
         }
 
         HandleChaseState();

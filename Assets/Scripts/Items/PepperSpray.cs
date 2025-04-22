@@ -12,6 +12,7 @@ public class PepperSpray : UsableObject
     public override void Action(GameObject _player)
     {
         AudioManager.Instance.PlaySound(AudioType.lacrymogene);
-        Object.Instantiate(sprayPrefab, _player.transform.position, _player.transform.rotation);
+        PepperSprayProjectile pepperSpray = (Object.Instantiate(sprayPrefab, _player.transform.position, _player.transform.rotation)).GetComponent<PepperSprayProjectile>();
+        pepperSpray.GetComponent<Collider2D>().enabled = false;
     }
 }
