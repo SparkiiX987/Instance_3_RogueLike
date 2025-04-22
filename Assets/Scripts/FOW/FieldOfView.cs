@@ -16,6 +16,10 @@ public class FieldOfView : MonoBehaviour
     public float viewDistance = 6f;
     public int rayCount = 10;
 
+    [Header("Delay")]
+    [SerializeField] private float delayRayCast = 1f;
+    private float timer = 1f;
+
 
     private void Start()
     {
@@ -24,7 +28,17 @@ public class FieldOfView : MonoBehaviour
 
     private void LateUpdate()
     {
-        float angle = startingAngle;
+        if (timer < delayRayCast) { timer += Time.deltaTime; }
+        else
+        {
+            LaunchFov();
+            timer -= delayRayCast;
+        }
+    }
+
+    private void LaunchFov()
+    {
+        float angle = startingAngle ;
         float angleIncrease = fov / rayCount;
 
         vertices = new Vector3[rayCount + 1 + 1];

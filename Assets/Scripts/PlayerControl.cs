@@ -59,6 +59,11 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private GameObject deathPanel;
 
+    private FieldOfView fovMain;
+    private FieldOfView fovSecond;
+    private FieldOfView playerMain;
+    private FieldOfView playerSecond;
+
     private void Awake()
     {
         stats = GetComponent<Stats>();
@@ -77,6 +82,12 @@ public class PlayerControl : MonoBehaviour, ITargetable
         sprint.canceled += StopPrint;
 
         deathPanel = GameObject.Find("Canvas").transform.GetChild(2).gameObject;
+
+        GameObject FogOfWar = GameObject.Find("FogOfWar");
+        fovMain = FogOfWar.transform.GetChild(2).transform.GetChild(0).GetComponent<FieldOfView>();
+        fovSecond = FogOfWar.transform.GetChild(2).transform.GetChild(1).GetComponent<FieldOfView>();
+        playerMain = FogOfWar.transform.GetChild(2).transform.GetChild(2).GetComponent<FieldOfView>();
+        playerSecond = FogOfWar.transform.GetChild(2).transform.GetChild(3).GetComponent<FieldOfView>();
     }
 
     private void OnEnable()
@@ -196,6 +207,18 @@ public class PlayerControl : MonoBehaviour, ITargetable
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
         Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+
+        fovMain.SetAimDirection(angle + 90);
+        fovMain.SetOrigin(playerTransform.position);
+
+        fovSecond.SetAimDirection(angle + 90);
+        fovSecond.SetOrigin(playerTransform.position);
+
+        playerMain.SetAimDirection(angle + 90);
+        playerMain.SetOrigin(playerTransform.position);
+
+        playerSecond.SetAimDirection(angle + 90);
+        playerSecond.SetOrigin(playerTransform.position);
     }
 
     public void PickUp(InputAction.CallbackContext _ctx)

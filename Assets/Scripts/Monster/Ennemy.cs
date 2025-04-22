@@ -339,7 +339,7 @@ public class Ennemy : MonoBehaviour
             {
                 List<Node> testpath = FindPathToCell(startNode, endNode);
 
-                if (testpath.Count != path.Count)
+                if (testpath != null  && testpath.Count != path.Count)
                 {
                     currentIndexNode = 0;
                     path = testpath;

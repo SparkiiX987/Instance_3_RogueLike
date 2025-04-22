@@ -347,6 +347,7 @@ MonoBehaviour:
   fov: 400
   viewDistance: 1
   rayCount: 10
+  delayRayCast: 0
 --- !u!1 &2474621508019807519
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,9 +650,10 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 3072
-  fov: 40
+  fov: 60
   viewDistance: 4
-  rayCount: 15
+  rayCount: 3
+  delayRayCast: 0.05
 --- !u!1 &7056798103096976757
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,9 +756,10 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 3072
-  fov: 40
+  fov: 60
   viewDistance: 4
-  rayCount: 15
+  rayCount: 3
+  delayRayCast: 0.05
 --- !u!1 &7143489142212790652
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,3 +865,4 @@ MonoBehaviour:
   fov: 400
   viewDistance: 1
   rayCount: 10
+  delayRayCast: 0
