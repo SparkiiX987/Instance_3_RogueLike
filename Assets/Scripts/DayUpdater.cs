@@ -35,7 +35,6 @@ public class DayUpdater : MonoBehaviour
 
     public void UpdateDayUI()
     {
-        textJour.text = string.Empty;
         textJour.text = "Jour : " + DayManager.Instance.dayNumber;
     }
 
@@ -57,7 +56,6 @@ public class DayUpdater : MonoBehaviour
 
     public void UpdateImpots()
     {
-        textImpots.text = string.Empty;
         textImpots.text = "Impôts : " + PlayerMoney.Instance.GetCurrentImpots(DayManager.Instance.impotAdditions) + "$";
     }
 }

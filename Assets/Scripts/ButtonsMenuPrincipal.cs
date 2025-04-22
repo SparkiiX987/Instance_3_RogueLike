@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -34,5 +33,6 @@ public class ButtonsMenuPrincipal : MonoBehaviour
     public void PlayTutorial()
     {
         SceneManager.LoadScene(2);
+        DayManager.Instance.SetIsPlayingTutorial();
     }
 }

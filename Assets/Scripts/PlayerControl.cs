@@ -76,7 +76,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
         sprint.started += Sprint;
         sprint.canceled += StopPrint;
 
-        deathPanel = GameObject.Find("Canvas").transform.GetChild(2).gameObject;
     }
 
     private void OnEnable()
@@ -103,8 +102,10 @@ public class PlayerControl : MonoBehaviour, ITargetable
         selfCollider = GetComponent<Collider2D>();
         if (paused)
         {
-            animator.SetBool("IsInBed", paused);
+            print("dodo");
+            animator.SetTrigger("Sleep");
             selfCollider.enabled = false;
+            Debug.Log(animator.GetCurrentAnimatorStateInfo(0).IsName("IdleInBed"));
         }
 
         GameObject canva = GameObject.Find("Canvas");
@@ -163,11 +164,13 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void WakeUp()
     {
-        animator.SetBool("IsInBed", false);
+        print("wake up");
+        animator.SetTrigger("WakeUp");
     }
 
     public void UnPause()
     {
+        print("unpause");
         selfCollider.enabled = true;
         paused = false;
     }

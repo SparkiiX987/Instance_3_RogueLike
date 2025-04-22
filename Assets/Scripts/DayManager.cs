@@ -6,6 +6,7 @@ public class DayManager : MonoBehaviour
     public static DayManager Instance;
     [Range(0, 4)] public int dayRemaining;
     public int impotAdditions = 0;
+    private bool isPlayingTutorial;
 
     private void Awake()
     {
@@ -21,6 +22,7 @@ public class DayManager : MonoBehaviour
 
     public void IncrementDay()
     {
+        if (isPlayingTutorial) { return; }
         dayNumber++;
         IncrementDayRemaining();
     }
@@ -35,5 +37,10 @@ public class DayManager : MonoBehaviour
         {
             dayRemaining = dayRemaining + 1;
         }
+    }
+
+    public void SetIsPlayingTutorial()
+    {
+        isPlayingTutorial = true;
     }
 }
