@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PepperSprayProjectile : MonoBehaviour
 {
+    [SerializeField] float stunDuration;
     [SerializeField] private float detonationTime;
     [SerializeField] private float cloudRadius;
     [SerializeField] private GameObject smoke;
@@ -30,6 +31,15 @@ public class PepperSprayProjectile : MonoBehaviour
             elapsedTime = 0;
             StartCoroutine(CloudColission());
         }
+        else
+        {
+            CircleCollider2D circle = GetComponent<CircleCollider2D>();
+            if (circle == null)
+            {
+                gameObject.AddComponent<CircleCollider2D>().isTrigger = true;
+                gameObject.GetComponent<CircleCollider2D>().radius = cloudRadius * 4f;
+            }
+        }
         
     }
 
@@ -37,16 +47,27 @@ public class PepperSprayProjectile : MonoBehaviour
     {
         if (!smoke)
         {
+            CircleCollider2D circle = GetComponent<CircleCollider2D>();
             Destroy(gameObject);
             yield break;
         }
         //make the monster run away here
         yield return null;
         StartCoroutine(CloudColission());
-    }
+    } 
 
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, cloudRadius);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Ennemy enemy = collision.GetComponent<Ennemy>();
+        if (enemy != null && !enemy.isStunned && hasDetonated)
+        {
+            enemy.isStunned = true;
+            enemy.stunDuration = stunDuration;
+        }
     }
 }

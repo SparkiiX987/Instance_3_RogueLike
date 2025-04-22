@@ -7,7 +7,7 @@ public class Ennemy : MonoBehaviour
     [Header("stats"), HideInInspector]
     public Stats ennemyStats;
     public float amplificater = 1f;
-    public float stunDuration;
+    public float stunDuration = 3f;
     private float stunTimer;
 
     [Header("States"), HideInInspector]
@@ -332,8 +332,6 @@ public class Ennemy : MonoBehaviour
     private void SetNewPathToPatrol()
     {
         currentIndexNode = 0;
-        print((currentPatrolsDone + 1));
-        print(patrolsDoneBeforeGoingToPlayer);
         currentPatrolsDone = (currentPatrolsDone + 1) % patrolsDoneBeforeGoingToPlayer;
         if (currentPatrolsDone > patrolsDoneBeforeGoingToPlayer - 1) { SetPathToPlayer();  return; }
 
@@ -419,15 +417,15 @@ public class Ennemy : MonoBehaviour
 
     void Update()
     {
-        if (isStunned)
-        {
-           stunTimer += Time.deltaTime; 
-        }
 
-        if (stunTimer >= stunDuration)
-        {
-            isStunned = !isStunned;
-            stunTimer = 0f;
+        if (isStunned) 
+        { 
+            stunTimer += Time.deltaTime;
+            if (stunTimer >= stunDuration)
+            {
+                isStunned = !isStunned;
+                stunTimer = 0f;
+            }
         }
 
         HandleChaseState();
