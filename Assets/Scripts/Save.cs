@@ -357,5 +357,22 @@ public class Save : MonoBehaviour
         public string customer;
         public bool questAccepted;
     }
+    
+    public int GetCurrentQuest()
+    {
+        if (PlayerPrefs.HasKey(questsSaveKey))
+        {
+            
+            string json = PlayerPrefs.GetString(questsSaveKey);
+            Quests quests = JsonUtility.FromJson<Quests>(json);
+            for (int i = 0; i < quests.questsDatas.Count; i++)
+            {
+                if (quests.questsDatas[i].questAccepted)
+                    return quests.questsDatas[i].id;
+            }
+            Debug.Log(json);
+        }
 
+        return -1;
+    }
 }

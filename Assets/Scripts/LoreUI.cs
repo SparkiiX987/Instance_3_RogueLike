@@ -12,7 +12,6 @@ public class LoreUI : MonoBehaviour
     
     public void ShowLorePage()
     {
-        PlayerPrefs.DeleteAll();
         lorePageUI.SetActive(true);
         int lorePage = PlayerPrefs.GetInt(Save.Instance.loreSaveKey);
         
@@ -25,7 +24,13 @@ public class LoreUI : MonoBehaviour
     public void CloseLorePage()
     {
         lorePageUI.SetActive(false);
-        if(PlayerPrefs.GetInt(Save.Instance.loreSaveKey) <= 9)
+
+        if (PlayerPrefs.GetInt(Save.Instance.loreSaveKey) <= 8)
+        {
             PlayerPrefs.SetInt(Save.Instance.loreSaveKey, PlayerPrefs.GetInt(Save.Instance.loreSaveKey) + 1);
+            return;
+        }
+            
+        PlayerPrefs.SetInt(Save.Instance.loreSaveKey, 0);
     }
 }
