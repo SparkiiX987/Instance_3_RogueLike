@@ -22,6 +22,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
     [SerializeField] private GameObject shop;
     [SerializeField] private GameObject quests;
 
+    [SerializeField] private bool isInTutorial;
+
     private InputSystem_Actions inputSystem;
     private InputAction moveInput;
     private InputAction interact;
@@ -105,26 +107,26 @@ public class PlayerControl : MonoBehaviour, ITargetable
         hit = Physics2D.Raycast(playerTransform.position, Vector2.up, 100f);
         rb = GetComponent<Rigidbody2D>();
         selfCollider = GetComponent<Collider2D>();
-        if (paused)
-        {
-            print("dodo");
-            animator.SetTrigger("Sleep");
-            selfCollider.enabled = false;
-            Debug.Log(animator.GetCurrentAnimatorStateInfo(0).IsName("IdleInBed"));
-        }
+
+        Time.timeScale = 1;
+        if(isInTutorial)
+        { animator.SetTrigger("Sleep"); }
 
         GameObject canva = GameObject.Find("Canvas");
         slots[0] = canva.transform.GetChild(0).GetChild(0).GetComponent<ItemSlot>();
         slots[1] = canva.transform.GetChild(0).GetChild(1).GetComponent<ItemSlot>();
         deathPanel = canva.transform.GetChild(2).gameObject;
-        Debug.Log(animator.GetCurrentAnimatorStateInfo(0).IsName("IdleInBed"));
 
-        GameObject FogOfWar = GameObject.Find("FogOfWar");
-        Transform fowTransform = FogOfWar.transform;
-        fovMain = fowTransform.GetChild(2).GetChild(0).GetComponent<FieldOfView>();
-        fovSecond = fowTransform.GetChild(2).GetChild(1).GetComponent<FieldOfView>();
-        playerMain = fowTransform.GetChild(2).GetChild(2).GetComponent<FieldOfView>();
-        playerSecond = fowTransform.GetChild(2).GetChild(3).GetComponent<FieldOfView>();
+        if(isInTutorial is not true)
+        {
+            print("recup");
+            GameObject FogOfWar = GameObject.Find("FogOfWar");
+            Transform fowTransform = FogOfWar.transform;
+            fovMain = fowTransform.GetChild(2).GetChild(0).GetComponent<FieldOfView>();
+            fovSecond = fowTransform.GetChild(2).GetChild(1).GetComponent<FieldOfView>();
+            playerMain = fowTransform.GetChild(2).GetChild(2).GetComponent<FieldOfView>();
+            playerSecond = fowTransform.GetChild(2).GetChild(3).GetComponent<FieldOfView>();
+        }
     }
 
     private void Update()
@@ -165,7 +167,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
     private IEnumerator DeathCoroutine()
     {
         paused = true;
-        animator.SetTrigger("IsDead");
+        
         yield return new WaitForSeconds(0.8f);
         deathPanel.SetActive(true);
         slots[0].transform.parent.gameObject.SetActive(false);
@@ -215,17 +217,20 @@ public class PlayerControl : MonoBehaviour, ITargetable
         Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
-        fovMain.SetAimDirection(angle + 90);
-        fovMain.SetOrigin(playerTransform.position);
+        if(isInTutorial is not true)
+        {
+            fovMain.SetAimDirection(angle + 90);
+            fovMain.SetOrigin(playerTransform.position);
 
-        fovSecond.SetAimDirection(angle + 90);
-        fovSecond.SetOrigin(playerTransform.position);
+            fovSecond.SetAimDirection(angle + 90);
+            fovSecond.SetOrigin(playerTransform.position);
 
-        playerMain.SetAimDirection(angle + 90);
-        playerMain.SetOrigin(playerTransform.position);
+            playerMain.SetAimDirection(angle + 90);
+            playerMain.SetOrigin(playerTransform.position);
 
-        playerSecond.SetAimDirection(angle + 90);
-        playerSecond.SetOrigin(playerTransform.position);
+            playerSecond.SetAimDirection(angle + 90);
+            playerSecond.SetOrigin(playerTransform.position);
+        }
     }
 
     public void PickUp(InputAction.CallbackContext _ctx)

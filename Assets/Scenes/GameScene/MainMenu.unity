@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 29018015}
   - component: {fileID: 29018017}
   - component: {fileID: 29018016}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubLeft(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -626,7 +626,7 @@ GameObject:
   - component: {fileID: 87980181}
   - component: {fileID: 87980180}
   - component: {fileID: 87980182}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubBottom(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -1032,7 +1032,7 @@ GameObject:
   - component: {fileID: 110092811}
   - component: {fileID: 110092813}
   - component: {fileID: 110092812}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubBottom(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -1166,7 +1166,7 @@ GameObject:
   - component: {fileID: 110611554}
   - component: {fileID: 110611556}
   - component: {fileID: 110611555}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubUp(Clone) (6)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -1289,6 +1289,67 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &118284512
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2588006967971638301, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_Name
+      value: FogOfWar
+      objectReference: {fileID: 0}
+    - target: {fileID: 2588006967971638301, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689805940839522634, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 58.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689805940839522634, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 59.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689805940839522634, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689805940839522634, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689805940839522634, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689805940839522634, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689805940839522634, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689805940839522634, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689805940839522634, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689805940839522634, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bdb55d1d34f48c34b936d0194d216e66, type: 3}
 --- !u!1001 &121258725
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1830,7 +1891,7 @@ GameObject:
   - component: {fileID: 152713047}
   - component: {fileID: 152713046}
   - component: {fileID: 152713048}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubRight(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -2010,7 +2071,7 @@ GameObject:
   - component: {fileID: 163869844}
   - component: {fileID: 163869846}
   - component: {fileID: 163869845}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubUp(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -2318,7 +2379,7 @@ GameObject:
   - component: {fileID: 215603824}
   - component: {fileID: 215603826}
   - component: {fileID: 215603825}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubLeft(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -2540,7 +2601,7 @@ GameObject:
   - component: {fileID: 275077156}
   - component: {fileID: 275077155}
   - component: {fileID: 275077157}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubLeft(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -2895,7 +2956,7 @@ GameObject:
   - component: {fileID: 292075229}
   - component: {fileID: 292075228}
   - component: {fileID: 292075230}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubUp(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -3210,7 +3271,7 @@ GameObject:
   - component: {fileID: 292259839}
   - component: {fileID: 292259838}
   - component: {fileID: 292259840}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubLeft(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -3827,7 +3888,7 @@ GameObject:
   - component: {fileID: 352360922}
   - component: {fileID: 352360924}
   - component: {fileID: 352360923}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubBottom(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -4048,7 +4109,7 @@ GameObject:
   - component: {fileID: 380254103}
   - component: {fileID: 380254105}
   - component: {fileID: 380254104}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubUp(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -4356,7 +4417,7 @@ GameObject:
   - component: {fileID: 410041324}
   - component: {fileID: 410041326}
   - component: {fileID: 410041325}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubLeft(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -5164,8 +5225,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 504757266895053390, guid: d877184fe98eee44cbc6cdd601948ef1, type: 3}
+      propertyPath: isInTutorial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 504757266895053390, guid: d877184fe98eee44cbc6cdd601948ef1, type: 3}
       propertyPath: interactibleLayer.m_Bits
       value: 3328
+      objectReference: {fileID: 0}
+    - target: {fileID: 2089556231479221312, guid: d877184fe98eee44cbc6cdd601948ef1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3624594588316375663, guid: d877184fe98eee44cbc6cdd601948ef1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5244,7 +5313,8 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7827998739357638085, guid: d877184fe98eee44cbc6cdd601948ef1, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d877184fe98eee44cbc6cdd601948ef1, type: 3}
@@ -6049,7 +6119,7 @@ GameObject:
   - component: {fileID: 593724536}
   - component: {fileID: 593724538}
   - component: {fileID: 593724537}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubRight(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -6385,98 +6455,11 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!1 &693174755
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 693174756}
-  - component: {fileID: 693174759}
-  - component: {fileID: 693174757}
-  m_Layer: 11
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &693174756
+--- !u!4 &693174756 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+  m_PrefabInstance: {fileID: 1640318952882727966}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 693174755}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: -1.065, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1625967383}
-  m_Father: {fileID: 1947301891}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &693174757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 693174755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75637bdf2ef03e348962ae13706d73c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!61 &693174759
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 693174755}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: -0.51101816, y: -0.0002784729}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.94761205, y: 0.06598759}
-  m_EdgeRadius: 0
 --- !u!1 &706008966
 GameObject:
   m_ObjectHideFlags: 0
@@ -6488,7 +6471,7 @@ GameObject:
   - component: {fileID: 706008967}
   - component: {fileID: 706008969}
   - component: {fileID: 706008968}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubRight(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -7589,7 +7572,7 @@ GameObject:
   - component: {fileID: 910637271}
   - component: {fileID: 910637273}
   - component: {fileID: 910637272}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubLeft(Clone) (3)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -7897,7 +7880,7 @@ GameObject:
   - component: {fileID: 977339282}
   - component: {fileID: 977339284}
   - component: {fileID: 977339283}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubBottom(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -8118,7 +8101,7 @@ GameObject:
   - component: {fileID: 1000484306}
   - component: {fileID: 1000484308}
   - component: {fileID: 1000484307}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubUp(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -8473,7 +8456,7 @@ GameObject:
   - component: {fileID: 1059753490}
   - component: {fileID: 1059753492}
   - component: {fileID: 1059753491}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubRight(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -8829,7 +8812,7 @@ GameObject:
   - component: {fileID: 1146967603}
   - component: {fileID: 1146967602}
   - component: {fileID: 1146967604}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubUp(Clone) (4)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -9009,7 +8992,7 @@ GameObject:
   - component: {fileID: 1149420770}
   - component: {fileID: 1149420772}
   - component: {fileID: 1149420771}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubUp(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -9364,7 +9347,7 @@ GameObject:
   - component: {fileID: 1267516720}
   - component: {fileID: 1267516722}
   - component: {fileID: 1267516721}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubUp(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -9590,7 +9573,7 @@ GameObject:
   - component: {fileID: 1295684038}
   - component: {fileID: 1295684040}
   - component: {fileID: 1295684039}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubUp(Clone) (3)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -9724,7 +9707,7 @@ GameObject:
   - component: {fileID: 1308142779}
   - component: {fileID: 1308142781}
   - component: {fileID: 1308142780}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubBottom(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -10166,7 +10149,7 @@ GameObject:
   - component: {fileID: 1365466101}
   - component: {fileID: 1365466103}
   - component: {fileID: 1365466102}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubRight(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -10300,7 +10283,7 @@ GameObject:
   - component: {fileID: 1377664671}
   - component: {fileID: 1377664673}
   - component: {fileID: 1377664672}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubRight(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -11582,93 +11565,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d59eec5b32275c40beb71f202f0484d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1625967382
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1625967383}
-  - component: {fileID: 1625967385}
-  m_Layer: 11
-  m_Name: sol instence3 porte (1)_0 (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1625967383
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1625967382}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: -0.5, y: 0.015000105, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 693174756}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
---- !u!212 &1625967385
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1625967382}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -9011857427042672188, guid: f700a4338af17f3428faef48e04da39b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 0.15625}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!1 &1628865885
 GameObject:
   m_ObjectHideFlags: 0
@@ -11680,7 +11576,7 @@ GameObject:
   - component: {fileID: 1628865886}
   - component: {fileID: 1628865888}
   - component: {fileID: 1628865887}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubLeft(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -11911,7 +11807,7 @@ GameObject:
   - component: {fileID: 1661769667}
   - component: {fileID: 1661769669}
   - component: {fileID: 1661769668}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubBottom(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -12055,7 +11951,7 @@ GameObject:
   - component: {fileID: 1694999776}
   - component: {fileID: 1694999778}
   - component: {fileID: 1694999777}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubBottom(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -12991,7 +12887,7 @@ GameObject:
   - component: {fileID: 1831243941}
   - component: {fileID: 1831243943}
   - component: {fileID: 1831243942}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubUp(Clone) (5)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -13805,7 +13701,7 @@ GameObject:
   - component: {fileID: 1953165171}
   - component: {fileID: 1953165173}
   - component: {fileID: 1953165172}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubUp(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -14385,7 +14281,7 @@ GameObject:
   - component: {fileID: 2021329126}
   - component: {fileID: 2021329128}
   - component: {fileID: 2021329127}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WallHubRight(Clone)
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -15071,6 +14967,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5b77d88f21c0c147b4bdc692490c925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &1640318952882727966
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1947301891}
+    m_Modifications:
+    - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.065
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8557345314826855134, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_Name
+      value: Door
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
 --- !u!1001 &1965190032151787646
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15976,4 +15929,5 @@ SceneRoots:
   - {fileID: 1780018751}
   - {fileID: 1757561493}
   - {fileID: 142262894}
+  - {fileID: 118284512}
   - {fileID: 521324947}
