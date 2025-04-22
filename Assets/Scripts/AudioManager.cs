@@ -2,7 +2,20 @@ using UnityEngine;
 
 public enum AudioType
 {
-    walk
+    walk,
+    bottleBreak,
+    death,
+    drinkSoda,
+    footstepWood,
+    itemTake,
+    lacrymogene,
+    Throw,
+    monsterRoaming,
+    run,
+    ambianceIG,
+    ambianceMenu,
+    buttons,
+    wind
 }
 
 public class AudioManager : MonoBehaviour
@@ -32,14 +45,14 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySound(AudioType type)
     {
-        AudioData data = GetAudioData(type);
-        data.source.Play();
+        //AudioData data = GetAudioData(type);
+        //data.source.Play();
     }
 
     public void StopSound(AudioType type)
     {
-        AudioData data = GetAudioData(type);
-        data.source.Stop();
+        //AudioData data = GetAudioData(type);
+        //data.source.Stop();
     }
 
     public AudioData GetAudioData(AudioType type)

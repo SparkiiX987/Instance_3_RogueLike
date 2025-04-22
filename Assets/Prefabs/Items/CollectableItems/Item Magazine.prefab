@@ -101,14 +101,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2d1036a2880ac245bedd6e102c53e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  price: 0
-  itemName: 
-  description: 
+  price: 50
+  itemName: Magazine
+  description: Its a book for playing
   inventorySprite: {fileID: -8325325679899800282, guid: 2bf7da0f721eed944ac5b745fae4ceea, type: 3}
   floorSprite: {fileID: -318428691225633517, guid: 9e6903a6c63a162459a6461d7c4acf42, type: 3}
   highlightedFloorSprite: {fileID: 8341424632218560292, guid: dab522cfa3ad93f479b8e8effd1646a0, type: 3}
-  distance: 2
+  distance: 1
   itemType: 0
+  projectile: {fileID: 0}
 --- !u!61 &13536588161606287
 BoxCollider2D:
   m_ObjectHideFlags: 0

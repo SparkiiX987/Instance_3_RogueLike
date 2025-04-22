@@ -4,16 +4,10 @@ using UnityEngine;
 public class MapGenerationController : MonoBehaviour
 {
     private LevelGeneratorWalker walkerScript;
-    
+
     [SerializeField] Transform entitiesParent;
     [SerializeField] GameObject playerPrefab;
     private bool playerSpawned = false;
-    
-    #region Monster Spawn Settings
-    
-    [Header("Monster Spawn Settings")]
-    [SerializeField] GameObject monsterPrefab;
-    [SerializeField] int minRoomsBeforeSpawn;
 
     #region Spawn Items Variables
     [Header("Rooms")]
@@ -29,6 +23,12 @@ public class MapGenerationController : MonoBehaviour
     [SerializeField] private float percentageOfObject;
     [SerializeField] private float percentageOfType;
     #endregion
+
+    #region Monster Spawn Settings
+
+    [Header("Monster Spawn Settings")]
+    [SerializeField] GameObject monsterPrefab;
+    [SerializeField] int minRoomsBeforeSpawn;
 
     #endregion
 
@@ -63,9 +63,10 @@ public class MapGenerationController : MonoBehaviour
     private void SpawnMonster()
     {
         Instantiate(monsterPrefab,
-            walkerScript.roomsGenerated[Random.Range(1, walkerScript.roomsGenerated.Count - 1)].transform
-                .position, Quaternion.identity, entitiesParent);      
+            walkerScript.roomsGenerated[Random.Range(minRoomsBeforeSpawn, walkerScript.roomsGenerated.Count)].transform
+                .position, Quaternion.identity, entitiesParent);
     }
+
 
     #region Spawn Items
     private void GenerateItems()

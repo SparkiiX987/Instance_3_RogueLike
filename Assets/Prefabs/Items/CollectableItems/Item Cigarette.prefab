@@ -101,14 +101,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2d1036a2880ac245bedd6e102c53e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  price: 0
-  itemName: 
-  description: 
+  price: 75
+  itemName: Malobro
+  description: Its cigarets
   inventorySprite: {fileID: 4206555389584611766, guid: 75e428e0a06543348887b71625da54a2, type: 3}
   floorSprite: {fileID: -2346873283927307752, guid: d88407fff4a972343b5a52f0f1b0f073, type: 3}
   highlightedFloorSprite: {fileID: 8654938049537718954, guid: 44a2c81f6e009654889551f315b2464f, type: 3}
-  distance: 2
+  distance: 1
   itemType: 0
+  projectile: {fileID: 0}
 --- !u!61 &13536588161606287
 BoxCollider2D:
   m_ObjectHideFlags: 0

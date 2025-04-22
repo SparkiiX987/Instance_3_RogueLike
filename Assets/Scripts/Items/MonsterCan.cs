@@ -1,11 +1,17 @@
+using UnityEngine;
+
 public class MonsterCan : UsableObject
 {
-    public MonsterCan(int _price, string _name, string _description) : base(_price, _name, _description)
+    public float bonusDuration;
+    private PlayerControl playerControl;
+
+    public MonsterCan(int _price, string _name, string _description, int _type) : base(_price, _name, _description, _type)
     {
     }
 
-    public override void Action()
+    public override void Action(GameObject _player)
     {
-
+        playerControl = _player.GetComponent<PlayerControl>();
+        AudioManager.Instance.PlaySound(AudioType.drinkSoda);
     }
 }
