@@ -122,23 +122,26 @@ public class MapGenerationController : MonoBehaviour
                         itemsSpwaned.transform.localPosition = pos;
                     }
                     transformItemsToDelete.Add(transformItem.gameObject);
-                    didSpawnQuestItem = false;
                 }
             }
-        }
-
-        if (didSpawnJournalItem == false)
-        {
-            journalIndex = Random.Range(0, usableObjects.Count);
-            itemsSpwaned = Instantiate(journal, spawnedUsableItems[journalIndex].transform.position, Quaternion.identity);
-            spawnedUsableItems[journalIndex].SetActive(false);
-            didSpawnJournalItem = true;
         }
 
         foreach (GameObject transformToDelete in transformItemsToDelete)
         {
             Destroy(transformToDelete);
         }
+        SpawnJournal();
     }
     #endregion
+
+    private void SpawnJournal()
+    {
+        if (didSpawnJournalItem == false)
+        {
+            journalIndex = Random.Range(0, spawnedUsableItems.Count);
+            itemsSpwaned = Instantiate(journal, spawnedUsableItems[journalIndex].transform.position, Quaternion.identity);
+            spawnedUsableItems[journalIndex].SetActive(false);
+            didSpawnJournalItem = true;
+        }
+    }
 }
