@@ -75,6 +75,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
     private bool isTryingAchivement9;
 
     private bool[] consomableCosumed = new bool[3];
+    
+    private Transform endZone;
 
     private void Awake()
     {
@@ -145,6 +147,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
             fovSecond = fowTransform.GetChild(2).GetChild(1).GetComponent<FieldOfView>();
             playerMain = fowTransform.GetChild(2).GetChild(2).GetComponent<FieldOfView>();
             playerSecond = fowTransform.GetChild(2).GetChild(3).GetComponent<FieldOfView>();
+            endZone = GameObject.Find("EndZone").transform;
         }
     }
 
@@ -297,6 +300,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
                 sellableObject = (SellableObject)_item;
                 slots[0].AddItem(_itemSprite);
+                endZone.GetChild(0).gameObject.SetActive(true);
                 break;
             case 1:
                 if (usableObject is not null) { return; }
