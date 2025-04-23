@@ -10,6 +10,7 @@ public class DayUpdater : MonoBehaviour
     [Header("Texts")]
     public TMP_Text textJour;
     public TMP_Text textImpots;
+    public TMP_Text textMoney;
 
     [Header("Impots")]
     [SerializeField] private List<Image> cases = new List<Image>();
@@ -37,8 +38,9 @@ public class DayUpdater : MonoBehaviour
         UpdateDayUI();
         CaseImpots();
         UpdateImpots();
+        UpdateMoney();
 
-        for(int i = 0; i < shopOfferPrefabs.Count; i++)
+        for (int i = 0; i < shopOfferPrefabs.Count; i++)
         {
             GameObject shopOffer = Instantiate(shopOfferPrefabs[i], shopOfferPanel);
         }
@@ -69,5 +71,10 @@ public class DayUpdater : MonoBehaviour
     public void UpdateImpots()
     {
         textImpots.text = "Impôts : " + PlayerMoney.Instance.GetCurrentImpots(DayManager.Instance.impotAdditions) + "$";
+    }
+
+    private void UpdateMoney()
+    {
+        textMoney.text = "Cash : " + PlayerMoney.Instance.GetCurrentImpots(DayManager.Instance.impotAdditions) + "$";
     }
 }

@@ -19,6 +19,7 @@ public class PlayerMoney : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
+        money = 200;
     }
 
     public int GetMoney()
@@ -28,7 +29,7 @@ public class PlayerMoney : MonoBehaviour
 
     public void AddMoney(int _amount)
     {
-
+        money += _amount;
     }
 
     public int GetCurrentImpots(int _additionFactor)

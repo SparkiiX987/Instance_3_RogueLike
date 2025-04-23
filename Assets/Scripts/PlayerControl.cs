@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class PlayerControl : MonoBehaviour, ITargetable
 {
@@ -22,7 +23,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     [SerializeField] private GameObject shop;
     [SerializeField] private GameObject quests;
-    [SerializeField] private GameObject journal;
 
     private InputSystem_Actions inputSystem;
     private InputAction moveInput;
@@ -267,33 +267,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
             Transform hitTransform = hit.collider.transform;
             if (hitTransform.GetComponent<CollectableItem>())
             {
-                switch (hitTransform.GetComponent<CollectableItem>().itemType)
-                {
-                    case 0:
-                        if (sellableObject is not null) { return; }
-
-                        sellableObject = (SellableObject)hitTransform.GetComponent<CollectableItem>().Item;
-                        slots[0].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
-                        break;
-                    case 1:
-                        if (usableObject is not null) { return; }
-
-                        usableObject = (PepperSpray)hitTransform.GetComponent<CollectableItem>().Item;
-                        slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
-                        break;
-                    case 2:
-                        if (usableObject is not null) { return; }
-
-                        usableObject = (EmptyBottle)hitTransform.GetComponent<CollectableItem>().Item;
-                        slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
-                        break;
-                    case 3:
-                        if (usableObject is not null) { return; }
-
-                        usableObject = (MonsterCan)hitTransform.GetComponent<CollectableItem>().Item;
-                        slots[1].AddItem(hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
-                        break;
-                }
+                AddItem(hitTransform.GetComponent<CollectableItem>().itemType, hitTransform.GetComponent<CollectableItem>().Item, hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
                 animator.SetTrigger("IsPickingUpItem");
                 Destroy(hit.collider.gameObject);
             }
@@ -311,10 +285,37 @@ public class PlayerControl : MonoBehaviour, ITargetable
                 paused = true;
                 quests.SetActive(true);
             }
-            else if (hitTransform.tag == "Journal")
-            {
-                hitTransform.GetComponent<JournalItem>().ActionJournal();
-            }
+        }
+    }
+
+    public void AddItem(int _itemType, PickableObject _item, Sprite _itemSprite)
+    {
+        switch (_itemType)
+        {
+            case 0:
+                if (sellableObject is not null) { return; }
+
+                sellableObject = (SellableObject)_item;
+                slots[0].AddItem(_itemSprite);
+                break;
+            case 1:
+                if (usableObject is not null) { return; }
+
+                usableObject = (PepperSpray)_item;
+                slots[1].AddItem(_itemSprite);
+                break;
+            case 2:
+                if (usableObject is not null) { return; }
+
+                usableObject = (EmptyBottle)_item;
+                slots[1].AddItem(_itemSprite);
+                break;
+            case 3:
+                if (usableObject is not null) { return; }
+
+                usableObject = (MonsterCan)_item;
+                slots[1].AddItem(_itemSprite);
+                break;
         }
     }
 
