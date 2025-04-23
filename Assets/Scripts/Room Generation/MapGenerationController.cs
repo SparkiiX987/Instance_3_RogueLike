@@ -25,11 +25,10 @@ public class MapGenerationController : MonoBehaviour
     private float chanceOfObject;
     private float chanceOfTypeObject;
     private int objectIndex;
-    private int objectQuestIndex;
     private int journalIndex;
     
     private List<GameObject> transformItemsToDelete = new List<GameObject>();
-    public List<GameObject> spawnedItems = new List<GameObject>();
+    public List<GameObject> spawnedUsableItems = new List<GameObject>();
     
     private Save save => Save.Instance;
 
@@ -37,6 +36,9 @@ public class MapGenerationController : MonoBehaviour
     [SerializeField] private List<GameObject> sellablesObjects;
     [SerializeField] private List<GameObject> usableObjects;
     [SerializeField] private GameObject journal;
+
+    private bool didSpawnQuestItem;
+    private bool didSpawnJournalItem;
 
     [Header("Percentage")]
     [SerializeField] private float percentageOfObject;
@@ -54,10 +56,6 @@ public class MapGenerationController : MonoBehaviour
     private void Start()
     {
         walkerScript = GetComponentInChildren<LevelGeneratorWalker>();
-        
-        GameObject playerControl = (sellablesObjects[0]);
-        playerControl.AddComponent<Save>();
-        objectQuestIndex = playerControl.GetComponent<Save>().GetCurrentQuest();
     }
 
     private void Update()
@@ -107,41 +105,35 @@ public class MapGenerationController : MonoBehaviour
                     if (chanceOfObject > percentageOfObject)
                     {
                         chanceOfTypeObject = Random.Range(0f, 1f);
-                        if (chanceOfTypeObject > percentageOfType)
+                        if (chanceOfTypeObject > percentageOfType && didSpawnQuestItem == false)
                         {
                             objectIndex = Random.Range(0, sellablesObjects.Count);
                             itemsSpwaned = Instantiate(sellablesObjects[objectIndex], transformItem.position, Quaternion.identity);
-                            spawnedItems.Add(itemsSpwaned);
+                            didSpawnQuestItem = true;
                         }
                         else
                         {
                             objectIndex = Random.Range(0, usableObjects.Count);
                             itemsSpwaned = Instantiate(usableObjects[objectIndex], transformItem.position, Quaternion.identity);
-                            spawnedItems.Add(itemsSpwaned);
+                            spawnedUsableItems.Add(itemsSpwaned);
                         }
                         itemsSpwaned.transform.parent = itemsParent.transform;
                         Vector3 pos = itemsSpwaned.transform.localPosition;
                         itemsSpwaned.transform.localPosition = pos;
                     }
                     transformItemsToDelete.Add(transformItem.gameObject);
+                    didSpawnQuestItem = false;
                 }
             }
         }
 
-        /*for (int i = 0; i < questsList.Count ; i++)
+        if (didSpawnJournalItem == false)
         {
-            journalIndex = Random.Range(0, spawnedItems.Count);
-            if (objectQuestIndex == questsList[i].id)
-            {
-                
-                if (spawnedItems[journalIndex].GetComponent<Sprite>().name != questsList[i].goalObject.name)
-                {
-                    itemsSpwaned = Instantiate(journal, spawnedItems[journalIndex].transform.position, Quaternion.identity);
-                    Destroy(spawnedItems[journalIndex]);
-                    break;
-                }
-            }
-        }*/
+            journalIndex = Random.Range(0, usableObjects.Count);
+            itemsSpwaned = Instantiate(journal, spawnedUsableItems[journalIndex].transform.position, Quaternion.identity);
+            spawnedUsableItems[journalIndex].SetActive(false);
+            didSpawnJournalItem = true;
+        }
 
         foreach (GameObject transformToDelete in transformItemsToDelete)
         {
