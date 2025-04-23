@@ -107,9 +107,13 @@ public class MapGenerationController : MonoBehaviour
                         chanceOfTypeObject = Random.Range(0f, 1f);
                         if (chanceOfTypeObject > percentageOfType && didSpawnQuestItem == false)
                         {
-                            objectIndex = Random.Range(0, sellablesObjects.Count);
-                            itemsSpwaned = Instantiate(sellablesObjects[objectIndex], transformItem.position, Quaternion.identity);
-                            didSpawnQuestItem = true;
+                            objectIndex = save.GetCurrentQuest();
+                            for (int j = 0; j < questsList.Count; j++)
+                            {
+                                if(questsList[j].id == objectIndex)
+                                itemsSpwaned = Instantiate(sellablesObjects[objectIndex], transformItem.position, Quaternion.identity);
+                                didSpawnQuestItem = true;
+                            }
                         }
                         else
                         {
