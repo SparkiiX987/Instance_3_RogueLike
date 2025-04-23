@@ -6,7 +6,7 @@ public class RoomParameters : MonoBehaviour
 {
     //0->Top, 1->Left, 2->Right, 3->Down
     public int[] entraces;
-    [SerializeField] private Transform[] doorways = new Transform[4];
+    [SerializeField] private Transform[] doorways;
 
     [FormerlySerializedAs("door")]
     [Header("Door Parameters")]
@@ -24,7 +24,7 @@ public class RoomParameters : MonoBehaviour
         print("Spawning walls");
         foreach (int i in entraces)
         {
-            if (doorways[i] == null) continue;
+            if (doorways[i] == null) { continue; }
             switch (i)
             {
                 case 0://up
@@ -32,11 +32,19 @@ public class RoomParameters : MonoBehaviour
                     {
                         SpawnWalls(i);
                     }
+                    else
+                    {
+                        
+                    }
                     break;
                 case 1://left
                     if (!Physics.Raycast(transform.position - new Vector3(raycastOffset, 0), Vector3.forward, 1))
                     {
                         SpawnWalls(i);
+                    }
+                    else
+                    {
+                        
                     }
                     break;
                 case 2://right
@@ -44,11 +52,19 @@ public class RoomParameters : MonoBehaviour
                     {
                         SpawnWalls(i);
                     }
+                    else
+                    {
+                        
+                    }
                     break;
                 case 3://down
                     if (!Physics.Raycast(transform.position - new Vector3(0, raycastOffset), Vector3.forward, 1))
                     {
                         SpawnWalls(i);
+                    }
+                    else
+                    {
+                        
                     }
                     break;
             }
@@ -69,6 +85,7 @@ public class RoomParameters : MonoBehaviour
     {
         foreach (Transform t in doorways)
         {
+            if (t == null) { continue; }
             if (!(Random.Range(0, 100) <= doorSpawnChance)) continue;
             if (!Physics.Raycast(t.position, Vector3.forward, 1))
             {

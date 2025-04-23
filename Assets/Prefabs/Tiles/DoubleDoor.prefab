@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2439379822862783376}
   - component: {fileID: 884209255485775059}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DoubleDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63,6 +63,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2439379822862783376}
     m_Modifications:
+    - target: {fileID: 483364894787000447, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1
@@ -115,6 +119,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door
       objectReference: {fileID: 0}
+    - target: {fileID: 8557345314826855134, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -133,6 +141,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2439379822862783376}
     m_Modifications:
+    - target: {fileID: 483364894787000447, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1475321222676377816, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
@@ -196,6 +208,10 @@ PrefabInstance:
     - target: {fileID: 8557345314826855134, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
       propertyPath: m_Name
       value: Door (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8557345314826855134, guid: 08f6303fdacdaa947ad0e9aaf45ccc28, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
