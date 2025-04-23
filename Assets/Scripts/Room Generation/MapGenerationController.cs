@@ -11,13 +11,34 @@ public class MapGenerationController : MonoBehaviour
 
     #region Spawn Items Variables
     [Header("Rooms")]
+    
+    public List<QuestScriptableObject> questsList = new List<QuestScriptableObject>();
+    
     private RoomParameters[] rooms;
     float timer = 0.1f;
     bool done;
+    
+    private Transform itemsParent;
+    private Transform transformItem;
+    private GameObject itemsSpwaned;
+
+    private float chanceOfObject;
+    private float chanceOfTypeObject;
+    private int objectIndex;
+    private int journalIndex;
+    
+    private List<GameObject> transformItemsToDelete = new List<GameObject>();
+    public List<GameObject> spawnedUsableItems = new List<GameObject>();
+    
+    private Save save => Save.Instance;
 
     [Header("Items")]
     [SerializeField] private List<GameObject> sellablesObjects;
     [SerializeField] private List<GameObject> usableObjects;
+    [SerializeField] private GameObject journal;
+
+    private bool didSpawnQuestItem;
+    private bool didSpawnJournalItem;
 
     [Header("Percentage")]
     [SerializeField] private float percentageOfObject;
@@ -71,16 +92,6 @@ public class MapGenerationController : MonoBehaviour
     #region Spawn Items
     private void GenerateItems()
     {
-        Transform itemsParent;
-        Transform transformItem;
-        GameObject itemsSpwaned;
-
-        float chanceOfObject;
-        float chanceOfTypeObject;
-        int objectIndex;
-
-        List<GameObject> transformItemsToDelete = new List<GameObject>();
-
         foreach (RoomParameters room in rooms)
         {
             itemsParent = room.transform.GetChild(5);
@@ -94,16 +105,17 @@ public class MapGenerationController : MonoBehaviour
                     if (chanceOfObject > percentageOfObject)
                     {
                         chanceOfTypeObject = Random.Range(0f, 1f);
-                        if (chanceOfTypeObject > percentageOfType)
+                        if (chanceOfTypeObject > percentageOfType && didSpawnQuestItem == false)
                         {
                             objectIndex = Random.Range(0, sellablesObjects.Count);
                             itemsSpwaned = Instantiate(sellablesObjects[objectIndex], transformItem.position, Quaternion.identity);
-
+                            didSpawnQuestItem = true;
                         }
                         else
                         {
                             objectIndex = Random.Range(0, usableObjects.Count);
                             itemsSpwaned = Instantiate(usableObjects[objectIndex], transformItem.position, Quaternion.identity);
+                            spawnedUsableItems.Add(itemsSpwaned);
                         }
                         itemsSpwaned.transform.parent = itemsParent.transform;
                         Vector3 pos = itemsSpwaned.transform.localPosition;
@@ -118,6 +130,18 @@ public class MapGenerationController : MonoBehaviour
         {
             Destroy(transformToDelete);
         }
+        SpawnJournal();
     }
     #endregion
+
+    private void SpawnJournal()
+    {
+        if (didSpawnJournalItem == false)
+        {
+            journalIndex = Random.Range(0, spawnedUsableItems.Count);
+            itemsSpwaned = Instantiate(journal, spawnedUsableItems[journalIndex].transform.position, Quaternion.identity);
+            spawnedUsableItems[journalIndex].SetActive(false);
+            didSpawnJournalItem = true;
+        }
+    }
 }

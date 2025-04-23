@@ -22,6 +22,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     [SerializeField] private GameObject shop;
     [SerializeField] private GameObject quests;
+    [SerializeField] private GameObject journal;
 
     private InputSystem_Actions inputSystem;
     private InputAction moveInput;
@@ -309,6 +310,10 @@ public class PlayerControl : MonoBehaviour, ITargetable
             {
                 paused = true;
                 quests.SetActive(true);
+            }
+            else if (hitTransform.tag == "Journal")
+            {
+                hitTransform.GetComponent<JournalItem>().ActionJournal();
             }
         }
     }

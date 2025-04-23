@@ -9,7 +9,7 @@ public class ButtonsMenuPrincipal : MonoBehaviour
 
     private void Start()
     {
-        AudioManager.Instance.PlaySound(AudioType.ambianceMenu);
+        //AudioManager.Instance.PlaySound(AudioType.ambianceMenu);
     }
 
     public void Leave()

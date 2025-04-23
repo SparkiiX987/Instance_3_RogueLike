@@ -5,4 +5,6 @@ using UnityEngine;
 public class LoreText : ScriptableObject
 {
     public string text;
+    public string text2;
+    public string text3;
 }
