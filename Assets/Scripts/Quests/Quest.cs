@@ -30,7 +30,7 @@ public class Quest : MonoBehaviour
         
         Shop.Instance.questsAvailables[numberQuestIndex] = this;
 
-        //PlayerPrefs.DeleteKey(save.questsSaveKey);
+        PlayerPrefs.DeleteKey(save.questsSaveKey);
         if (!save.LoadQuests() || questData == null)
             GetRandomQuest();
         else

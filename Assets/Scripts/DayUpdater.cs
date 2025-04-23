@@ -56,6 +56,6 @@ public class DayUpdater : MonoBehaviour
 
     public void UpdateImpots()
     {
-        textImpots.text = "Impôts : " + PlayerMoney.Instance.GetCurrentImpots(DayManager.Instance.impotAdditions) + "$";
+        textImpots.text = "Impots: \n" + PlayerMoney.Instance.GetCurrentImpots(DayManager.Instance.impotAdditions) + "$";
     }
 }
