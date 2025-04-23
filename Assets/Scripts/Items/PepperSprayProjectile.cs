@@ -8,11 +8,11 @@ public class PepperSprayProjectile : MonoBehaviour
     [SerializeField] private float cloudRadius;
     [SerializeField] private GameObject smoke;
     [SerializeField] private float launchStrength;
-    private bool hasDetonated = false;
+    private bool hasDetonated;
     private float elapsedTime;
     private Rigidbody2D rb;
-    
-    
+    private AchievementsManager achievementsManager;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -43,6 +43,11 @@ public class PepperSprayProjectile : MonoBehaviour
         
     }
 
+    public void SetAchivementManager(AchievementsManager _achievementsManager)
+    {
+        achievementsManager = _achievementsManager;
+    }
+
     private IEnumerator CloudColission()
     {
         if (!smoke)
@@ -51,7 +56,6 @@ public class PepperSprayProjectile : MonoBehaviour
             Destroy(gameObject);
             yield break;
         }
-        //make the monster run away here
         yield return null;
         StartCoroutine(CloudColission());
     } 
@@ -63,6 +67,8 @@ public class PepperSprayProjectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if(PlayerPrefs.GetInt("4") == 0)
+        { }
         Ennemy enemy = collision.GetComponent<Ennemy>();
         if (enemy != null && !enemy.isStunned && hasDetonated)
         {

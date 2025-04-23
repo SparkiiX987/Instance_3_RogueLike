@@ -15,6 +15,9 @@ public class DayUpdater : MonoBehaviour
     [SerializeField] private List<Image> cases = new List<Image>();
     [SerializeField] private Color _color = Color.red;
 
+    [Header("Achivements")]
+    [SerializeField] private AchievementsManager achievementsManager;
+
     public Transform shopOfferPanel;
 
     [SerializeField] private List<GameObject> shopOfferPrefabs = new List<GameObject>();
@@ -22,6 +25,15 @@ public class DayUpdater : MonoBehaviour
     private void Start()
     {
         DayManager.Instance.IncrementDay();
+
+        if (DayManager.Instance.dayNumber == 10 && PlayerPrefs.GetInt("3") == 0)
+        {
+            achievementsManager.PlayAddAchievement(3);
+        }
+        if (DayManager.Instance.dayNumber == 12 && PlayerPrefs.GetInt("5") == 0)
+        {
+            achievementsManager.PlayAddAchievement(5);
+        }
         UpdateDayUI();
         CaseImpots();
         UpdateImpots();

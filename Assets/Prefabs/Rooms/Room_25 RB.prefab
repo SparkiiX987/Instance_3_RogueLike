@@ -14337,12 +14337,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entraces: 0200000003000000
-  door: {fileID: 0}
   doorways: []
-  doorSpawnChance: 0
-  wall: {fileID: 0}
+  doubleDoor: {fileID: 7366321199967113017, guid: 981867d264595ea4ea406d52eaf4b7cd, type: 3}
+  doorSpawnChance: 25
+  canDoorSpawn: 0
+  wall: {fileID: 8536467521328634853, guid: 631de60beee2f2c43b5fb6ccaa73b282, type: 3}
   wallParent: {fileID: 0}
-  offset: 0
+  raycastOffset: 4
 --- !u!65 &-1600945477683761741
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -65,6 +65,16 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private bool isCafeinated;
 
+    private float angleLookAt;
+
+    [Header("Achivements"), HideInInspector]
+    private AchievementsManager achivementsManager;
+    private float useCount = 0;
+    private bool isTryingAchivement8;
+    private bool isTryingAchivement9;
+
+    private bool[] consomableCosumed = new bool[3];
+
     private void Awake()
     {
         stats = GetComponent<Stats>();
@@ -113,7 +123,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
         selfCollider = GetComponent<Collider2D>();
 
         Time.timeScale = 1;
-        if(paused)
+        if (paused)
         { animator.SetTrigger("Sleep"); }
 
         GameObject canva = GameObject.Find("Canvas");
@@ -121,8 +131,9 @@ public class PlayerControl : MonoBehaviour, ITargetable
         slots[0] = canvaTransform.GetChild(0).GetChild(0).GetComponent<ItemSlot>();
         slots[1] = canvaTransform.GetChild(0).GetChild(1).GetComponent<ItemSlot>();
         deathPanel = canvaTransform.GetChild(2).gameObject;
-        if(canvaTransform.GetChild(3))
+        if (canvaTransform.GetChild(3))
         { pauseMenu = canvaTransform.GetChild(3).gameObject; }
+        achivementsManager = canvaTransform.GetComponentInChildren<AchievementsManager>();
 
         if (isInHub is not true)
         {
@@ -164,17 +175,35 @@ public class PlayerControl : MonoBehaviour, ITargetable
             }
 
         }
+
+        if (isInHub is not true)
+        {
+            angleLookAt = playerTransform.eulerAngles.z;
+
+            fovMain.SetAimDirection(angleLookAt + 90);
+            fovMain.SetOrigin(playerTransform.position);
+
+            fovSecond.SetAimDirection(angleLookAt + 90);
+            fovSecond.SetOrigin(playerTransform.position);
+
+            playerMain.SetAimDirection(angleLookAt + 90);
+            playerMain.SetOrigin(playerTransform.position);
+
+            playerSecond.SetAimDirection(angleLookAt + 90);
+            playerSecond.SetOrigin(playerTransform.position);
+        }
     }
 
     public void Death()
     {
         StartCoroutine(DeathCoroutine());
+        if (PlayerPrefs.GetInt("2") == 0) { achivementsManager.PlayAddAchievement(2); }
     }
 
     private IEnumerator DeathCoroutine()
     {
         paused = true;
-        
+
         yield return new WaitForSeconds(0.8f);
         deathPanel.SetActive(true);
         slots[0].transform.parent.gameObject.SetActive(false);
@@ -217,7 +246,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private void OpenPauseMenu(InputAction.CallbackContext _ctx)
     {
-        if(paused) { return; }
+        if (paused) { return; }
         pauseMenu.SetActive(!pauseMenu.activeInHierarchy);
     }
 
@@ -227,21 +256,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
         Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-
-        if(isInHub is not true)
-        {
-            fovMain.SetAimDirection(angle + 90);
-            fovMain.SetOrigin(playerTransform.position);
-
-            fovSecond.SetAimDirection(angle + 90);
-            fovSecond.SetOrigin(playerTransform.position);
-
-            playerMain.SetAimDirection(angle + 90);
-            playerMain.SetOrigin(playerTransform.position);
-
-            playerSecond.SetAimDirection(angle + 90);
-            playerSecond.SetOrigin(playerTransform.position);
-        }
     }
 
     public void PickUp(InputAction.CallbackContext _ctx)
@@ -306,15 +320,46 @@ public class PlayerControl : MonoBehaviour, ITargetable
         if (usableObject is not null)
         {
             usableObject.Action(gameObject);
+            AddConsumedItem(usableObject.type);
+            CheckForAchivement6();
 
             if (usableObject.type == 1 || usableObject.type == 2)
             {
                 animator.SetTrigger("IsThrowingItem");
+                if (usableObject.type == 1)
+                {
+                    if(PlayerPrefs.GetInt("9") is 0)
+                    {
+                        PepperSpray paperSpay = (PepperSpray)usableObject;
+                        paperSpay.SetAchivement(achivementsManager);
+                        if (isTryingAchivement9 is not true && useCount is 0)
+                        {
+                            isTryingAchivement9 = true;
+                            StartCoroutine(StartCheckingForAchivementUsingItems(9));
+                        }
+                        else if (isTryingAchivement9 is true)
+                        {
+                            useCount++;
+                        }
+                    }
+                }
             }
 
             if (usableObject.type == 3)
             {
                 animator.SetTrigger("IsDrinkingItem");
+                if (PlayerPrefs.GetInt("8") is 0)
+                {
+                    if (isTryingAchivement8 is not true && useCount is 0)
+                    {
+                        isTryingAchivement8 = true;
+                        StartCoroutine(StartCheckingForAchivementUsingItems(8));
+                    }
+                    else if (isTryingAchivement8 is true)
+                    {
+                        useCount++;
+                    }
+                }
             }
 
             usableObject = null;
@@ -326,6 +371,43 @@ public class PlayerControl : MonoBehaviour, ITargetable
             Obstacle obstacleObject = hit.collider.transform.GetComponent<Obstacle>();
             obstacleObject.Action();
         }
+    }
+
+    private void AddConsumedItem(int _itemId)
+    {
+        consomableCosumed[_itemId--] = true;
+    }
+
+    private void CheckForAchivement6()
+    {
+        for (int i = 0; i < consomableCosumed.Length; ++i)
+        {
+            if (consomableCosumed[i] is true)
+            {
+                return;
+            }
+        }
+        achivementsManager.PlayAddAchievement(6);
+    }
+
+    private IEnumerator StartCheckingForAchivementUsingItems(int _achivementIndex)
+    {
+        float timeRemaining = 0;
+        useCount = 1;
+        while (timeRemaining < 3f)
+        {
+            timeRemaining += Time.deltaTime;
+            if (useCount == 3)
+            {
+                achivementsManager.PlayAddAchievement(_achivementIndex);
+                yield break;
+            }
+            yield return new WaitForEndOfFrame();
+        }
+
+        useCount = 0;
+        isTryingAchivement8 = false;
+        isTryingAchivement9 = false;
     }
 
     public void Sprint(InputAction.CallbackContext _ctx)
@@ -362,7 +444,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
     {
         isCafeinated = true;
         float remainingTime = 0;
-        while(remainingTime < _cooldown)
+        while (remainingTime < _cooldown)
         {
             remainingTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
