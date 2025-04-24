@@ -27,6 +27,9 @@ public class MapGenerationController : MonoBehaviour
     private int objectIndex;
     private int journalIndex;
     
+    private int roomIndex;
+    private int transformQuestItem;
+    
     private List<GameObject> transformItemsToDelete = new List<GameObject>();
     public List<GameObject> spawnedUsableItems = new List<GameObject>();
     
@@ -37,7 +40,6 @@ public class MapGenerationController : MonoBehaviour
     [SerializeField] private List<GameObject> usableObjects;
     [SerializeField] private GameObject journal;
 
-    private bool didSpawnQuestItem;
     private bool didSpawnJournalItem;
 
     [Header("Percentage")]
@@ -104,23 +106,10 @@ public class MapGenerationController : MonoBehaviour
                     chanceOfObject = Random.Range(0f, 1f);
                     if (chanceOfObject > percentageOfObject)
                     {
-                        chanceOfTypeObject = Random.Range(0f, 1f);
-                        if (chanceOfTypeObject > percentageOfType && didSpawnQuestItem == false)
-                        {
-                            objectIndex = save.GetCurrentQuest();
-                            for (int j = 0; j < questsList.Count; j++)
-                            {
-                                if(questsList[j].id == objectIndex)
-                                itemsSpwaned = Instantiate(sellablesObjects[objectIndex], transformItem.position, Quaternion.identity);
-                                didSpawnQuestItem = true;
-                            }
-                        }
-                        else
-                        {
-                            objectIndex = Random.Range(0, usableObjects.Count);
-                            itemsSpwaned = Instantiate(usableObjects[objectIndex], transformItem.position, Quaternion.identity);
-                            spawnedUsableItems.Add(itemsSpwaned);
-                        }
+                        objectIndex = Random.Range(0, usableObjects.Count);
+                        itemsSpwaned = Instantiate(usableObjects[objectIndex], transformItem.position, Quaternion.identity);
+                        spawnedUsableItems.Add(itemsSpwaned);
+                        
                         itemsSpwaned.transform.parent = itemsParent.transform;
                         Vector3 pos = itemsSpwaned.transform.localPosition;
                         itemsSpwaned.transform.localPosition = pos;
@@ -129,7 +118,8 @@ public class MapGenerationController : MonoBehaviour
                 }
             }
         }
-
+        SpawnQuestItem();
+        
         foreach (GameObject transformToDelete in transformItemsToDelete)
         {
             Destroy(transformToDelete);
@@ -137,6 +127,28 @@ public class MapGenerationController : MonoBehaviour
         SpawnJournal();
     }
     #endregion
+
+    private void SpawnQuestItem()
+    {
+        objectIndex = save.GetCurrentQuest();
+        for (int i = 0; i < questsList.Count; i++)
+        {
+            if (questsList[i].id == objectIndex)
+            {
+                roomIndex = Random.Range(1, rooms.Length);
+                itemsParent = rooms[roomIndex].transform.GetChild(5);
+                transformQuestItem = Random.Range(0, itemsParent.childCount);
+                
+                for (int j = 0; j < sellablesObjects.Count; j++)
+                {
+                    if (questsList[i].goalObject.name == sellablesObjects[j].GetComponent<CollectableItem>().floorSprite.name) 
+                    {
+                        itemsSpwaned = Instantiate(sellablesObjects[j], itemsParent.GetChild(transformQuestItem).position, Quaternion.identity);
+                    }
+                }
+            }
+        }
+    }
 
     private void SpawnJournal()
     {
