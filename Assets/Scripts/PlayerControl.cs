@@ -139,7 +139,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
         if (isInHub is not true)
         {
-            print("recup");
             GameObject FogOfWar = GameObject.Find("FogOfWar");
             Transform fowTransform = FogOfWar.transform;
             fovMain = fowTransform.GetChild(2).GetChild(0).GetComponent<FieldOfView>();
@@ -278,6 +277,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
         hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, interactibleLayer);
         if (hit.collider != null)
         {
+            Debug.Log(hit.collider.gameObject.name);
             Transform hitTransform = hit.collider.transform;
             if (hitTransform.GetComponent<CollectableItem>())
             {
@@ -306,6 +306,11 @@ public class PlayerControl : MonoBehaviour, ITargetable
                 paused = true;
                 achivements.SetActive(true);
                 mainPanel.SetActive(false);
+            }
+            else if (hitTransform.tag == "Journal")
+            {
+                Debug.Log(hitTransform.name);
+                hitTransform.GetComponent<JournalItem>().ActionJournal();
             }
         }
     }
@@ -406,7 +411,9 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private void AddConsumedItem(int _itemId)
     {
-        consomableCosumed[_itemId--] = true;
+        print("ItemId: " + (_itemId - 1));
+        print("Lengths: " + consomableCosumed.Length);
+        consomableCosumed[_itemId-1] = true;
     }
 
     private void CheckForAchivement6()

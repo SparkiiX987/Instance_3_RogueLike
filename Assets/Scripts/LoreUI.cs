@@ -14,7 +14,6 @@ public class LoreUI : MonoBehaviour
     
     public void ShowLorePage()
     {
-        lorePageUI.SetActive(true);
         int lorePage = PlayerPrefs.GetInt(Save.Instance.loreSaveKey);
         
         if (text.text != null)

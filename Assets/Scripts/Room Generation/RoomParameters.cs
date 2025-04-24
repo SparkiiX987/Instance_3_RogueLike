@@ -21,7 +21,6 @@ public class RoomParameters : MonoBehaviour
 
     public void SpawnWallsCheck()
     {
-        print("Spawning walls");
         foreach (int i in entraces)
         {
             if (doorways[i] == null) { continue; }

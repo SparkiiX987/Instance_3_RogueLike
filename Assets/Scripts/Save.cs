@@ -63,8 +63,6 @@ public class Save : MonoBehaviour
         }
         string json = JsonUtility.ToJson(quests);
         PlayerPrefs.SetString(questsSaveKey, json);
-
-        Debug.Log(json);
     }
 
     public bool LoadQuests()

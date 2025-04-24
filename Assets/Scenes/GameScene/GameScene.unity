@@ -754,7 +754,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1855
+    m_Bits: 12095
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -940,9 +940,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 63903346}
     m_Modifications:
+    - target: {fileID: 595524445125973730, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 595524445125973730, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8120783560571273976, guid: 13f2456b858f7bb4191d29947ff25abe, type: 3}
     - target: {fileID: 3582530583419354677, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
       propertyPath: m_Name
       value: LorePanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582530583419354677, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6741756105778803546, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
       propertyPath: m_Pivot.x
@@ -970,11 +982,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6741756105778803546, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -2980
+      value: -1510
       objectReference: {fileID: 0}
     - target: {fileID: 6741756105778803546, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -1220
+      value: -309.99997
       objectReference: {fileID: 0}
     - target: {fileID: 6741756105778803546, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1006,11 +1018,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6741756105778803546, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1240
+      value: 495
       objectReference: {fileID: 0}
     - target: {fileID: 6741756105778803546, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 690
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6741756105778803546, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

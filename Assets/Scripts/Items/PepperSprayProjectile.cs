@@ -15,6 +15,7 @@ public class PepperSprayProjectile : MonoBehaviour
 
     private void Start()
     {
+        GetComponent<Collider2D>().enabled = true;
         rb = GetComponent<Rigidbody2D>();
         rb.AddForce(transform.up * launchStrength, ForceMode2D.Impulse);
     }
@@ -25,8 +26,8 @@ public class PepperSprayProjectile : MonoBehaviour
         if (elapsedTime < detonationTime) return;
         if (hasDetonated == false)
         {
+            rb.freezeRotation = true;
             smoke.GetComponent<ParticleSystem>().Play();
-            GetComponent<Collider2D>().enabled = false;
             hasDetonated = true;
             elapsedTime = 0;
             StartCoroutine(CloudColission());

@@ -14,7 +14,7 @@ public class EmptyBottleProjectile : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.AddForce(transform.up * launchStrength, ForceMode2D.Impulse);
+        rb.linearVelocity = transform.up * launchStrength;
     }
 
     private void Update()
@@ -36,6 +36,8 @@ public class EmptyBottleProjectile : MonoBehaviour
             monster = other.collider.GetComponent<Ennemy>();
             monster.stunDuration = stunDuration;
             monster.isStunned = true;
+            rb.linearVelocity = Vector2.zero;
+            rb.freezeRotation = true;
         }
         catch { return; }
         PlayParticleEffect();

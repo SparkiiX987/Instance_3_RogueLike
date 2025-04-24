@@ -77,7 +77,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 4
   m_Sprite: {fileID: -7044527696425451788, guid: c8601890a47e0ef4d94d495ad275a4ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -101,11 +101,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2d1036a2880ac245bedd6e102c53e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  floorSprite: {fileID: -7044527696425451788, guid: c8601890a47e0ef4d94d495ad275a4ff, type: 3}
   price: 100
   itemName: Whiskey bottle
   description: bottle with wiskey inside
   inventorySprite: {fileID: -6265572309554476903, guid: 2427d368a8adb0244bd16c42b0fa7322, type: 3}
-  floorSprite: {fileID: -7044527696425451788, guid: c8601890a47e0ef4d94d495ad275a4ff, type: 3}
   highlightedFloorSprite: {fileID: 1860948478867470346, guid: 622120bdf3f303e47b732d247a0ffbe6, type: 3}
   distance: 1
   itemType: 0

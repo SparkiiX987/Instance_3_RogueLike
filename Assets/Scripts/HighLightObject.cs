@@ -16,8 +16,7 @@ public class HighLightObject : MonoBehaviour
     private void Update()
     {
         if (player is null) { return; }
-
-        print(distance);
+        
         spriteRenderer.sprite = distance <= Vector3.Distance(player.transform.position, transform.position) ? sprites[0] : sprites[1];
     }
 }
