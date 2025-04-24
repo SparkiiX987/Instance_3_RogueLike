@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class EndZone : MonoBehaviour
 {
-    [SerializeField] private GameObject EndGamePanel;
+    [SerializeField] private GameObject endGamePanel;
+    [SerializeField] private ParticleSystem endParticles;
 
-    private void Start()
+   private void Start()
     {
-        EndGamePanel = GameObject.Find("Canvas").transform.GetChild(1).gameObject;
+        Instantiate(endParticles, gameObject.transform);
+        endGamePanel = GameObject.Find("Canvas").transform.GetChild(1).gameObject;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -15,7 +17,7 @@ public class EndZone : MonoBehaviour
         {
             Time.timeScale = 0;
             PlayerMoney.Instance.AddMoney(collision.GetComponent<PlayerControl>().sellableObject.GetPrice());
-            EndGamePanel.SetActive(true);
+            endGamePanel.SetActive(true);
         }
     }
 }

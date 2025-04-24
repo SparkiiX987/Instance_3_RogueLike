@@ -14995,13 +14995,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8912f6a45b3a647bef46b0d9fb50ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeOffer: {fileID: 0}
+  activeOffer:
+    price: 0
+    name: 
+    description: 
+    type: 0
   offers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - price: 0
+    name: 
+    description: 
+    type: 0
+  - price: 0
+    name: 
+    description: 
+    type: 0
+  - price: 0
+    name: 
+    description: 
+    type: 0
+  - price: 0
+    name: 
+    description: 
+    type: 0
+  - price: 0
+    name: 
+    description: 
+    type: 0
   questsAvailables:
   - {fileID: 0}
   - {fileID: 0}
@@ -15021,7 +15040,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be7c47e154a329a448292f55dff4ab86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioData:
+  audioDatas:
   - type: 0
     source: {fileID: 1119953274}
   - type: 1

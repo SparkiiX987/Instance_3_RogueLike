@@ -165,7 +165,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 5, y: 5}
+  m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &6855398888260349433
 MonoBehaviour:
@@ -179,7 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc5f5c986be901b418b82d8e542529fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EndGamePanel: {fileID: 0}
+  endGamePanel: {fileID: 0}
+  endParticles: {fileID: 7727901431276785293}
 --- !u!1 &5505812356853917882
 GameObject:
   m_ObjectHideFlags: 0
