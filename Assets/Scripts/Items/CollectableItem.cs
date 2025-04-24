@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class CollectableItem : MonoBehaviour
 {
+    public Sprite floorSprite;
+    
     private PickableObject item;
     [SerializeField] private int price;
     [SerializeField] private string itemName;
     [SerializeField] private string description;
     [SerializeField] private Sprite inventorySprite;
-    [SerializeField] private Sprite floorSprite;
     [SerializeField] private Sprite highlightedFloorSprite;
     [SerializeField] private float distance;
 
