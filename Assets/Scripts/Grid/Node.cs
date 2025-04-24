@@ -19,11 +19,7 @@ public class Node : MonoBehaviour
         links.Add(_newLink);
     }
 
-    private void Awake()
-    {
-        ConnectToNearbyNodes();
-    }
-    private void ConnectToNearbyNodes()
+    public void ConnectToNearbyNodes()
     {
         Node[] allNodes = FindObjectsByType<Node>(FindObjectsSortMode.None);
         foreach (Node node in allNodes)

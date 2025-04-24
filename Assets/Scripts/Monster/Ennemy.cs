@@ -227,7 +227,10 @@ public class Ennemy : MonoBehaviour
             Transform transformMap = graphGameObject.transform;
             foreach (Transform child in transformMap)
             {
-                nodes.Add(child.GetComponent<Node>());
+                Node node = child.GetComponent<Node>();
+                node.ConnectToNearbyNodes();
+                nodes.Add(node);
+                
             }
             break;
         }
