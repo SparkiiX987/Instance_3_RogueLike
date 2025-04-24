@@ -145,7 +145,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
             playerMain = fowTransform.GetChild(2).GetChild(2).GetComponent<FieldOfView>();
             playerSecond = fowTransform.GetChild(2).GetChild(3).GetComponent<FieldOfView>();
 
-            if(Shop.Instance.CanAddItem())
+            if (Shop.Instance.CanAddItem())
             {
                 AddItem(Shop.Instance.itemStruct.itemType, Shop.Instance.itemStruct.item, Shop.Instance.itemStruct.itemSprite);
                 Shop.Instance.itemStruct.item = null;
@@ -159,6 +159,13 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
         LookAtMouse();
 
+        if (stamina <= 0)
+        {
+            stamina = 0;
+            isRunning = false;
+            stats.speed = stats.speed / 2;
+        }
+
         if (currentCooldown >= 0)
         {
             currentCooldown -= Time.deltaTime;
@@ -170,14 +177,14 @@ public class PlayerControl : MonoBehaviour, ITargetable
             if (IsUsingStamina())
             {
                 LosingStamina();
-                animator.SetBool("IsRunning", true);
                 AudioManager.Instance.PlaySound(AudioType.run);
+                animator.SetBool("IsRunning", isRunning);
             }
             else
             {
                 StaminaRegen();
-                animator.SetBool("IsRunning", false);
                 AudioManager.Instance.StopSound(AudioType.run);
+                animator.SetBool("IsRunning", isRunning);
             }
 
         }
@@ -344,7 +351,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
                 animator.SetTrigger("IsThrowingItem");
                 if (usableObject.type == 1)
                 {
-                    if(PlayerPrefs.GetInt("9") is 0)
+                    if (PlayerPrefs.GetInt("9") is 0)
                     {
                         PepperSpray paperSpay = (PepperSpray)usableObject;
                         paperSpay.SetAchivement(achivementsManager);
@@ -428,7 +435,12 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void Sprint(InputAction.CallbackContext _ctx)
     {
-        if (stamina <= 0) { return; }
+        if (stamina <= 0)
+        {
+            stats.speed = stats.speed / 2;
+            isRunning = false;
+            return;
+        }
 
         stats.speed = stats.speed * 2f;
         isRunning = true;
@@ -486,14 +498,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     private bool IsUsingStamina()
     {
-        if (movementDir != Vector2.zero && isRunning)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return movementDir != Vector2.zero && isRunning;
     }
 
     private Vector2 GetMousePosition()
