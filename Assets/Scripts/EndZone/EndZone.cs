@@ -3,11 +3,9 @@ using UnityEngine;
 public class EndZone : MonoBehaviour
 {
     [SerializeField] private GameObject endGamePanel;
-    [SerializeField] private ParticleSystem endParticles;
 
    private void Start()
     {
-        Instantiate(endParticles, gameObject.transform);
         endGamePanel = GameObject.Find("Canvas").transform.GetChild(1).gameObject;
     }
 

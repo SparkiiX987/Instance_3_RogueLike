@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -22,7 +23,7 @@ public class Shop : MonoBehaviour
     public PickableObject activeOffer;
     public PickableObject[] offers = new PickableObject[5];
 
-    public Quest[] questsAvailables = new Quest[3];
+    public List<Quest> questsAvailables = new List<Quest>();
 
     public itemSavedForGame itemStruct;
 

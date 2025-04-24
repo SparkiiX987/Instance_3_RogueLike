@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Save : MonoBehaviour
 {
+    [SerializeField] private GameObject emptyBottleProjectile;
+    [SerializeField] private GameObject tearGazProjectile;
+
     public static Save Instance;
     public string moneySaveKey => "Money";
     public string questsSaveKey => "Quests";
@@ -17,7 +20,7 @@ public class Save : MonoBehaviour
 
     private void Awake()
     {
-        if (Save.Instance != null) { Destroy(this.gameObject); }
+        if (Instance != null) { Destroy(gameObject); }
         Instance = this;
         if (PlayerPrefs.HasKey(dictionaryItems))
         {
@@ -44,7 +47,7 @@ public class Save : MonoBehaviour
     {
         Shop shop = Shop.Instance;
         Quests quests = new Quests();
-        for (int i = 0; i < shop.questsAvailables.Length; i++)
+        for (int i = 0; i < shop.questsAvailables.Count; i++)
         {
             QuestInfos questInfos = new QuestInfos();
             if (shop.questsAvailables[i] != null && shop.questsAvailables[i].questData != null)
@@ -73,7 +76,7 @@ public class Save : MonoBehaviour
             Quests quests = JsonUtility.FromJson<Quests>(json);
             Debug.Log(json);
             Shop shop = Shop.Instance;
-            for (int i = 0; i < shop.questsAvailables.Length; i++)
+            for (int i = 0; i < shop.questsAvailables.Count; i++)
             {
                 if (shop.questsAvailables[i] != null)
                 {
@@ -121,7 +124,7 @@ public class Save : MonoBehaviour
     {
         InventoryData inventoryData = new InventoryData();
 
-        PickableObject pickableObject = _player.sellableObject as PickableObject;
+        PickableObject pickableObject = _player.sellableObject;
         ItemData itemData = new ItemData();
         if (pickableObject != null)
         {
@@ -149,7 +152,7 @@ public class Save : MonoBehaviour
             inventoryData.sellableObject = -1;
         }
 
-        pickableObject = _player.usableObject as PickableObject;
+        pickableObject = _player.usableObject;
         if (pickableObject != null)
         {
             itemData.price = pickableObject.price; itemData.name = pickableObject.name; itemData.description = pickableObject.description;
@@ -218,43 +221,45 @@ public class Save : MonoBehaviour
                 sellableObject.price = itemData.price;
                 sellableObject.name = itemData.name;
                 sellableObject.description = itemData.description;*/
+                print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+                return false;
             }
 
             if (inventoryData.usableObject != -1)
             {
-                /*id = inventoryData.usableObject;
+                id = inventoryData.usableObject;
                 itemData = items[id];
-                PickableObject pickableObject = new PickableObject();
+                PickableObject pickableObject = new PickableObject(itemData.price, itemData.name, itemData.description, 0); 
                 switch (itemData.name)
                 {
-                    case "WoodenPlank":
+                    /*case "WoodenPlank":
                         {
                             WoodenPlank woodenPlank = new WoodenPlank();
                             pickableObject = woodenPlank;
                             break;
-                        }
+                        }*/
                     case "MonsterCan":
                         {
-                            MonsterCan monsterCan = new MonsterCan();
+                            MonsterCan monsterCan = new MonsterCan(itemData.price, itemData.name, itemData.description, 3, 3f);
                             pickableObject = monsterCan;
                             break;
                         }
                     case "PepperSpray":
                         {
-                            PepperSpray spray = new PepperSpray();
+                            PepperSpray spray = new PepperSpray(itemData.price, itemData.name, itemData.description, 2, tearGazProjectile);
                             pickableObject = spray;
                             break;
                         }
                     case "EmptyBottle":
                         {
-                            EmptyBottle bottle = new EmptyBottle();
+                            EmptyBottle bottle = new EmptyBottle(itemData.price, itemData.name, itemData.description, 1, emptyBottleProjectile);
                             pickableObject = bottle;
                             break;
                         }
                 }
                 pickableObject.price = itemData.price;
                 pickableObject.name = itemData.name;
-                pickableObject.description = itemData.description;*/
+                pickableObject.description = itemData.description;
             }
             DisplayArray();
             if (inventoryData.collectableObject != -1)
@@ -358,13 +363,15 @@ public class Save : MonoBehaviour
     
     public int GetCurrentQuest()
     {
+        print(PlayerPrefs.HasKey(questsSaveKey));
         if (PlayerPrefs.HasKey(questsSaveKey))
         {
-            
             string json = PlayerPrefs.GetString(questsSaveKey);
             Quests quests = JsonUtility.FromJson<Quests>(json);
+            print(json);
             for (int i = 0; i < quests.questsDatas.Count; i++)
             {
+                print(quests.questsDatas[i].questAccepted);
                 if (quests.questsDatas[i].questAccepted)
                     return quests.questsDatas[i].id;
             }

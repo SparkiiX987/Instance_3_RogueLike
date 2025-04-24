@@ -28,8 +28,16 @@ public class Quest : MonoBehaviour
         button = transform.GetChild(0).GetComponent<Button>();
         boxDescription = transform.GetChild(1).GetComponentInChildren<TMP_Text>();
         image = transform.GetChild(2).GetComponentInChildren<Image>();
-        
-        Shop.Instance.questsAvailables[numberQuestIndex] = this;
+
+        print(numberQuestIndex);
+        if(numberQuestIndex < Shop.Instance.questsAvailables.Count)
+        {
+            Shop.Instance.questsAvailables.Add(this);
+        }
+        else
+        {
+            Shop.Instance.questsAvailables[numberQuestIndex] = this;
+        }
 
         PlayerPrefs.DeleteKey(save.questsSaveKey);
         if (!save.LoadQuests() || questData == null)
@@ -40,6 +48,7 @@ public class Quest : MonoBehaviour
 
     public void AcceptQuest()
     {
+        print("a");
         questAccepted = true;
         ChangeButtonFunction(questAccepted);
         GameObject.Find("FadeInPanel").GetComponent<Animator>().SetTrigger("PlayFadeInAnim");
