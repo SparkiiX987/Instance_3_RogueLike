@@ -1463,7 +1463,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304063354}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1722,6 +1722,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemSlot
       objectReference: {fileID: 0}
+    - target: {fileID: 3108668985589022160, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4750923274227343915, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7925486712693071754, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1801,6 +1809,22 @@ PrefabInstance:
     - target: {fileID: 7925486712693071754, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8329712575199944386, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8329712575199944386, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8329712575199944386, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8329712575199944386, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1903,10 +1927,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22843e1bff9294945949261ef4f03b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: "Lorsque vous vous approchez d\u2019un objet int\xE9ractible, un contour
-    blanc apparait. Lorsqu\u2019un objet r\xE9cup\xE9rable est r\xE9cup\xE9r\xE9,
-    il est ajout\xE9 \xE0 l'inventaire. Certains objets interactible peuvent ouvrir
-    une bo\xEEte de texte. Appuyez sur E pour interagir."
+  text: When you approach an interactable object, a white outline appears. When a
+    lootable object is picked up, it is added to the inventory. Some interactable
+    objects may open a text box. Press E to interact.
   panel: {fileID: 304063354}
   paneltext: {fileID: 1356354659}
 --- !u!1001 &669536664
@@ -2124,9 +2147,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22843e1bff9294945949261ef4f03b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: "Lorsque vous avez r\xE9cup\xE9r\xE9 l\u2019objet de commande, une zone s\u2019active
-    \xE0 la salle de d\xE9but du niveau. Dans cet exemple, elle appara\xEEt en face
-    du joueur. Entrez dans la zone pour mettre fin au Tutoriel."
+  text: When you have retrieved the command item, an area will activate in the starting
+    room of the level. In this example, it appears in front of the player. Enter
+    the area to end the tutorial.
   panel: {fileID: 304063354}
   paneltext: {fileID: 1356354659}
 --- !u!1001 &729019669
@@ -2497,67 +2520,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6084514027663177394, guid: 5056fa7ac1ba51c4dabb11682576c7ac, type: 3}
   m_PrefabInstance: {fileID: 391258060}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &851571401
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -4.1959333
-      objectReference: {fileID: 0}
-    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -13.727061
-      objectReference: {fileID: 0}
-    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 941920536703662507, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3857222089601363009, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: m_Name
-      value: MonstreCan
-      objectReference: {fileID: 0}
-    - target: {fileID: 4746973551826508413, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
-      propertyPath: distance
-      value: 1.5
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
 --- !u!1001 &893201341
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2762,7 +2724,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22843e1bff9294945949261ef4f03b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: "Appuyez sur ZQSD pour vous d\xE9placer.  Maintenez SHIFT pour sprinter  "
+  text: 'Press ZQSD to move. Hold SHIFT to sprint. '
   panel: {fileID: 304063354}
   paneltext: {fileID: 1356354659}
 --- !u!1 &981706501
@@ -2815,6 +2777,10 @@ PrefabInstance:
       propertyPath: distance
       value: 1.65
       objectReference: {fileID: 0}
+    - target: {fileID: 2277653727795147197, guid: 5c59ba0c90a33e244b9927ca1aaac335, type: 3}
+      propertyPath: inventorySprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ddfa6235e2461964d81e3ca1afa6da91, type: 3}
     - target: {fileID: 4865535000034621515, guid: 5c59ba0c90a33e244b9927ca1aaac335, type: 3}
       propertyPath: m_Name
       value: Item Whisky bottle Tutorial
@@ -2879,6 +2845,18 @@ PrefabInstance:
     - target: {fileID: 2579060533506479128, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
       propertyPath: m_Name
       value: ItemSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108668985589022160, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4750923274227343915, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4750923274227343915, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_Color.a
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7925486712693071754, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
       propertyPath: m_Pivot.x
@@ -2959,6 +2937,22 @@ PrefabInstance:
     - target: {fileID: 7925486712693071754, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8329712575199944386, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8329712575199944386, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8329712575199944386, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8329712575199944386, guid: e662f3bc55f6c7a4ab83a63f4f6803d9, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3164,8 +3158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22843e1bff9294945949261ef4f03b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: "A chaque mission que vous lancez, vous devez r\xE9cup\xE9rer un objet de
-    commande diff\xE9rent. Chaque objet de commande a une valeur diff\xE9rente."
+  text: Each mission you launch requires you to retrieve a different command item.
+    Each command item has a different value.
   panel: {fileID: 304063354}
   paneltext: {fileID: 1356354659}
 --- !u!1 &1356354657
@@ -3227,8 +3221,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2fdae80ba40d00e4cb85a0eaef17a21a, type: 2}
+  m_sharedMaterial: {fileID: -3491628651510102174, guid: 2fdae80ba40d00e4cb85a0eaef17a21a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3252,15 +3246,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 75
+  m_fontSizeBase: 75
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 1024
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -3395,9 +3389,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22843e1bff9294945949261ef4f03b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: "Le rampant est pr\xE9sent dans chaque niveau que vous explorerez. Il se
-    d\xE9place dans toute la carte, et attaque le joueur d\xE8s qu\u2019il rentre
-    dans sa port\xE9e de d\xE9tection."
+  text: The creeper is present in every level you explore. It moves throughout the
+    map, attacking the player as soon as they enter its detection range.
   panel: {fileID: 304063354}
   paneltext: {fileID: 1356354659}
 --- !u!1 &1485687812 stripped
@@ -3688,10 +3681,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22843e1bff9294945949261ef4f03b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: "Le brouillard est une m\xE9canique importante. La zone noir est la zone
-    pas encore d\xE9couverte. La zone gris\xE9e est la zone d\xE9couverte mais non
-    visible. La zone \xE9clair\xE9e est la zone visible actuellement par le joueur.
-    Vous ne pouvez voir les changements sur le terrain uniquement dans la zone visible."
+  text: The FOG is an important mechanic. The black area is the undiscovered area.
+    The gray area is the undiscovered but not visible area. The lit area is the area
+    currently visible to the player. You can only see changes in the terrain in the
+    visible area.
   panel: {fileID: 304063354}
   paneltext: {fileID: 1356354659}
 --- !u!1001 &1563376762
@@ -4464,8 +4457,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22843e1bff9294945949261ef4f03b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: "Les obstacles permettent de fermer un chemin pour emp\xEAcher toute forme
-    de danger de vous atteindre. Attention, ils ne sont pas indestructibles !"
+  text: Obstacles block a path to prevent any form of danger from reaching you. Be
+    careful, they are not indestructible!
   panel: {fileID: 304063354}
   paneltext: {fileID: 1356354659}
 --- !u!1 &1719676066
@@ -4527,8 +4520,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: move forward to continue
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2fdae80ba40d00e4cb85a0eaef17a21a, type: 2}
+  m_sharedMaterial: {fileID: -3491628651510102174, guid: 2fdae80ba40d00e4cb85a0eaef17a21a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4593,7 +4586,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1719676069
@@ -5098,8 +5091,8 @@ RectTransform:
   - {fileID: 675118681}
   - {fileID: 1631541511}
   - {fileID: 669536665}
-  - {fileID: 304063355}
   - {fileID: 1184742284}
+  - {fileID: 304063355}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -5694,4 +5687,3 @@ SceneRoots:
   - {fileID: 1563376762}
   - {fileID: 442503938}
   - {fileID: 735810827}
-  - {fileID: 851571401}

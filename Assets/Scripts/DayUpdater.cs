@@ -21,11 +21,14 @@ public class DayUpdater : MonoBehaviour
 
     public Transform shopOfferPanel;
 
+    [SerializeField] private Image itemHolded;
     [SerializeField] private List<GameObject> shopOfferPrefabs = new List<GameObject>();
 
     private void Start()
     {
         DayManager.Instance.IncrementDay();
+
+        Shop.Instance.OnItemBuyed.AddListener(UpdateItem);
 
         if (DayManager.Instance.dayNumber == 10 && PlayerPrefs.GetInt("3") == 0)
         {
@@ -73,8 +76,14 @@ public class DayUpdater : MonoBehaviour
         textImpots.text = "Impots: \n" + PlayerMoney.Instance.GetCurrentImpots(DayManager.Instance.impotAdditions) + "$";
     }
 
-    private void UpdateMoney()
+    private void UpdateItem(Sprite _itemSprite)
     {
-        textMoney.text = "Cash : " + PlayerMoney.Instance.GetCurrentImpots(DayManager.Instance.impotAdditions) + "$";
+        UpdateMoney();
+        itemHolded.sprite = _itemSprite;
+    }
+
+    public void UpdateMoney()
+    {
+        textMoney.text = "Cash : " + PlayerMoney.Instance.money + "$";
     }
 }

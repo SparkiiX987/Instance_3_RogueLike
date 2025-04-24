@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerMoney : MonoBehaviour
 {
-    private int money;
+    public int money;
     private int impotsIncrement = 50;
     public int impots = 200;
 
@@ -19,7 +19,6 @@ public class PlayerMoney : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
-        money = 200;
     }
 
     public int GetMoney()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Shop : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class Shop : MonoBehaviour
 
     public itemSavedForGame itemStruct;
 
+    public UnityEvent<Sprite> OnItemBuyed;
+
     private void Awake()
     {
         if(Instance != null)
@@ -45,6 +48,7 @@ public class Shop : MonoBehaviour
     public void SetItemForGame(int _itemType, PickableObject _item, Sprite _itemSprite)
     {
         itemStruct = new(_itemType, _item, _itemSprite);
+        OnItemBuyed.Invoke(_itemSprite);
     }
 
     public bool CanAddItem()
