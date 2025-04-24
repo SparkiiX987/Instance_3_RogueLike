@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -41,8 +42,14 @@ public class Quest : MonoBehaviour
     {
         questAccepted = true;
         ChangeButtonFunction(questAccepted);
-
+        GameObject.Find("FadeInPanel").GetComponent<Animator>().SetTrigger("PlayFadeInAnim");
         save.SaveQuests();
+        StartCoroutine(WaitForChangeScene());
+    }
+
+    public IEnumerator WaitForChangeScene()
+    {
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(1);
     }
 
@@ -60,10 +67,10 @@ public class Quest : MonoBehaviour
 
     public void GetRandomQuest()
     {
-        int randomIndex = UnityEngine.Random.Range(0, questsPossibles.Count);
+        int randomIndex = Random.Range(0, questsPossibles.Count);
         questData = questsPossibles[randomIndex];
 
-        randomIndex = UnityEngine.Random.Range(0, questData.customerAvailables.Count);
+        randomIndex = Random.Range(0, questData.customerAvailables.Count);
         customer = questData.customerAvailables[randomIndex];
         GetQuestInfos();
 
@@ -86,13 +93,12 @@ public class Quest : MonoBehaviour
         {
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => AcceptQuest());
-            button.GetComponentInChildren<TMP_Text>().text = "Recuperer la recompense";
         }
         else
         {
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => AcceptQuest());
-            button.GetComponentInChildren<TMP_Text>().text = "Accepter";
+            button.GetComponentInChildren<TMP_Text>().text = "Accept";
         }
     }
 }

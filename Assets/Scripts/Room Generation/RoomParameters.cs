@@ -31,19 +31,11 @@ public class RoomParameters : MonoBehaviour
                     {
                         SpawnWalls(i);
                     }
-                    else
-                    {
-                        
-                    }
                     break;
                 case 1://left
                     if (!Physics.Raycast(transform.position - new Vector3(raycastOffset, 0), Vector3.forward, 1))
                     {
                         SpawnWalls(i);
-                    }
-                    else
-                    {
-                        
                     }
                     break;
                 case 2://right
@@ -51,19 +43,11 @@ public class RoomParameters : MonoBehaviour
                     {
                         SpawnWalls(i);
                     }
-                    else
-                    {
-                        
-                    }
                     break;
                 case 3://down
                     if (!Physics.Raycast(transform.position - new Vector3(0, raycastOffset), Vector3.forward, 1))
                     {
                         SpawnWalls(i);
-                    }
-                    else
-                    {
-                        
                     }
                     break;
             }

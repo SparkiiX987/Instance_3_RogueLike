@@ -16,7 +16,6 @@ public class SkikapbleLore : MonoBehaviour
 
     private int currentIndex;
     private float maxTimeParagraph = 10f;
-    private float maxTimeMeltedEffect = 1f;
     private float timer = 0f;
     private void Start()
     {
