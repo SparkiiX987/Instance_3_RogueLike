@@ -8,6 +8,7 @@ public class Door : MonoBehaviour
     private bool closed = true;
     private bool isMoving;
     private Vector3 finalRotation;
+    [SerializeField] private float dir;
 
     void Start()
     {
@@ -19,17 +20,13 @@ public class Door : MonoBehaviour
         if(isMoving is true) { return; }
 
         isMoving = true;
-        float dir = 1;
-        if (closed is not true)
-        {
-            dir *= -1;
-        }
-        RotateDoor(dir);
+        dir *= -1;
+        RotateDoor();
     }
 
-    private void RotateDoor(float _dir)
+    private void RotateDoor()
     {
-        finalRotation.Set(selfTransform.rotation.eulerAngles.x, selfTransform.rotation.eulerAngles.y, selfTransform.rotation.eulerAngles.z + _dir * 90);
+        finalRotation.Set(selfTransform.rotation.eulerAngles.x, selfTransform.rotation.eulerAngles.y, selfTransform.rotation.eulerAngles.z + dir * 90);
         float time = 0.5f;
         selfTransform.DORotate(finalRotation, time);
         StartCoroutine(OpenningCooldown(time));
