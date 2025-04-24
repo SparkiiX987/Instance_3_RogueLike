@@ -29,7 +29,6 @@ public class Quest : MonoBehaviour
         boxDescription = transform.GetChild(1).GetComponentInChildren<TMP_Text>();
         image = transform.GetChild(2).GetComponentInChildren<Image>();
 
-        print(numberQuestIndex);
         if(numberQuestIndex < Shop.Instance.questsAvailables.Count)
         {
             Shop.Instance.questsAvailables.Add(this);
@@ -48,7 +47,6 @@ public class Quest : MonoBehaviour
 
     public void AcceptQuest()
     {
-        print("a");
         questAccepted = true;
         ChangeButtonFunction(questAccepted);
         GameObject.Find("FadeInPanel").GetComponent<Animator>().SetTrigger("PlayFadeInAnim");

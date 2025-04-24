@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 631223254305302023}
   - component: {fileID: 13536588161606287}
   - component: {fileID: -2420171970310033282}
+  - component: {fileID: 1074623864679427365}
   m_Layer: 8
   m_Name: Journal
   m_TagString: Journal
@@ -151,3 +152,20 @@ MonoBehaviour:
   highlightedFloorSprite: {fileID: 5451901496708653366, guid: 69ef73d5230c7c44dadc6f82898a234d, type: 3}
   distance: 1
   loreUI: {fileID: 0}
+--- !u!114 &1074623864679427365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4865535000034621515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3333a6b7d73d39444874a3cafa224641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 7308570704100026132, guid: d74c756d2b8bd4944b46e059aba10d9c, type: 3}
+  - {fileID: 5451901496708653366, guid: 69ef73d5230c7c44dadc6f82898a234d, type: 3}
+  distance: 1.5
+  player: {fileID: 0}

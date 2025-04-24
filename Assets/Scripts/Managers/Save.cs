@@ -363,15 +363,12 @@ public class Save : MonoBehaviour
     
     public int GetCurrentQuest()
     {
-        print(PlayerPrefs.HasKey(questsSaveKey));
         if (PlayerPrefs.HasKey(questsSaveKey))
         {
             string json = PlayerPrefs.GetString(questsSaveKey);
             Quests quests = JsonUtility.FromJson<Quests>(json);
-            print(json);
             for (int i = 0; i < quests.questsDatas.Count; i++)
             {
-                print(quests.questsDatas[i].questAccepted);
                 if (quests.questsDatas[i].questAccepted)
                     return quests.questsDatas[i].id;
             }
