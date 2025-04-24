@@ -41,10 +41,10 @@ public class CollectableItem : MonoBehaviour
                 item = new PepperSpray(price, itemName, description, 1, projectile);
                 break;
             case 2:
-                item = new EmptyBottle(price, itemName, description, 1, projectile);
+                item = new EmptyBottle(price, itemName, description, 2, projectile);
                 break;
             case 3:
-                item = new MonsterCan(price, itemName, description, 1, 3f);
+                item = new MonsterCan(price, itemName, description, 3, 3f);
                 break;
         }
     }

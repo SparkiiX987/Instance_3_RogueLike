@@ -272,9 +272,11 @@ public class PlayerControl : MonoBehaviour, ITargetable
             Transform hitTransform = hit.collider.transform;
             if (hitTransform.GetComponent<CollectableItem>())
             {
-                AddItem(hitTransform.GetComponent<CollectableItem>().itemType, hitTransform.GetComponent<CollectableItem>().Item, hitTransform.GetComponent<CollectableItem>().GetInventorySprite);
-                animator.SetTrigger("IsPickingUpItem");
-                Destroy(hit.collider.gameObject);
+                if(AddItem(hitTransform.GetComponent<CollectableItem>().itemType, hitTransform.GetComponent<CollectableItem>().Item, hitTransform.GetComponent<CollectableItem>().GetInventorySprite))
+                {
+                    animator.SetTrigger("IsPickingUpItem");
+                    Destroy(hit.collider.gameObject);
+                }
             }
             else if (hitTransform.TryGetComponent(out Door door))
             {
@@ -293,35 +295,36 @@ public class PlayerControl : MonoBehaviour, ITargetable
         }
     }
 
-    public void AddItem(int _itemType, PickableObject _item, Sprite _itemSprite)
+    public bool AddItem(int _itemType, PickableObject _item, Sprite _itemSprite)
     {
         switch (_itemType)
         {
             case 0:
-                if (sellableObject is not null) { return; }
+                if (sellableObject is not null) { return false; }
 
                 sellableObject = (SellableObject)_item;
                 slots[0].AddItem(_itemSprite);
                 break;
             case 1:
-                if (usableObject is not null) { return; }
+                if (usableObject is not null) { return false; }
 
                 usableObject = (PepperSpray)_item;
                 slots[1].AddItem(_itemSprite);
                 break;
             case 2:
-                if (usableObject is not null) { return; }
+                if (usableObject is not null) { return false; }
 
                 usableObject = (EmptyBottle)_item;
                 slots[1].AddItem(_itemSprite);
                 break;
             case 3:
-                if (usableObject is not null) { return; }
+                if (usableObject is not null) { return false; }
 
                 usableObject = (MonsterCan)_item;
                 slots[1].AddItem(_itemSprite);
                 break;
         }
+        return true;
     }
 
     public void UseItem(InputAction.CallbackContext _ctx)
@@ -337,6 +340,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
             if (usableObject.type == 1 || usableObject.type == 2)
             {
+                print(usableObject.type);
                 animator.SetTrigger("IsThrowingItem");
                 if (usableObject.type == 1)
                 {
