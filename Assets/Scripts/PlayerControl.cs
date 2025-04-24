@@ -165,9 +165,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
         {
             stamina = 0;
             isRunning = false;
-            stats.speed = stats.speed / 2;
         }
-
+        print(isRunning);
         if (currentCooldown >= 0)
         {
             currentCooldown -= Time.deltaTime;
@@ -244,7 +243,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
         if (paused is not false) { return; }
 
         movementDir = moveInput.ReadValue<Vector2>();
-        nextPlayerPos.Set(playerTransform.position.x + movementDir.x * stats.speed * Time.deltaTime, playerTransform.position.y + movementDir.y * stats.speed * Time.deltaTime);
+        float actualMovementSpeed = isRunning ? stats.speed * 2 : stats.speed;
+        nextPlayerPos.Set(playerTransform.position.x + movementDir.x * actualMovementSpeed * Time.deltaTime, playerTransform.position.y + movementDir.y * actualMovementSpeed * Time.deltaTime);
         rb.MovePosition(nextPlayerPos);
         animator.SetBool("IsWalkingBool", (movementDir != Vector2.zero));
     }
@@ -445,18 +445,14 @@ public class PlayerControl : MonoBehaviour, ITargetable
     {
         if (stamina <= 0)
         {
-            stats.speed = stats.speed / 2;
-            isRunning = false;
             return;
         }
 
-        stats.speed = stats.speed * 2f;
         isRunning = true;
     }
 
     private void StopPrint(InputAction.CallbackContext _ctx)
     {
-        stats.speed = stats.speed / 2;
         isRunning = false;
     }
 
