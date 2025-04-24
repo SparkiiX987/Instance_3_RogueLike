@@ -22,6 +22,8 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     [SerializeField] private GameObject shop;
     [SerializeField] private GameObject quests;
+    [SerializeField] private GameObject achivements;
+    [SerializeField] private GameObject mainPanel;
 
     private InputSystem_Actions inputSystem;
     private InputAction moveInput;
@@ -298,6 +300,12 @@ public class PlayerControl : MonoBehaviour, ITargetable
             {
                 paused = true;
                 quests.SetActive(true);
+            }
+            else if (hitTransform.tag == "Trophy")
+            {
+                paused = true;
+                achivements.SetActive(true);
+                mainPanel.SetActive(false);
             }
         }
     }
