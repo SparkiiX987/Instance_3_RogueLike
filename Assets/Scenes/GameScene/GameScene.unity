@@ -217,7 +217,7 @@ RectTransform:
   - {fileID: 424228591}
   - {fileID: 1462629060}
   - {fileID: 207774148}
-  - {fileID: 183877275}
+  - {fileID: 1104752502}
   - {fileID: 457076633}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -316,7 +316,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 63903346}
+    m_TransformParent: {fileID: 1104752502}
     m_Modifications:
     - target: {fileID: 1238661379166206390, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
       propertyPath: m_Name
@@ -325,6 +325,10 @@ PrefabInstance:
     - target: {fileID: 1238661379166206390, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7842230761827634199, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8166830087013297757, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
       propertyPath: m_Pivot.x
@@ -376,15 +380,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8166830087013297757, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8166830087013297757, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8166830087013297757, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8166830087013297757, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -406,7 +410,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2431565708905749217, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -418,15 +423,42 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &183877276 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2431565708905749217, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6444492283320788463, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
   m_PrefabInstance: {fileID: 183877274}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cf832706d9594c4e8b1d686935dde27, type: 3}
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &183877277 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1031103582839249059, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
+  m_PrefabInstance: {fileID: 183877274}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &183877278 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7736014069059035699, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
+  m_PrefabInstance: {fileID: 183877274}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &183877279 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1238661379166206390, guid: c85d103f59a68a0458347fc3fa84b159, type: 3}
+  m_PrefabInstance: {fileID: 183877274}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &207774147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -995,7 +1027,7 @@ PrefabInstance:
     - target: {fileID: 8981072566635231585, guid: 47533c3b5675964499be4e8fbe951344, type: 3}
       propertyPath: achievementCondition
       value: 
-      objectReference: {fileID: 183877276}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1379,7 +1411,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 04301a8bea0ce96449f23300bb8d2356, type: 2}
     - target: {fileID: 6135982835572565854, guid: c903475f77d235245a0fc776a34ba078, type: 3}
       propertyPath: usableObjects.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6135982835572565854, guid: c903475f77d235245a0fc776a34ba078, type: 3}
       propertyPath: sellablesObjects.Array.size
@@ -1388,11 +1420,15 @@ PrefabInstance:
     - target: {fileID: 6135982835572565854, guid: c903475f77d235245a0fc776a34ba078, type: 3}
       propertyPath: 'usableObjects.Array.data[0]'
       value: 
-      objectReference: {fileID: 4865535000034621515, guid: 9d5ab309df0d87d428882daf44f044bc, type: 3}
+      objectReference: {fileID: 3352254059225638569, guid: 64101cbe3b09a504a900d832b75496f6, type: 3}
     - target: {fileID: 6135982835572565854, guid: c903475f77d235245a0fc776a34ba078, type: 3}
       propertyPath: 'usableObjects.Array.data[1]'
       value: 
-      objectReference: {fileID: 4865535000034621515, guid: 1b76554071ae86b4084fafb86e3617f3, type: 3}
+      objectReference: {fileID: 8130528568311225325, guid: 344f8e463cdf0004fb1bb2f02bbc6fd7, type: 3}
+    - target: {fileID: 6135982835572565854, guid: c903475f77d235245a0fc776a34ba078, type: 3}
+      propertyPath: 'usableObjects.Array.data[2]'
+      value: 
+      objectReference: {fileID: 3857222089601363009, guid: 4f9cc432336174248adbe516332fdfd9, type: 3}
     - target: {fileID: 6135982835572565854, guid: c903475f77d235245a0fc776a34ba078, type: 3}
       propertyPath: spawnedUsableItems.Array.size
       value: 0
@@ -1625,6 +1661,90 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1104752501
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1104752502}
+  - component: {fileID: 1104752503}
+  m_Layer: 5
+  m_Name: Achivements
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1104752502
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104752501}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 183877275}
+  m_Father: {fileID: 63903346}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1104752503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104752501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cf832706d9594c4e8b1d686935dde27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  achievementPanel: {fileID: 183877279}
+  achievementImage: {fileID: 183877278}
+  achievementTitle: {fileID: 183877277}
+  achievementDesc: {fileID: 183877276}
+  achievementsIcons:
+  - {fileID: 9158884529557622325, guid: c5f9ec0b7d79e6240bdc9e1a22a2d04b, type: 3}
+  - {fileID: -6573734269700068937, guid: 15d715636d74b1c4597b23978b84b564, type: 3}
+  - {fileID: 6208758057133653563, guid: ab062a92cf9497740a69b610bbe0bb9c, type: 3}
+  - {fileID: -572001262318463172, guid: 8bf58e2c66cbaa049bd0c2a2bc4b1e99, type: 3}
+  - {fileID: 5800283242814770752, guid: b0e63c39ea009294cad471813690220f, type: 3}
+  - {fileID: 6780926504039722210, guid: a09581a9f19e40443ba6fb65d048d5fa, type: 3}
+  - {fileID: 3520626825629515213, guid: 2fab35f3e0d1aca49a1af4ec91878586, type: 3}
+  - {fileID: -2005861690214740973, guid: 86c0813aa73dd614493b39b13a1d2a2a, type: 3}
+  - {fileID: -830493454530193650, guid: 47599326ef27447458e6128fa512b3f5, type: 3}
+  achievementsTitles:
+  - Obstacle 1 - Monster 0.
+  - First Death.
+  - The Survivor.
+  - Smokescreened.
+  - Goodbye, beautiful bounty.
+  - Lucky.
+  - Have you read them ?
+  - Caffeinated.
+  - Riot Control.
+  achievementsDescs:
+  - Make the monster hit a obstacle.
+  - Die from the monster for the first time.
+  - Survive for 10 days straight.
+  - Hit the monster with a tear gas canister.
+  - Pay 3 times the taxes.
+  - Find and use all the consumable in a single day.
+  - Find all the notes.
+  - Drink 3 energy can in less than 10 seconds.
+  - Throw 3 tear gas bomb in less than 10 seconds.
+  compAchievementList: 
 --- !u!114 &1334540234 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7473102633522049254, guid: 42efcd00ee68a6b46be1680025c1cd2c, type: 3}

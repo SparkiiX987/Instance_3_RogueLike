@@ -15,7 +15,7 @@ public class Achievements : MonoBehaviour
     {
         for(int i = 0; i < achievementsPanel.Count; i++)
         {
-            if(PlayerPrefs.GetInt(i.ToString()) == 1)
+            if(PlayerPrefs.GetInt((i + 1).ToString()) == 0)
             {
                 achievementsPanel[i].color = Color.gray;
             }

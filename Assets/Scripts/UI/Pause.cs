@@ -11,6 +11,7 @@ class Pause : MonoBehaviour
 
     private void OnDisable()
     {
+        Time.timeScale = 1;
         transform.GetChild(0).gameObject.SetActive(true);
         transform.GetChild(1).gameObject.SetActive(false);
 
@@ -22,6 +23,7 @@ class Pause : MonoBehaviour
 
     private void OnEnable()
     {
+        Time.timeScale = 0;
         if (panelShop != null)
         {
             panelShop.SetActive(false);

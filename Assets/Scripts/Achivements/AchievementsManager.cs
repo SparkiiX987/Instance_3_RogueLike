@@ -25,9 +25,8 @@ public class AchievementsManager : MonoBehaviour
         if (PlayerPrefs.GetInt(achievementsID.ToString()) == 1)
             return;
         
-        compAchievementList.Add(achievementsID);
         PlayerPrefs.SetInt(achievementsID.ToString(), 1);
-        
+        compAchievementList.Add(achievementsID - 1);
         while (compAchievementList.Count > 0 && !isPlaying)
         {
             achievementPanel.SetActive(true);

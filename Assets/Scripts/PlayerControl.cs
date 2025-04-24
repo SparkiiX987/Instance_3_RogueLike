@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class PlayerControl : MonoBehaviour, ITargetable
 {
@@ -203,6 +202,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void Death()
     {
+        if(paused) { return; }
         StartCoroutine(DeathCoroutine());
         if (PlayerPrefs.GetInt("2") == 0) { achivementsManager.PlayAddAchievement(2); }
     }
@@ -215,7 +215,6 @@ public class PlayerControl : MonoBehaviour, ITargetable
         deathPanel.SetActive(true);
         slots[0].transform.parent.gameObject.SetActive(false);
         enduranceBar.gameObject.SetActive(false);
-        Time.timeScale = 0;
     }
 
     public Vector2 GetMovementDir => movementDir;
@@ -327,6 +326,7 @@ public class PlayerControl : MonoBehaviour, ITargetable
 
     public void UseItem(InputAction.CallbackContext _ctx)
     {
+        if(paused) { return; }
         hit = Physics2D.Raycast(playerTransform.position, GetMousePosition(), pickupDistance, obstacleLayer);
 
         if (usableObject is not null)
