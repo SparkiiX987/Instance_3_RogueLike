@@ -133,8 +133,6 @@ public class MapGenerationController : MonoBehaviour
         objectIndex = save.GetCurrentQuest();
         for (int i = 0; i < questsList.Count; i++)
         {
-            print(questsList[i].id);
-            print(objectIndex);
             if (questsList[i].id == objectIndex)
             {
                 roomIndex = Random.Range(1, rooms.Length);
@@ -143,8 +141,6 @@ public class MapGenerationController : MonoBehaviour
                 
                 for (int j = 0; j < sellablesObjects.Count; j++)
                 {
-                    print(questsList[i].goalObject.name);
-                    print(sellablesObjects[j].GetComponent<CollectableItem>().floorSprite.name);
                     if (questsList[i].goalObject.name == sellablesObjects[j].GetComponent<CollectableItem>().floorSprite.name) 
                     {
                         GameObject questItem = Instantiate(sellablesObjects[j], itemsParent.GetChild(transformQuestItem).position, Quaternion.identity);
