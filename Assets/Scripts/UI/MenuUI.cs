@@ -53,7 +53,7 @@ public class MenuUI : MonoBehaviour
 
     public void UpdateDayUI()
     {
-        textJour.text = "Jour : " + DayManager.Instance.dayNumber;
+        textJour.text = "Day : " + DayManager.Instance.dayNumber;
     }
 
     public void CaseImpots()
@@ -74,7 +74,7 @@ public class MenuUI : MonoBehaviour
 
     public void UpdateImpots()
     {
-        textImpots.text = "Impots: \n" + PlayerMoney.Instance.GetCurrentImpots(DayManager.Instance.impotAdditions) + "$";
+        textImpots.text = "Taxes : \n" + PlayerMoney.Instance.GetCurrentImpots(DayManager.Instance.impotAdditions) + "$";
     }
 
     private void UpdateItem(Sprite _itemSprite)
