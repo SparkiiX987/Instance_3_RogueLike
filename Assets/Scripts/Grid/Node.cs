@@ -6,6 +6,7 @@ public class Node : MonoBehaviour
     public List<Link> links = new List<Link>();
     public Node parent;
     public float connectionRange;
+    public LayerMask layerMask;
 
     public Vector2 GetNodePosition() => transform.position;
 
@@ -28,7 +29,7 @@ public class Node : MonoBehaviour
             { continue; }
 
             float dist = Vector2.Distance(GetNodePosition(), node.GetNodePosition());
-            if (dist <= connectionRange)
+            if (dist <= connectionRange && !Physics2D.Linecast(GetNodePosition(), node.GetNodePosition(), layerMask))
             {
                 AddLink(new Link(node, dist, 0f));
             }
