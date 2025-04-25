@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EndZone : MonoBehaviour
@@ -14,7 +15,10 @@ public class EndZone : MonoBehaviour
         if (collision.CompareTag("Player") && collision.GetComponent<PlayerControl>().sellableObject is not null)
         {
             Time.timeScale = 0;
-            PlayerMoney.Instance.AddMoney(collision.GetComponent<PlayerControl>().sellableObject.GetPrice());
+            try
+            {
+                PlayerMoney.Instance.AddMoney(collision.GetComponent<PlayerControl>().sellableObject.GetPrice());
+            } catch (Exception e) { Debug.LogException(e); }
             endGamePanel.SetActive(true);
         }
     }
