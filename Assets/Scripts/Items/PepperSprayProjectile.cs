@@ -28,6 +28,7 @@ public class PepperSprayProjectile : MonoBehaviour
         {
             rb.freezeRotation = true;
             smoke.GetComponent<ParticleSystem>().Play();
+            AudioManager.Instance.PlaySound(AudioType.lacrymogene);
             hasDetonated = true;
             elapsedTime = 0;
             StartCoroutine(CloudColission());
