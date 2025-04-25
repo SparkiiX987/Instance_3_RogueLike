@@ -19,16 +19,13 @@ public class HighLightObject : MonoBehaviour
 
     private IEnumerator GetPlayer()
     {
-        print("dans la coroutine");
         do
         {
-            print("cherche le player");
             GameObject playerGo = GameObject.FindGameObjectWithTag("Player");
             if (playerGo is null) { yield break; }
             player = playerGo.transform;
             if (player is not null)
             {
-                print("trouver");
                 yield break;
             }
             yield return new WaitForSeconds(0.5f);
@@ -37,7 +34,7 @@ public class HighLightObject : MonoBehaviour
 
     private void Update()
     {
-        if (player == null) { print("returned"); return; }
+        if (player == null) { return; }
         
         spriteRenderer.sprite = distance <= Vector3.Distance(player.transform.position, transform.position) ? sprites[0] : sprites[1];
     }

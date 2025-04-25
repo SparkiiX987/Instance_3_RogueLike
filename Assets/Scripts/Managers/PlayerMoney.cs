@@ -1,6 +1,7 @@
 using DG.Tweening.Core.Easing;
 using UnityEngine;
 
+
 public class PlayerMoney : MonoBehaviour
 {
     public int money;
@@ -16,8 +17,12 @@ public class PlayerMoney : MonoBehaviour
         if (Instance != null)
         {
             Destroy(this);
+            return;
         }
-        Instance = this;
+        else
+        {
+            Instance = this;
+        }
     }
 
     private void Start()

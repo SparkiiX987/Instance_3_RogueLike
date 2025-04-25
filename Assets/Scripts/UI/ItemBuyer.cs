@@ -10,6 +10,7 @@ public class ItemBuyer : MonoBehaviour
 
     public void BuyItem()
     {
+        print(PlayerMoney.Instance.money);
         if(PlayerMoney.Instance.money < item.price || Shop.Instance.CanAddItem()) { return; }
         PlayerMoney.Instance.AddMoney(-item.GetPrice());
         Shop.Instance.SetItemForGame(itemType, item, itemSprite, projectile);

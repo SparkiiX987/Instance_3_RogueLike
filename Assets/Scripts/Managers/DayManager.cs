@@ -31,6 +31,7 @@ public class DayManager : MonoBehaviour
     {
         if(dayRemaining == 4)
         {
+            PlayerMoney.Instance.AddMoney(-PlayerMoney.Instance.GetCurrentImpots(impotAdditions));
             impotAdditions++;
             dayRemaining = 1;
         } else
