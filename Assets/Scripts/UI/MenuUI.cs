@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -41,7 +42,7 @@ public class MenuUI : MonoBehaviour
         UpdateDayUI();
         CaseImpots();
         UpdateImpots();
-        UpdateMoney();
+        StartCoroutine(WaitingForUpdatedInfos());
 
         for (int i = 0; i < shopOfferPrefabs.Count; i++)
         {
@@ -85,5 +86,16 @@ public class MenuUI : MonoBehaviour
     public void UpdateMoney()
     {
         textMoney.text = "Cash : " + PlayerMoney.Instance.money + "$";
+    }
+
+    IEnumerator WaitingForUpdatedInfos()
+    {
+        PlayerMoney.Instance.gotSavedInfos = false;
+        while (!PlayerMoney.Instance.gotSavedInfos)
+        {
+            PlayerMoney.Instance.GetMoneyFromSave();
+            yield return new WaitForSecondsRealtime(0.05f);
+        }
+        UpdateMoney();
     }
 }

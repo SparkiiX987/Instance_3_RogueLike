@@ -33,7 +33,7 @@ public class Save : MonoBehaviour
     {
         PlayerPrefs.SetInt(moneySaveKey, _value);
     }
-    public int GetMoney(int _value)
+    public int GetMoney()
     {
         if (PlayerPrefs.HasKey(moneySaveKey))
         {

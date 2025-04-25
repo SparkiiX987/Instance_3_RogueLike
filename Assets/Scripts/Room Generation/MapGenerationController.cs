@@ -19,6 +19,7 @@ public class MapGenerationController : MonoBehaviour
     bool done;
     
     private Transform itemsParent;
+    private int transformQuestItemIndex;
     private Transform transformItem;
     private GameObject itemsSpwaned;
 
@@ -137,13 +138,17 @@ public class MapGenerationController : MonoBehaviour
             {
                 roomIndex = Random.Range(1, rooms.Length);
                 itemsParent = rooms[roomIndex].transform.GetChild(5);
-                transformQuestItem = Random.Range(0, itemsParent.childCount);
+                transformQuestItemIndex = Random.Range(0, itemsParent.childCount);
                 
                 for (int j = 0; j < sellablesObjects.Count; j++)
                 {
                     if (questsList[i].goalObject.name == sellablesObjects[j].GetComponent<CollectableItem>().floorSprite.name) 
                     {
-                        GameObject questItem = Instantiate(sellablesObjects[j], itemsParent.GetChild(transformQuestItem).position, Quaternion.identity);
+                        Transform transformQuestItem = itemsParent.GetChild(transformQuestItemIndex);
+                        GameObject questItem = Instantiate(sellablesObjects[j], transformQuestItem.position, Quaternion.identity);
+                        questItem.transform.SetParent(itemsParent.transform);
+                        Destroy(transformQuestItem.gameObject);
+                        break;
                     }
                 }
             }
